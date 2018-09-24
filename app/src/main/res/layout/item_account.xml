@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/account_card"
+    style="@style/InfoCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/quarter_standard_margin"
+    android:layout_marginEnd="@dimen/half_standard_margin"
+    android:layout_marginStart="@dimen/half_standard_margin"
+    android:layout_marginTop="@dimen/quarter_standard_margin"
+    android:transitionName="@string/transition_account_card"
+    app:contentPadding="0dp"
+    tools:ignore="UnusedAttribute">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/account_logo_image_view"
+            android:layout_width="@dimen/account_list_item_logo_size"
+            android:layout_height="@dimen/account_list_item_logo_size"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginLeft="@dimen/standard_margin"
+            app:layout_constraintBottom_toBottomOf="@id/email_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/app_name_text_view" />
+
+        <TextView
+            android:id="@+id/app_name_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginTop="24dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textSize="@dimen/text_size_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/account_logo_image_view"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="App name" />
+
+        <TextView
+            android:id="@+id/email_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/half_standard_margin"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/colorSecondaryText"
+            app:layout_constraintEnd_toEndOf="@id/app_name_text_view"
+            app:layout_constraintStart_toStartOf="@id/app_name_text_view"
+            app:layout_constraintTop_toBottomOf="@id/app_name_text_view"
+            tools:text="email@tmp.com" />
+
+        <View
+            android:id="@+id/account_card_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:background="@color/material_drawer_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email_text_view" />
+
+        <Button
+            android:id="@+id/account_manage_button"
+            style="@style/DialogButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="@dimen/half_standard_margin"
+            android:layout_marginStart="@dimen/half_standard_margin"
+            android:tag="primary_action"
+            android:theme="@style/PrimaryButton.Overlay"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/account_card_divider"
+            tools:text="Manage" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

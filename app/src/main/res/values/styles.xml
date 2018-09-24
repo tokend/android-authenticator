@@ -1,11 +1,43 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+        <item name="android:windowAnimationStyle">@style/AppAnimationStyle</item>
+    </style>
+
+    <style name="AppAnimationStyle" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenExitAnimation">@anim/stay_visible</item>
+        <item name="android:activityCloseEnterAnimation">@anim/stay_visible</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SecondaryButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorSecondaryText</item>
+    </style>
+
+    <style name="DialogButton" parent="SecondaryButton">
+        <item name="android:textColor">@color/colorPrimaryAction</item>
+    </style>
+
+    <style name="PrimaryButton.Overlay" parent="ThemeOverlay.AppCompat">
+     <item name="colorButtonNormal">@color/colorPrimaryActionDisabled</item>
+        <item name="colorAccent">@color/colorPrimaryAction</item>
+    </style>
+
+    <style name="InfoCard">
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="contentPadding">@dimen/standard_margin</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:layout_marginTop">@dimen/half_standard_margin</item>
     </style>
 
 </resources>
