@@ -16,9 +16,9 @@ class Account(
         @SerializedName("originalAccountId")
         val originalAccountId: String,
         @SerializedName("encryptedSeed")
-        val encryptedSeed: KeychainData,
+        var encryptedSeed: KeychainData,
         @SerializedName("kdfAttributes")
-        val kdfAttributes: KdfAttributes,
+        var kdfAttributes: KdfAttributes,
         @SerializedName("uid")
         val uid: Long = System.nanoTime()
 ) {

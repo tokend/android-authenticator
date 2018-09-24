@@ -42,4 +42,38 @@ class AccountsRepository {
 
         Assert.assertEquals(account, loadedAccount)
     }
+
+    @Test
+    fun update() {
+        val appContext = InstrumentationRegistry.getTargetContext()
+
+        val database = Room.databaseBuilder(appContext, AppDatabase::class.java,
+                "app-db-test")
+                .build()
+        database.accountsDao.deleteAll()
+
+        val getRepository = {
+            AccountsRepository(database)
+                    .also {
+                        it.updateDeferred().blockingAwait()
+                    }
+        }
+
+        val repository = getRepository()
+
+        repository.add(account)
+        val newKdf = KdfAttributesGenerator().withRandomSalt()
+        val newEncryptedSeed = KeychainData.fromDecoded(byteArrayOf(1, 2, 3, 4), byteArrayOf(5, 6, 7, 8))
+        account.apply {
+            kdfAttributes = newKdf
+            encryptedSeed = newEncryptedSeed
+        }
+        repository.update(account)
+
+        val loadedAccount = getRepository().itemsList.first()
+
+        Assert.assertEquals(newKdf.encodedSalt, loadedAccount.kdfAttributes.encodedSalt)
+        Assert.assertArrayEquals(newEncryptedSeed.cipherText, loadedAccount.encryptedSeed.cipherText)
+        Assert.assertArrayEquals(newEncryptedSeed.iv, loadedAccount.encryptedSeed.iv)
+    }
 }
