@@ -28,6 +28,13 @@
         <item name="android:textColor">@color/colorPrimaryAction</item>
     </style>
 
+    <style name="PrimaryButton" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="android:theme">@style/PrimaryButton.Overlay</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingLeft">@dimen/double_margin</item>
+        <item name="android:paddingRight">@dimen/double_margin</item>
+    </style>
+
     <style name="PrimaryButton.Overlay" parent="ThemeOverlay.AppCompat">
      <item name="colorButtonNormal">@color/colorPrimaryActionDisabled</item>
         <item name="colorAccent">@color/colorPrimaryAction</item>
@@ -38,6 +45,19 @@
         <item name="contentPadding">@dimen/standard_margin</item>
         <item name="cardUseCompatPadding">true</item>
         <item name="android:layout_marginTop">@dimen/half_standard_margin</item>
+    </style>
+
+    <style name="EditText">
+        <item name="met_textColorHint">@color/colorSecondaryText</item>
+        <item name="met_primaryColor">@color/colorSecondaryText</item>
+        <item name="met_errorColor">@color/colorError</item>
+        <item name="met_floatingLabel">highlight</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="PrimaryActionTextView">
+        <item name="android:textColor">@color/colorPrimaryAction</item>
     </style>
 
 </resources>

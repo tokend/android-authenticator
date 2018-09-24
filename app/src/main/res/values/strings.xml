@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">TokenD Authenticator</string>
     <string name="search">Search</string>
+    <string name="tokend_network_hint">Network</string>
+    <string name="not_specified">Not specified</string>
+    <string name="email">Email</string>
+    <string name="create">Create</string>
+    <string name="recover">Recover</string>
 </resources>
