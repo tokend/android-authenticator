@@ -18,7 +18,9 @@ class Account(
         @SerializedName("encryptedSeed")
         val encryptedSeed: KeychainData,
         @SerializedName("kdfAttributes")
-        val kdfAttributes: KdfAttributes
+        val kdfAttributes: KdfAttributes,
+        @SerializedName("uid")
+        val uid: Long = System.nanoTime()
 ) {
     fun getSeed(cipher: DataCipher,
                 keyProvider: EncryptionKeyProvider): Single<CharArray> {
@@ -33,17 +35,10 @@ class Account(
 
     override fun equals(other: Any?): Boolean {
         return other is Account
-                && other.network == this.network
-                && other.email == this.email
-                && other.originalAccountId == this.originalAccountId
-                && other.encryptedSeed.cipherText.contentEquals(this.encryptedSeed.cipherText)
-                && other.kdfAttributes.encodedSalt == this.kdfAttributes.encodedSalt
+                && other.uid == this.uid
     }
 
     override fun hashCode(): Int {
-        var result = network.hashCode()
-        result = 31 * result + email.hashCode()
-        result = 31 * result + originalAccountId.hashCode()
-        return result
+        return uid.hashCode()
     }
 }
