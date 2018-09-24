@@ -1,6 +1,7 @@
 package org.tokend.authenticator.base.logic.repository
 
 import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.CompletableSubject
@@ -10,6 +11,8 @@ import io.reactivex.subjects.CompletableSubject
  */
 abstract class LocalMultipleItemsRepository<T> : MultipleItemsRepository<T>() {
     private var updateResultSubject: CompletableSubject? = null
+
+    override fun getItems(): Single<List<T>> = Single.just(emptyList())
 
     private var updateDisposable: Disposable? = null
     override fun update(): Completable {
