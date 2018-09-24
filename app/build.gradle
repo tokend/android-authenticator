@@ -57,6 +57,10 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
 
+    implementation 'com.google.dagger:dagger:2.16'
+    kapt 'com.google.dagger:dagger-compiler:2.13'
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+
     implementation "org.tokend:sdk:0.82"
     implementation "org.tokend:wallet:1.0.8"
 
