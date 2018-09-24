@@ -18,6 +18,11 @@
     <dimen name="half_standard_margin">8dp</dimen>
     <dimen name="quarter_standard_margin">4dp</dimen>
 
+    <!-- General paddings -->
+    <dimen name="standard_padding">24dp</dimen>
+    <dimen name="double_padding">48dp</dimen>
+    <dimen name="half_standard_padding">12dp</dimen>
+
     <!-- Elevations -->
     <dimen name="card_elevation">2dp</dimen>
 

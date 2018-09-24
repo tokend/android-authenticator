@@ -11,6 +11,7 @@
     <color name="colorPrimaryActionDisabled">#977fff</color>
     <color name="colorError">#ff1744</color>
     <color name="colorOk">#3fa595</color>
+    <color name="colorIcons">#6E759F</color>
 
     <color name="white">#ffffff</color>
     <color name="white_almost">#a0ffffff</color>
