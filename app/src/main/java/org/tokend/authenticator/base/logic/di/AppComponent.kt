@@ -6,10 +6,11 @@ import javax.inject.Singleton
 
 @Component(
         modules = [
+            AppModule::class,
             AppDatabaseModule::class,
             AccountsRepositoryModule::class,
-            DataCipherModule::class
-        ]
+            UtilModule::class,
+            DataCipherModule::class]
 )
 @Singleton
 interface AppComponent {
