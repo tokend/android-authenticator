@@ -1,6 +1,7 @@
 package org.tokend.authenticator.base.logic.di
 
 import dagger.Component
+import org.tokend.authenticator.base.activities.BaseActivity
 import javax.inject.Singleton
 
 @Component(
@@ -12,4 +13,5 @@ import javax.inject.Singleton
 )
 @Singleton
 interface AppComponent {
+    fun inject(baseActivity: BaseActivity)
 }
