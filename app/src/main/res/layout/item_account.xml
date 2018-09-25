@@ -28,10 +28,10 @@
             android:layout_marginLeft="@dimen/standard_margin"
             app:layout_constraintBottom_toBottomOf="@id/email_text_view"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/app_name_text_view" />
+            app:layout_constraintTop_toTopOf="@id/network_text_view" />
 
         <TextView
-            android:id="@+id/app_name_text_view"
+            android:id="@+id/network_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/standard_margin"
@@ -44,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/account_logo_image_view"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="App name" />
+            tools:text="Network" />
 
         <TextView
             android:id="@+id/email_text_view"
@@ -54,9 +54,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/colorSecondaryText"
-            app:layout_constraintEnd_toEndOf="@id/app_name_text_view"
-            app:layout_constraintStart_toStartOf="@id/app_name_text_view"
-            app:layout_constraintTop_toBottomOf="@id/app_name_text_view"
+            app:layout_constraintEnd_toEndOf="@id/network_text_view"
+            app:layout_constraintStart_toStartOf="@id/network_text_view"
+            app:layout_constraintTop_toBottomOf="@id/network_text_view"
             tools:text="email@tmp.com" />
 
         <View

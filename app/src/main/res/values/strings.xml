@@ -6,4 +6,10 @@
     <string name="email">Email</string>
     <string name="create">Create</string>
     <string name="recover">Recover</string>
+    <string name="accounts">Accounts</string>
+    <string name="retry">Retry</string>
+
+    <string name="error_try_again">An error occurred. Try again later</string>
+    <string name="error_connection_try_again">Connection error. Try again later</string>
+    <string name="no_accounts_message">No Accounts</string>
 </resources>
