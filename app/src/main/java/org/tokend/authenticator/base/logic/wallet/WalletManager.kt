@@ -18,9 +18,8 @@ class WalletManager(
     fun getWalletInfo(email: String, password: CharArray,
                       isRecovery: Boolean = false): Single<WalletInfo> {
         return {
-            io.reactivex.rxkotlin.Maybes
             keyStorage.getWalletInfo(email, password, isRecovery)
-        }.toSingle()
+        }.toSingle().subscribeOn(Schedulers.newThread())
     }
 
     fun saveWallet(walletData: WalletData): Completable {
@@ -37,7 +36,7 @@ class WalletManager(
     // endregion
 
     companion object {
-        private const val STUB_KDF_VERSION = 42L
+        private const val STUB_KDF_VERSION = 2L
 
         // region Creation
         /**

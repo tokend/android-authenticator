@@ -1,6 +1,7 @@
 package org.tokend.authenticator.accounts.logic.model
 
 import com.google.gson.annotations.SerializedName
+import org.tokend.sdk.api.models.SystemInfo
 import java.io.Serializable
 
 class Network(
@@ -26,5 +27,16 @@ class Network(
         result = 31 * result + passphrase.hashCode()
         result = 31 * result + masterAccountId.hashCode()
         return result
+    }
+
+    companion object {
+        fun fromSystemInfo(rootUrl: String, systemInfo: SystemInfo): Network {
+            return Network(
+                    name = systemInfo.masterExchangeName,
+                    passphrase = systemInfo.passphrase,
+                    masterAccountId = systemInfo.masterExchangeAccountId,
+                    rootUrl = rootUrl
+            )
+        }
     }
 }

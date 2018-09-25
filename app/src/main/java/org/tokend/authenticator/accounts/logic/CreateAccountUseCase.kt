@@ -56,12 +56,7 @@ class CreateAccountUseCase(
                     getSystemInfo()
                 }
                 .map { systemInfo ->
-                    Network(
-                            name = systemInfo.masterExchangeName,
-                            passphrase = systemInfo.passphrase,
-                            masterAccountId = systemInfo.masterExchangeAccountId,
-                            rootUrl = networkUrl
-                    )
+                    Network.fromSystemInfo(networkUrl, systemInfo)
                 }
                 .doOnSuccess { network ->
                     this.network = network
