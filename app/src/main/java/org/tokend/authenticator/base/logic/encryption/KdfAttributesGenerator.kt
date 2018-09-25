@@ -6,15 +6,20 @@ import java.security.SecureRandom
 
 class KdfAttributesGenerator {
     fun withRandomSalt(lengthBytes: Int = DEFAULT_SALT_LENGTH_BYTES): KdfAttributes {
-        val salt = SecureRandom().generateSeed(lengthBytes)
         return KdfAttributes(
                 algorithm = DEFAULT_ALG,
                 bits = DEFAULT_KEY_LENGTH_BYTES * 8,
                 n = DEFAULT_N,
                 r = DEFAULT_R,
                 p = DEFAULT_P,
-                encodedSalt = Base64.toBase64String(salt)
+                encodedSalt = Base64.toBase64String(
+                        getRandomSalt(lengthBytes)
+                )
         )
+    }
+
+    fun getRandomSalt(lengthBytes: Int = DEFAULT_SALT_LENGTH_BYTES): ByteArray {
+        return SecureRandom().generateSeed(lengthBytes)
     }
 
     companion object {
