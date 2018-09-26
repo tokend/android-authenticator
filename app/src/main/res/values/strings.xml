@@ -12,4 +12,5 @@
     <string name="error_try_again">An error occurred. Try again later</string>
     <string name="error_connection_try_again">Connection error. Try again later</string>
     <string name="no_accounts_message">No Accounts</string>
+    <string name="add_account">Add Account</string>
 </resources>

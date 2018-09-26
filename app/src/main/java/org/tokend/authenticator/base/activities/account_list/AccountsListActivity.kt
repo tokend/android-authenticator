@@ -19,6 +19,7 @@ import org.tokend.authenticator.R
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountsListAdapter
 import org.tokend.authenticator.base.activities.account_list.adapter.ManageClickListener
+import org.tokend.authenticator.base.util.Navigator
 import org.tokend.authenticator.base.util.SearchUtil
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import java.util.concurrent.TimeUnit
@@ -81,7 +82,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
 
     private fun initFab() {
         add_account_fab.setOnClickListener {
-
+            Navigator.openAddAccount(this)
         }
     }
 
