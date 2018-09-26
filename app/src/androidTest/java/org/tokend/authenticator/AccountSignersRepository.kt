@@ -16,6 +16,7 @@ import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.transactions.TxManager
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
+import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.sdk.factory.ApiFactory
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toByteArray
@@ -140,5 +141,18 @@ class AccountSignersRepository {
         repository.update().blockingAwait()
 
         Assert.assertNull(repository.itemsList.find { it.publicKey == publicKey })
+    }
+
+    @Test
+    fun provider() {
+        val appContext = InstrumentationRegistry.getTargetContext()
+
+        val database = Room.databaseBuilder(appContext, AppDatabase::class.java,
+                "app-db-test")
+                .build()
+
+        val provider = AccountSignersRepositoryProvider(database)
+
+        Assert.assertEquals(provider.getForAccount(account), provider.getForAccount(account))
     }
 }

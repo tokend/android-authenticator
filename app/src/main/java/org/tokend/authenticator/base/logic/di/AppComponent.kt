@@ -10,7 +10,9 @@ import javax.inject.Singleton
             AppDatabaseModule::class,
             AccountsRepositoryModule::class,
             UtilModule::class,
-            DataCipherModule::class]
+            DataCipherModule::class,
+            AccountSignersRepositoryProviderModule::class
+        ]
 )
 @Singleton
 interface AppComponent {
