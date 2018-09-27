@@ -6,6 +6,8 @@ import android.view.MenuItem
 import io.reactivex.disposables.CompositeDisposable
 import org.tokend.authenticator.App
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
+import org.tokend.authenticator.base.logic.encryption.DataCipher
+import org.tokend.authenticator.base.util.ToastManager
 import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
 import javax.inject.Inject
 
@@ -15,6 +17,10 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var accountsRepository: AccountsRepository
     @Inject
     lateinit var errorHandlerFactory: ErrorHandlerFactory
+    @Inject
+    lateinit var toastManager: ToastManager
+    @Inject
+    lateinit var dataCipher: DataCipher
 
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
