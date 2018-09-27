@@ -10,6 +10,7 @@ import android.support.v7.widget.SearchView
 import android.view.MenuItem
 import android.widget.EditText
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
+import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -20,6 +21,7 @@ import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountsListAdapter
 import org.tokend.authenticator.base.activities.account_list.adapter.ManageClickListener
 import org.tokend.authenticator.base.util.Navigator
+import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.base.util.SearchUtil
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import java.util.concurrent.TimeUnit
@@ -169,7 +171,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         accountsDisposable?.dispose()
         accountsDisposable =
                 accountsRepository.itemsObservable
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(ObservableTransformers.defaultSchedulers() )
                         .subscribe {
                             adapter.addData(it)
                         }
@@ -178,7 +180,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         accountsLoadingDisposable?.dispose()
         accountsLoadingDisposable =
                 accountsRepository.loading
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(ObservableTransformers.defaultSchedulers() )
                         .subscribe {
                             loadingIndicator.setLoading(it, "accounts")
                         }
@@ -187,7 +189,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         accountsErrorsDisposable?.dispose()
         accountsErrorsDisposable =
                 accountsRepository.errors
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(ObservableTransformers.defaultSchedulers() )
                         .subscribe { error ->
                             if (!adapter.hasData) {
                                 error_empty_view.showError(error, errorHandlerFactory.getDefault()) {
