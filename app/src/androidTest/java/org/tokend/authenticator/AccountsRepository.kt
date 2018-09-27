@@ -39,6 +39,9 @@ class AccountsRepository {
         }
 
         getRepository().add(account)
+
+        Thread.sleep(500)
+
         val loadedAccount = getRepository().itemsList.first()
 
         Assert.assertEquals(account, loadedAccount)
