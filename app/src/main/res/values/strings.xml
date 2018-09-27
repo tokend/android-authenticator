@@ -14,4 +14,20 @@
     <string name="no_accounts_message">No Accounts</string>
     <string name="add_account">Add Account</string>
     <string name="error_invalid_email">Invalid Email</string>
+    <string name="save_recovery_seed">Save your recovery seed</string>
+    <string name="recovery_seed_explanation">Save this seed in a secure place.
+        In case you change device or re-install app you will be able to recover access to your account
+        by using this seed</string>
+    <string name="seed_copied">Seed is copied to the clipboard</string>
+    <string name="error_seed_mismatch">Seed doesn\'t match confirmation</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="seed_not_copied_confirmation">This seed is the only way to recover your account. You will not be able to get it later</string>
+    <string name="i_understand">I understand</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="acount_created">Account created</string>
+    <string name="validate_recovery_seed">Validate recovery seed</string>
+    <string name="validate_recovery_seed_explanation">Please validate this seed in the field below to ensure that you copied it properly</string>
+    <string name="continue_action">Continue</string>
+    <string name="error_email_already_taken">Email is already taken</string>
 </resources>
