@@ -33,7 +33,7 @@ class AuthorizeApp {
                     "NET_ACCOUNT", "https://api.testnet.tokend.org/"),
             "EMAIL",
             "GCC4IGBATFLGG5JV4DUKA2HZSS6EO6LJBCBY4AJJPYJ6U7HKZGL7VE4T",
-            "",
+            "WALLET_ID",
             DefaultDataCipher().encrypt(seed.toByteArray(), key).blockingGet(),
             KdfAttributesGenerator().withRandomSalt(),
             1L
