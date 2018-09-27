@@ -12,6 +12,7 @@ class AccountsCache(database: AppDatabase) : RepositoryCache<Account>() {
         return first.network == second.network
                 && first.email == second.email
                 && first.originalAccountId == second.originalAccountId
+                && first.walletId == second.walletId
                 && first.encryptedSeed.cipherText.contentEquals(second.encryptedSeed.cipherText)
                 && first.kdfAttributes.encodedSalt == second.kdfAttributes.encodedSalt
     }

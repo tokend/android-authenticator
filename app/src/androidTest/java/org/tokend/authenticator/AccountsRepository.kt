@@ -17,6 +17,7 @@ class AccountsRepository {
                     "NET_ACCOUNT", "NET_URL"),
             "EMAIL",
             "ORIGINAL_ACCOUNT_ID",
+            "",
             KeychainData.fromDecoded(ByteArray(16), ByteArray(16)),
             KdfAttributesGenerator().withRandomSalt()
     )

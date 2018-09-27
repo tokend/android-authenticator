@@ -18,6 +18,8 @@ data class AccountEntity(
         val email: String,
         @ColumnInfo(name = "original_account_id")
         val originalAccountId: String,
+        @ColumnInfo(name = "wallet_id")
+        val walletId: String,
         @ColumnInfo(name = "network_json")
         val networkJson: String,
         @ColumnInfo(name = "encrypted_seed_json")
@@ -32,6 +34,7 @@ data class AccountEntity(
                 network = gson.fromJson(networkJson, Network::class.java),
                 email = email,
                 originalAccountId = originalAccountId,
+                walletId = walletId,
                 encryptedSeed = gson.fromJson(encryptedSeedJson, KeychainData::class.java),
                 kdfAttributes = gson.fromJson(kdfJson, KdfAttributes::class.java)
         )
@@ -44,6 +47,7 @@ data class AccountEntity(
                     uid = account.uid,
                     email = account.email,
                     originalAccountId = account.originalAccountId,
+                    walletId = account.walletId,
                     networkJson = gson.toJson(account.network),
                     encryptedSeedJson = gson.toJson(account.encryptedSeed),
                     kdfJson = gson.toJson(account.kdfAttributes)

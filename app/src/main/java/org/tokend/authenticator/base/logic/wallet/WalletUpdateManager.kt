@@ -1,6 +1,5 @@
 package org.tokend.authenticator.base.logic.wallet
 
-import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
@@ -10,7 +9,6 @@ import org.tokend.sdk.api.ApiService
 import org.tokend.sdk.api.models.WalletData
 import org.tokend.sdk.api.requests.DataEntity
 import org.tokend.sdk.api.responses.AccountResponse
-import org.tokend.sdk.keyserver.KeyStorage
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.WalletInfo
 import org.tokend.wallet.*
@@ -54,7 +52,7 @@ class WalletUpdateManager() {
                                    network: Network,
                                    signKeyPair: Account,
                                    newMasterKeyPair: Account,
-                                   newKdfAttributes: KdfAttributes): Completable {
+                                   newKdfAttributes: KdfAttributes): Single<WalletData> {
         val originalAccountId = walletInfo.accountId
         val walletId = walletInfo.walletIdHex
 
@@ -82,8 +80,9 @@ class WalletUpdateManager() {
                     )
                 }
                 // Update current wallet with it.
-                .flatMapCompletable { newWallet ->
+                .flatMap { newWallet ->
                     walletManager.updateWallet(walletId, newWallet)
+                            .andThen(Single.just(newWallet))
                 }
     }
 
@@ -102,30 +101,19 @@ class WalletUpdateManager() {
                                       newKdfAttributes: KdfAttributes): Single<WalletData> {
         val email = currentWallet.email
 
-        return {
-            KeyStorage.getWalletIdHex(
-                    email,
-                    newMasterKeyPair.secretSeed!!,
-                    newKdfAttributes
-            )
-        }
-                .toSingle()
-                .flatMap { walletId ->
-                    Single.zip(
-                            WalletManager.createWallet(
-                                    email = email,
-                                    walletId = walletId,
-                                    originalAccountId = newMasterKeyPair.accountId,
-                                    kdfAttributes = newKdfAttributes,
-                                    recoveryAccount = signKeyPair
-                            ),
+        return Single.zip(
+                WalletManager.createWallet(
+                        email = email,
+                        kdfAttributes = newKdfAttributes,
+                        masterAccount = newMasterKeyPair,
+                        recoveryAccount = signKeyPair
+                ),
 
-                            createSignersUpdateTransaction(network, currentWallet,
-                                    signKeyPair, currentSigners, newMasterKeyPair),
+                createSignersUpdateTransaction(network, currentWallet,
+                        signKeyPair, currentSigners, newMasterKeyPair),
 
-                            BiFunction { t1: WalletData, t2: Transaction -> Pair(t1, t2) }
-                    )
-                }
+                BiFunction { t1: WalletData, t2: Transaction -> Pair(t1, t2) }
+        )
 
                 .map { (wallet, transaction) ->
                     wallet.relationships["transaction"] =
