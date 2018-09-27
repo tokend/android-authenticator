@@ -1,11 +1,13 @@
 package org.tokend.authenticator.auth.request
 
 import android.net.Uri
-import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
+import org.tokend.authenticator.auth.request.result.AuthResultApi
+import org.tokend.authenticator.auth.request.result.AuthResultData
+import org.tokend.authenticator.base.extensions.toCompletable
 import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
@@ -14,6 +16,7 @@ import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.sdk.api.ApiService
+import org.tokend.sdk.api.requests.DataEntity
 import org.tokend.sdk.factory.ApiFactory
 import java.util.concurrent.CancellationException
 
@@ -143,9 +146,20 @@ class AuthorizeAppUseCase(
 
     private fun postAuthResult(success: Boolean): Completable {
         return Completable.defer {
-            Log.i("Oleg", "Post success:$success")
+            val result = AuthResultData(
+                    success = success,
+                    walletId =
+                    if (success)
+                        account.walletId
+                    else
+                        null
+            )
 
-            Completable.complete()
+            val resultApi = ApiFactory(authRequest.networkUrl)
+                    .getCustomService(AuthResultApi::class.java)
+
+            resultApi.postAuthResult(authRequest.publicKey, DataEntity(result))
+                    .toCompletable()
         }
     }
 }
