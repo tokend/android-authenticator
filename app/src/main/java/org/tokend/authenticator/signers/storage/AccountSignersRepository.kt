@@ -5,6 +5,7 @@ import io.reactivex.Single
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.db.AppDatabase
+import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.repository.SimpleMultipleItemsRepository
@@ -39,8 +40,8 @@ class AccountSignersRepository(
 
                         Signer(
                                 uid = existingSigner?.uid ?: System.nanoTime(),
-                                name = "",
                                 accountId = account.uid,
+                                name = signerResponse.name,
                                 publicKey = signerResponse.accountId,
                                 scope = signerResponse.type,
                                 expirationDate = null
@@ -50,7 +51,7 @@ class AccountSignersRepository(
     }
 
     fun add(signer: Signer,
-            cipher: DefaultDataCipher,
+            cipher: DataCipher,
             encryptionKeyProvider: EncryptionKeyProvider,
             txManager: TxManager): Completable {
         return account.getSeed(cipher, encryptionKeyProvider)
