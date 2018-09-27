@@ -1,6 +1,5 @@
 package org.tokend.authenticator.accounts.logic.storage
 
-import io.reactivex.Single
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.db.AccountEntity
 import org.tokend.authenticator.base.logic.db.AppDatabase
@@ -17,12 +16,10 @@ class AccountsCache(database: AppDatabase) : RepositoryCache<Account>() {
                 && first.kdfAttributes.encodedSalt == second.kdfAttributes.encodedSalt
     }
 
-    override fun getAllFromDb(): Single<List<Account>> {
+    override fun getAllFromDb(): List<Account> {
         return dao.getAll()
                 .map {
-                    it.map {
-                        it.toAccount()
-                    }
+                    it.toAccount()
                 }
     }
 
