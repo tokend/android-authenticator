@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import org.jetbrains.anko.intentFor
 import org.tokend.authenticator.R
+import org.tokend.authenticator.base.activities.RecoverySeedActivity
 import org.tokend.authenticator.base.activities.add_account.AddAccountActivity
 
 
@@ -44,5 +45,11 @@ object Navigator {
 
     fun openAddAccount(activity: Activity) {
         activity.startActivity(activity.intentFor<AddAccountActivity>())
+    }
+
+    fun openRecoverySeedSaving(activity: Activity, requestCode: Int, seed: String) {
+        activity.startActivityForResult(activity.intentFor<RecoverySeedActivity>(
+                RecoverySeedActivity.SEED_EXTRA to seed
+        ), requestCode)
     }
 }

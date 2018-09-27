@@ -30,6 +30,12 @@
             android:screenOrientation="sensor"
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
+        <activity
+            android:name=".base.activities.RecoverySeedActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/save_recovery_seed"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>
