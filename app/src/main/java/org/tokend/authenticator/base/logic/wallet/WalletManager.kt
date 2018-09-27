@@ -43,11 +43,14 @@ class WalletManager(
          * @return Fully armed and ready to go [WalletData].
          */
         fun createWallet(email: String,
-                         walletId: String,
-                         originalAccountId: String,
+                         masterAccount: Account,
                          recoveryAccount: Account,
                          kdfAttributes: KdfAttributes): Single<WalletData> {
             return {
+                val walletId =
+                        KeyStorage.getWalletIdHex(email, masterAccount.secretSeed!!, kdfAttributes)
+                val originalAccountId = masterAccount.accountId
+
                 // Base wallet has only KDF relation, we need more.
                 val wallet = KeyStorage.createBaseWallet(
                         email, kdfAttributes.salt, walletId, ByteArray(32),

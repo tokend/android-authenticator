@@ -45,6 +45,7 @@ class CreateAccountUseCase(
     private lateinit var network: Network
     private lateinit var masterKeyPair: org.tokend.wallet.Account
     private lateinit var recoveryKeyPair: org.tokend.wallet.Account
+    private lateinit var walletId: String
 
     fun perform(): Single<Result> {
         return getKdfAttributes()
@@ -79,6 +80,9 @@ class CreateAccountUseCase(
                 // Generate TokenD wallet.
                 .flatMap {
                     getWallet()
+                }
+                .doOnSuccess { wallet ->
+                    this.walletId = wallet.id!!
                 }
                 // Post wallet to the system.
                 .flatMap { wallet ->
@@ -126,23 +130,12 @@ class CreateAccountUseCase(
     }
 
     private fun getWallet(): Single<WalletData> {
-        return {
-            KeyStorage.getWalletIdHex(
-                    email,
-                    masterKeyPair.secretSeed!!,
-                    kdfAttributes
-            )
-        }
-                .toSingle()
-                .flatMap { walletId ->
-                    WalletManager.createWallet(
-                            email,
-                            walletId,
-                            masterKeyPair.accountId,
-                            recoveryKeyPair,
-                            kdfAttributes
-                    )
-                }
+        return WalletManager.createWallet(
+                email,
+                masterKeyPair,
+                recoveryKeyPair,
+                kdfAttributes
+        )
     }
 
     private fun postWallet(wallet: WalletData): Single<Boolean> {
@@ -159,6 +152,7 @@ class CreateAccountUseCase(
                             network = network,
                             email = email,
                             originalAccountId = masterKeyPair.accountId,
+                            walletId = walletId,
                             encryptedSeed = encryptedSeed,
                             kdfAttributes = kdfAttributes
                     )

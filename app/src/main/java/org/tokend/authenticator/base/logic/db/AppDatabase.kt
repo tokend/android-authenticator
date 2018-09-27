@@ -12,7 +12,7 @@ import org.tokend.authenticator.signers.storage.SignersDao
             AccountEntity::class,
             SignerEntity::class
         ],
-        version = 2,
+        version = 3,
         exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

@@ -15,6 +15,8 @@ class Account(
         val email: String,
         @SerializedName("originalAccountId")
         val originalAccountId: String,
+        @SerializedName("walletId")
+        var walletId: String,
         @SerializedName("encryptedSeed")
         var encryptedSeed: KeychainData,
         @SerializedName("kdfAttributes")

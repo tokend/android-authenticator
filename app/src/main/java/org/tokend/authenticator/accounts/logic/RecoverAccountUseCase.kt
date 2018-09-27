@@ -16,6 +16,7 @@ import org.tokend.authenticator.base.logic.wallet.WalletManager
 import org.tokend.authenticator.base.logic.wallet.WalletUpdateManager
 import org.tokend.sdk.api.ApiService
 import org.tokend.sdk.api.models.SystemInfo
+import org.tokend.sdk.api.models.WalletData
 import org.tokend.sdk.api.requests.RequestSigner
 import org.tokend.sdk.factory.ApiFactory
 import org.tokend.sdk.keyserver.KeyStorage
@@ -42,6 +43,7 @@ class RecoverAccountUseCase(
     private lateinit var walletManager: WalletManager
     private lateinit var walletUpdateManager: WalletUpdateManager
     private lateinit var newKdfAttributes: KdfAttributes
+    private lateinit var newWalletId: String
 
     fun perform(): Completable {
         return getRecoveryKeyPair()
@@ -99,6 +101,9 @@ class RecoverAccountUseCase(
                 .flatMap {
                     updateWallet()
                 }
+                .doOnSuccess { updatedWallet ->
+                    this.newWalletId = updatedWallet.id!!
+                }
                 .flatMapCompletable {
                     updateAccount()
                 }
@@ -120,7 +125,7 @@ class RecoverAccountUseCase(
         }.toSingle()
     }
 
-    private fun updateWallet(): Single<Boolean> {
+    private fun updateWallet(): Single<WalletData> {
         return walletUpdateManager.updateWalletWithNewKeyPair(
                 walletInfo = recoveryWallet,
                 newMasterKeyPair = newMasterKeyPair,
@@ -129,7 +134,7 @@ class RecoverAccountUseCase(
                 signKeyPair = recoveryKeyPair,
                 signedApi = signedApi,
                 walletManager = walletManager
-        ).toSingleDefault(true)
+        )
     }
 
     private fun updateAccount(): Completable {
@@ -145,12 +150,14 @@ class RecoverAccountUseCase(
                     if (accountToUpdate != null) {
                         accountToUpdate.encryptedSeed = encryptedSeed
                         accountToUpdate.kdfAttributes = newKdfAttributes
+                        accountToUpdate.walletId = newWalletId
                         accountsRepository.update(accountToUpdate)
                     } else {
                         val newAccount = Account(
                                 network = network,
                                 email = email,
-                                originalAccountId = newMasterKeyPair.accountId,
+                                originalAccountId = recoveryWallet.accountId,
+                                walletId = newWalletId,
                                 encryptedSeed = encryptedSeed,
                                 kdfAttributes = newKdfAttributes
                         )
