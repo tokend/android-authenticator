@@ -58,7 +58,7 @@ class AccountSignersRepository {
 
         Assert.assertArrayEquals(
                 repository.itemsList.toTypedArray(),
-                database.signersDao.getByAccount(account.uid).blockingGet().map { it.toSigner() }
+                database.signersDao.getByAccount(account.uid).map { it.toSigner() }
                         .toTypedArray()
         )
     }
