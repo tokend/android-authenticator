@@ -6,7 +6,6 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DataCipher
-import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.repository.SimpleMultipleItemsRepository
 import org.tokend.authenticator.base.logic.transactions.TxManager
@@ -72,7 +71,7 @@ class AccountSignersRepository(
     }
 
     fun delete(signer: Signer,
-               cipher: DefaultDataCipher,
+               cipher: DataCipher,
                encryptionKeyProvider: EncryptionKeyProvider,
                txManager: TxManager): Completable {
         return account.getSeed(cipher, encryptionKeyProvider)
