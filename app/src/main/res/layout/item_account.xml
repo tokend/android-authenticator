@@ -83,7 +83,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/account_card_divider"
-            tools:text="Manage" />
+            android:text="@string/manage" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
