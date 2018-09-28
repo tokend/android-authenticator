@@ -3,7 +3,6 @@ package org.tokend.authenticator.auth.request
 import android.net.Uri
 import org.tokend.wallet.Base32Check
 import org.tokend.wallet.xdr.SignerType
-import java.lang.IllegalArgumentException
 import java.net.URLDecoder
 import java.util.*
 
@@ -23,9 +22,8 @@ class AuthRequest(
             }
 
     companion object {
-        private const val URI_SCHEME = "tdauth"
-        private const val URI_ACTION_KEY = "action"
-        private const val URI_AUTH_ACTION = "auth"
+        private const val URI_SCHEME = "tokend"
+        private const val URI_HOST = "auth"
         private const val URI_NETWORK_URL_KEY = "api"
         private const val URI_APP_NAME_KEY = "app"
         private const val URI_PUBKEY_KEY = "pubkey"
@@ -38,8 +36,8 @@ class AuthRequest(
                 throw IllegalArgumentException("Auth URI must have '$URI_SCHEME' scheme")
             }
 
-            if (uri.getQueryParameter(URI_ACTION_KEY) != URI_AUTH_ACTION) {
-                throw IllegalArgumentException("Invalid action")
+            if (uri.host != URI_HOST) {
+                throw IllegalArgumentException("Invalid host")
             }
 
             return AuthRequest(

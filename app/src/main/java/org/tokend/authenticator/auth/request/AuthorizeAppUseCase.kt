@@ -3,6 +3,7 @@ package org.tokend.authenticator.auth.request
 import android.net.Uri
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.auth.request.result.AuthResultApi
@@ -35,6 +36,8 @@ class AuthorizeAppUseCase(
     private lateinit var signersRepository: AccountSignersRepository
 
     fun perform(): Completable {
+        val scheduler = Schedulers.newThread()
+
         return getAuthRequest()
                 .doOnSuccess { authRequest ->
                     this.authRequest = authRequest
@@ -54,12 +57,14 @@ class AuthorizeAppUseCase(
                 .flatMap {
                     getAccount()
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { account ->
                     this.account = account
                 }
                 .flatMap {
                     getConfirmation()
                 }
+                .observeOn(scheduler)
                 .map {
                     getSignersRepository()
                 }

@@ -34,7 +34,7 @@ class AuthRequestConfirmationDialog(
                 dateFormat
         )
 
-        AlertDialog.Builder(context, R.style.AlertDialogStyle)
+        AlertDialog.Builder(context)
                 .setTitle(
                         context.getString(R.string.template_auth_confirmation_dialog_title,
                                 authRequest.appName)

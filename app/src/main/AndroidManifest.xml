@@ -43,6 +43,21 @@
             android:name=".auth.view.accounts.selection.AuthAccountSelectionActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.Dialog" />
+        <activity
+            android:name=".auth.view.AuthorizeAppActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.Dialog">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="auth"
+                    android:scheme="tokend" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

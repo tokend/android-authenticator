@@ -39,4 +39,6 @@
     <string name="error_email_not_verified">Email is not verified</string>
     <string name="template_auth_account_selection_title">Select account for \"%1$s\"</string>
     <string name="manage">Manage</string>
+    <string name="processing_auth_request">Processing request…</string>
+    <string name="app_authorized">App authorized</string>
 </resources>
