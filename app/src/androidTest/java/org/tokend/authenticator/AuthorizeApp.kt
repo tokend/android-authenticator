@@ -16,10 +16,9 @@ import org.tokend.authenticator.auth.request.AuthRequestConfirmationProvider
 import org.tokend.authenticator.auth.request.AuthorizeAppUseCase
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
-import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
+import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
-import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toByteArray
 import java.net.URLEncoder
 
@@ -57,16 +56,8 @@ class AuthorizeApp {
 
         val accountSelector = object : AuthAccountSelector {
             override fun selectAccountForAuth(network: Network,
-                                              authRequest: AuthRequest): Maybe<AuthAccountSelector.Result> {
-                return Maybe.just(
-                        AuthAccountSelector.Result(
-                                account, DefaultDataCipher(), object : EncryptionKeyProvider {
-                            override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
-                                return Single.just(key)
-                            }
-                        }
-                        )
-                )
+                                              authRequest: AuthRequest): Maybe<Account> {
+                return Maybe.just(account)
             }
         }
 
@@ -80,7 +71,9 @@ class AuthorizeApp {
                 uri,
                 accountSelector,
                 signersRepositoryProvider,
-                confirmationProvider
+                confirmationProvider,
+                DefaultDataCipher(),
+                TmpEncryptionKeyProvider()
         )
                 .perform()
                 .blockingAwait()

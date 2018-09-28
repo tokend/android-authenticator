@@ -1,0 +1,3 @@
+package org.tokend.authenticator.auth.view.accounts.selection.adapter
+
+class AddAccountSelectionListItem: AccountSelectionListItem

@@ -20,6 +20,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+    </style>
+
     <style name="SecondaryButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/colorSecondaryText</item>
     </style>
@@ -36,7 +44,7 @@
     </style>
 
     <style name="PrimaryButton.Overlay" parent="ThemeOverlay.AppCompat">
-     <item name="colorButtonNormal">@color/colorPrimaryActionDisabled</item>
+        <item name="colorButtonNormal">@color/colorPrimaryActionDisabled</item>
         <item name="colorAccent">@color/colorPrimaryAction</item>
     </style>
 

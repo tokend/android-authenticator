@@ -13,7 +13,9 @@ import javax.inject.Singleton
             DataCipherModule::class,
             AccountSignersRepositoryProviderModule::class,
             DateFormatModule::class,
-            AuthRequestConfirmationProviderFactoryModule::class
+            AuthRequestConfirmationProviderFactoryModule::class,
+            AuthAccountSelectorFactoryModule::class,
+            EncryptionKeyProviderModule::class
         ]
 )
 @Singleton

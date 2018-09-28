@@ -3,7 +3,6 @@ package org.tokend.authenticator
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,9 +10,8 @@ import org.tokend.authenticator.accounts.logic.RecoverAccountUseCase
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
-import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
+import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
 import org.tokend.authenticator.base.util.ObservableTransformers
-import org.tokend.sdk.keyserver.models.KdfAttributes
 
 @RunWith(AndroidJUnit4::class)
 class AccountRecovery {
@@ -76,11 +74,7 @@ class AccountRecovery {
         val network = "https://api.testnet.tokend.org/"
         val recoverySeed = "SCIUKFBGL364Q2A2BVO474BBOFS6VV2K5WFAQG6WQS7WHAATGLE6CVP3".toCharArray()
         val cipher = DefaultDataCipher()
-        val keyProvider = object : EncryptionKeyProvider {
-            override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
-                return Single.just(ByteArray(32))
-            }
-        }
+        val keyProvider = TmpEncryptionKeyProvider()
 
         RecoverAccountUseCase(
                 networkUrl = network,

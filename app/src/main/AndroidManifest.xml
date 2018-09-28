@@ -36,8 +36,13 @@
             android:label="@string/save_recovery_seed"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".base.activities.RecoveryActivity"
-            android:label="@string/recovery"/>
+        <activity
+            android:name=".base.activities.RecoveryActivity"
+            android:label="@string/recovery" />
+        <activity
+            android:name=".auth.view.accounts.selection.AuthAccountSelectionActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.Dialog" />
     </application>
 
 </manifest>

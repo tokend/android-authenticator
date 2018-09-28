@@ -48,8 +48,11 @@ object Navigator {
         }
     }
 
-    fun openAddAccount(activity: Activity) {
-        activity.startActivity(activity.intentFor<AddAccountActivity>())
+    fun openAddAccount(activity: Activity,
+                       networkUrl: String? = null) {
+        activity.startActivity(activity.intentFor<AddAccountActivity>(
+                AddAccountActivity.NETWORK_URL_EXTRA to networkUrl
+        ))
     }
 
     fun openRecoverySeedSaving(activity: Activity, requestCode: Int, seed: String) {

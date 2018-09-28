@@ -24,14 +24,14 @@ class AuthorizeAppUseCase(
         private val authUri: String,
         private val accountSelector: AuthAccountSelector,
         private val accountSignersRepositoryProvider: AccountSignersRepositoryProvider,
-        private val confirmationProvider: AuthRequestConfirmationProvider
+        private val confirmationProvider: AuthRequestConfirmationProvider,
+        private val cipher: DataCipher,
+        private val encryptionKeyProvider: EncryptionKeyProvider
 ) {
     private lateinit var authRequest: AuthRequest
     private lateinit var api: ApiService
     private lateinit var network: Network
     private lateinit var account: Account
-    private lateinit var cipher: DataCipher
-    private lateinit var encryptionKeyProvider: EncryptionKeyProvider
     private lateinit var signersRepository: AccountSignersRepository
 
     fun perform(): Completable {
@@ -54,10 +54,8 @@ class AuthorizeAppUseCase(
                 .flatMap {
                     getAccount()
                 }
-                .doOnSuccess { (account, cipher, encryptionKeyProvider) ->
+                .doOnSuccess { account ->
                     this.account = account
-                    this.cipher = cipher
-                    this.encryptionKeyProvider = encryptionKeyProvider
                 }
                 .flatMap {
                     getConfirmation()
@@ -103,7 +101,7 @@ class AuthorizeAppUseCase(
                 }
     }
 
-    private fun getAccount(): Single<AuthAccountSelector.Result> {
+    private fun getAccount(): Single<Account> {
         return accountSelector.selectAccountForAuth(network, authRequest)
                 .switchIfEmpty(
                         Single.error(CancellationException("Auth canceled on account request"))

@@ -27,6 +27,7 @@ class AddAccountActivity : BaseActivity() {
 
     companion object {
         private val SAVE_SEED_REQUEST = "save_recovery_seed".hashCode() and 0xffff
+        const val NETWORK_URL_EXTRA = "network_url"
     }
 
     private var networkUrl: String = ""
@@ -57,6 +58,9 @@ class AddAccountActivity : BaseActivity() {
         initFields()
         initButtons()
 
+        intent.getStringExtra(NETWORK_URL_EXTRA)?.also {
+            onNetworkUrlObtained(it)
+        }
     }
 
     private fun updateAddAccountAvailability() {
@@ -111,11 +115,11 @@ class AddAccountActivity : BaseActivity() {
         val keyProvider = TmpEncryptionKeyProvider()
 
         CreateAccountUseCase(
-            networkUrl,
-            email,
-            dataCipher,
-            keyProvider,
-            accountsRepository)
+                networkUrl,
+                email,
+                dataCipher,
+                keyProvider,
+                accountsRepository)
                 .perform()
                 .compose(ObservableTransformers.defaultSchedulersSingle())
                 .doOnSubscribe {
@@ -163,16 +167,24 @@ class AddAccountActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == SAVE_SEED_REQUEST) {
+        if (requestCode == SAVE_SEED_REQUEST) {
             onSuccessfulCreated()
         } else {
             QrScannerUtil.getStringFromResult(requestCode, resultCode, data)?.also {
-                val api = JSONObject(it).getString("api").addSlashIfNeed()
-                HttpUrl.parse(api).also { httpUrl ->
-                    networkUrl = httpUrl.toString()
-                    network_edit_text.setText(httpUrl.host())
+                try {
+                    val api = JSONObject(it).getString("api").addSlashIfNeed()
+                    onNetworkUrlObtained(api)
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
+        }
+    }
+
+    private fun onNetworkUrlObtained(networkUrl: String) {
+        HttpUrl.parse(networkUrl)?.also { httpUrl ->
+            this.networkUrl = httpUrl.toString()
+            network_edit_text.setText(httpUrl.host())
         }
     }
 
