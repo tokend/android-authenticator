@@ -52,6 +52,7 @@ class AccountsListAdapter : RecyclerView.Adapter<AccountViewHolder>() {
     }
 
     fun addData(data: List<Account>?) {
+        items.clear()
         if(data != null) {
             items.addAll(data)
         }
