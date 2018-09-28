@@ -36,9 +36,8 @@ class AccountsListAdapter : RecyclerView.Adapter<AccountViewHolder>() {
     val hasData: Boolean
         get() = items.isNotEmpty()
 
-    fun filter(data: List<Account>?) {
+    fun setData(data: Collection<Account>?) {
         val newItems = data?.toList() ?: listOf()
-
         val diffCallback = getDiffCallback(newItems)
 
         if (items.isEmpty() && newItems.isEmpty()) {
@@ -51,7 +50,7 @@ class AccountsListAdapter : RecyclerView.Adapter<AccountViewHolder>() {
         }
     }
 
-    fun addData(data: List<Account>?) {
+    fun addData(data: Collection<Account>?) {
         items.clear()
         if(data != null) {
             items.addAll(data)

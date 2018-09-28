@@ -128,7 +128,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { it ->
-                    filter = it.trim().toString().takeIf { it.isNotEmpty() }
+                    filter = it.trim().toString()
                 }
                 .addTo(compositeDisposable)
 
@@ -159,11 +159,12 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
                 .let { items ->
                     filter?.let {
                         items.filter { item ->
-                            SearchUtil.isMatchGeneralCondition(it, item.network.name, item.email)
+                            item.email.contains(it, true)
+                                    || item.network.name.contains(it, true)
                         }
                     }
                 }
-        adapter.filter(items)
+        adapter.setData(items)
     }
 
     private var accountsDisposable: Disposable? = null
