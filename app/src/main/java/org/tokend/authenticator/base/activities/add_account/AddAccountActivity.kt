@@ -29,7 +29,7 @@ class AddAccountActivity : BaseActivity() {
         private val SAVE_SEED_REQUEST = "save_recovery_seed".hashCode() and 0xffff
     }
 
-    private lateinit var networkUrl: String
+    private var networkUrl: String = ""
     private val cameraPermission = Permission(Manifest.permission.CAMERA, 404)
 
     private val loadingIndicator = LoadingIndicatorManager(
@@ -88,7 +88,8 @@ class AddAccountActivity : BaseActivity() {
         }
 
         recovery_button.setOnClickListener {
-
+            val email = email_edit_text.text.toString()
+            Navigator.openRecoveryActivity(this, networkUrl, email)
         }
     }
 
@@ -129,7 +130,7 @@ class AddAccountActivity : BaseActivity() {
                             isLoading = false
                             Navigator.openRecoverySeedSaving(this,
                                     SAVE_SEED_REQUEST,
-                                    it.recoverySeed.toString())
+                                    String(it.recoverySeed))
                         },
                         onError = {
                             it.printStackTrace()

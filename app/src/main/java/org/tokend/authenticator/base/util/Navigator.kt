@@ -5,9 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
+import org.jetbrains.anko.clearTop
 import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.newTask
+import org.jetbrains.anko.noHistory
 import org.tokend.authenticator.R
+import org.tokend.authenticator.base.activities.RecoveryActivity
 import org.tokend.authenticator.base.activities.RecoverySeedActivity
+import org.tokend.authenticator.base.activities.account_list.AccountsListActivity
 import org.tokend.authenticator.base.activities.add_account.AddAccountActivity
 
 
@@ -51,5 +56,16 @@ object Navigator {
         activity.startActivityForResult(activity.intentFor<RecoverySeedActivity>(
                 RecoverySeedActivity.SEED_EXTRA to seed
         ), requestCode)
+    }
+
+    fun openRecoveryActivity(activity: Activity, api: String, email: String) {
+        activity.startActivity(activity.intentFor<RecoveryActivity>(
+                RecoveryActivity.EXTRA_API to api,
+                RecoveryActivity.EXTRA_EMAIL to email
+        ))
+    }
+
+    fun toAccountsList(activity: Activity) {
+        activity.startActivity(activity.intentFor<AccountsListActivity>().clearTop())
     }
 }

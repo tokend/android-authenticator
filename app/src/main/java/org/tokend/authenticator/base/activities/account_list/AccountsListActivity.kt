@@ -53,6 +53,8 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         initMenu()
 
         subscribeAccounts()
+
+        update()
     }
 
     private val hideFabScrollListener = object : RecyclerView.OnScrollListener() {
@@ -90,7 +92,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
 
     private fun initSwipeRefresh() {
         swipe_refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
-        swipe_refresh.setOnRefreshListener { update(true) }
+        swipe_refresh.setOnRefreshListener { update() }
     }
 
     private fun update(force: Boolean = false) {
@@ -125,7 +127,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
                 .skipInitialValue()
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe { it ->
                     filter = it.trim().toString().takeIf { it.isNotEmpty() }
                 }
                 .addTo(compositeDisposable)
@@ -182,7 +184,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
                 accountsRepository.loading
                         .compose(ObservableTransformers.defaultSchedulers() )
                         .subscribe {
-                            loadingIndicator.setLoading(it, "accounts")
+                            loadingIndicator.setLoading(it, "account")
                         }
                         .addTo(compositeDisposable)
 
