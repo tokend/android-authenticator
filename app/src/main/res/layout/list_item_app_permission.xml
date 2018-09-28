@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="8dp">
+
+    <ImageView
+        android:id="@+id/permission_icon_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="8dp"
+        app:srcCompat="@drawable/ic_bullet" />
+
+    <TextView
+        android:id="@+id/permission_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/permission_icon_image_view"
+        android:textSize="16sp"
+        tools:text="Manage account" />
+
+    <TextView
+        android:id="@+id/permission_description_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/permission_text_view"
+        android:layout_below="@id/permission_text_view"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="12sp"
+        tools:text="Description" />
+
+</RelativeLayout>

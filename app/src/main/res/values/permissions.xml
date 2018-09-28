@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="signer_type_descriptions">
+        <item>Read account information</item>
+        <item>Manage non-verified account</item>
+        <item>Perform general account management</item>
+        <item>Operate direct debit</item>
+        <item>Manage assets</item>
+        <item>Manage asset rates</item>
+        <item>Manage balances</item>
+        <item>Manage issuance</item>
+        <item>Manage invoices</item>
+        <item>Operate payments</item>
+        <item>Manage limits</item>
+        <item>Manage accounts</item>
+        <item>Manage commission balances</item>
+        <item>Manage operational balances</item>
+        <item>Check system events</item>
+        <item>Manage exchange account</item>
+        <item>Manage syndicate account</item>
+        <item>Manage user assets</item>
+        <item>Manage user issuance</item>
+        <item>Manage withdrawals</item>
+        <item>Manage fees</item>
+        <item>Send transactions</item>
+        <item>Manage AML alerts</item>
+        <item>Review AML alerts</item>
+        <item>Manage KYC accounts</item>
+        <item>Administrate KYC (super)</item>
+        <item>Manage external system accounts pool</item>
+        <item>Manage key-value storage</item>
+        <item>Manage issuance (super)</item>
+        <item>Manage contracts</item>
+    </string-array>
+
+    <string name="template_permission_finite_access">Access the account until %1$s</string>
+    <string name="permission_permanent_access">Have permanent access to the account</string>
+    <string name="permission_access_revoke_description">Can be revoked at any time</string>
+</resources>

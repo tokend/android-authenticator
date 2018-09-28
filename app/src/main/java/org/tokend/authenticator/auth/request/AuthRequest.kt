@@ -62,7 +62,7 @@ class AuthRequest(
                     expirationDate = uri.getQueryParameter(URI_EXPIRATION_TIMESTAMP_KEY)
                             ?.toLongOrNull()
                             ?.takeIf { it > 0 }
-                            ?.let { Date(it) }
+                            ?.let { Date(it * 1000) }
             )
         }
     }

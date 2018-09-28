@@ -30,4 +30,7 @@
     <string name="validate_recovery_seed_explanation">Please validate this seed in the field below to ensure that you copied it properly</string>
     <string name="continue_action">Continue</string>
     <string name="error_email_already_taken">Email is already taken</string>
+
+    <string name="template_auth_confirmation_dialog_title">\"%1$s\" would like to</string>
+    <string name="confirm_action">Confirm</string>
 </resources>
