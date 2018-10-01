@@ -43,4 +43,6 @@
     <string name="app_authorized">App authorized</string>
     <string name="scan_qr_code_action">Scan QR code</string>
     <string name="error_unknown_qr">Unknown QR code format</string>
+    <string name="template_authorized_app_dialog_title">\"%1$s\" is able to</string>
+    <string name="revoke_access_action">Revoke access</string>
 </resources>

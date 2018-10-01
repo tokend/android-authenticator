@@ -3,6 +3,7 @@ package org.tokend.authenticator.auth.view.permission
 import android.content.Context
 import org.tokend.authenticator.R
 import org.tokend.authenticator.auth.request.AuthRequest
+import org.tokend.authenticator.signers.model.Signer
 import org.tokend.wallet.xdr.SignerType
 import java.text.DateFormat
 import java.util.*
@@ -48,6 +49,23 @@ class PermissionListItem(
 
             return listOf(accessDurationPermission) +
                     authRequest.accessTypes
+                            .map {
+                                fromAccessType(context, it)
+                            }
+        }
+
+        fun fromSigner(context: Context,
+                       signer: Signer,
+                       dateFormat: DateFormat): List<PermissionListItem> {
+            val accessDurationPermission =
+                    fromExpirationDate(
+                            context,
+                            signer.expirationDate,
+                            dateFormat
+                    )
+
+            return listOf(accessDurationPermission) +
+                    signer.types
                             .map {
                                 fromAccessType(context, it)
                             }
