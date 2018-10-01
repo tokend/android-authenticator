@@ -1,6 +1,7 @@
 package org.tokend.authenticator.base.util
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
@@ -10,6 +11,8 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.newTask
 import org.jetbrains.anko.noHistory
 import org.tokend.authenticator.R
+import org.tokend.authenticator.auth.request.AuthorizeAppUseCase
+import org.tokend.authenticator.auth.view.AuthorizeAppActivity
 import org.tokend.authenticator.base.activities.RecoveryActivity
 import org.tokend.authenticator.base.activities.RecoverySeedActivity
 import org.tokend.authenticator.base.activities.account_list.AccountsListActivity
@@ -70,5 +73,13 @@ object Navigator {
 
     fun toAccountsList(activity: Activity) {
         activity.startActivity(activity.intentFor<AccountsListActivity>().clearTop())
+    }
+
+    fun openAuthorizeAppActivity(activity: Activity,
+                                 authUri: Uri? = null) {
+        activity.startActivity(
+                activity.intentFor<AuthorizeAppActivity>()
+                        .setData(authUri)
+        )
     }
 }

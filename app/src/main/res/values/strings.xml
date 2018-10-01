@@ -41,4 +41,6 @@
     <string name="manage">Manage</string>
     <string name="processing_auth_request">Processing request…</string>
     <string name="app_authorized">App authorized</string>
+    <string name="scan_qr_code_action">Scan QR code</string>
+    <string name="error_unknown_qr">Unknown QR code format</string>
 </resources>
