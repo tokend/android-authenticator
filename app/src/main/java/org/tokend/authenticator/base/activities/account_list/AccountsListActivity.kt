@@ -1,5 +1,8 @@
 package org.tokend.authenticator.base.activities.account_list
 
+import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.transition.Fade
 import android.support.transition.TransitionManager
@@ -10,19 +13,19 @@ import android.support.v7.widget.SearchView
 import android.view.MenuItem
 import android.widget.EditText
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
-import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_accounts_list.*
 import kotlinx.android.synthetic.main.include_error_empty_view.*
+import okhttp3.HttpUrl
+import org.json.JSONObject
 import org.tokend.authenticator.R
+import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountsListAdapter
 import org.tokend.authenticator.base.activities.account_list.adapter.ManageClickListener
-import org.tokend.authenticator.base.util.Navigator
-import org.tokend.authenticator.base.util.ObservableTransformers
-import org.tokend.authenticator.base.util.SearchUtil
+import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import java.util.concurrent.TimeUnit
 
@@ -42,6 +45,8 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
             showLoading = { swipe_refresh.isRefreshing = true },
             hideLoading = { swipe_refresh.isRefreshing = false }
     )
+
+    private val cameraPermission = Permission(Manifest.permission.CAMERA, 404)
 
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_accounts_list)
@@ -96,7 +101,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
     }
 
     private fun update(force: Boolean = false) {
-        if(force) {
+        if (force) {
             accountsRepository.updateIfNotFresh()
         } else {
             accountsRepository.update()
@@ -148,6 +153,11 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
                 return true
             }
         })
+
+        menu.findItem(R.id.scan_qr)?.setOnMenuItemClickListener {
+            tryOpenQrScanner()
+            true
+        }
     }
 
     private fun onFilterChanged() {
@@ -174,7 +184,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         accountsDisposable?.dispose()
         accountsDisposable =
                 accountsRepository.itemsObservable
-                        .compose(ObservableTransformers.defaultSchedulers() )
+                        .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe {
                             adapter.addData(it)
                         }
@@ -183,7 +193,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         accountsLoadingDisposable?.dispose()
         accountsLoadingDisposable =
                 accountsRepository.loading
-                        .compose(ObservableTransformers.defaultSchedulers() )
+                        .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe {
                             loadingIndicator.setLoading(it, "account")
                         }
@@ -192,7 +202,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         accountsErrorsDisposable?.dispose()
         accountsErrorsDisposable =
                 accountsRepository.errors
-                        .compose(ObservableTransformers.defaultSchedulers() )
+                        .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe { error ->
                             if (!adapter.hasData) {
                                 error_empty_view.showError(error, errorHandlerFactory.getDefault()) {
@@ -203,5 +213,44 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
                             }
                         }
                         .addTo(compositeDisposable)
+    }
+
+    // region QR
+    private fun tryOpenQrScanner() {
+        cameraPermission.check(this) {
+            QrScannerUtil.openScanner(this)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        cameraPermission.handlePermissionResult(requestCode, permissions, grantResults)
+    }
+    // endregion
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        QrScannerUtil.getStringFromResult(requestCode, resultCode, data).also {
+            try {
+                val uri = Uri.parse(it)
+                AuthRequest.fromUri(uri)
+                Navigator.openAuthorizeAppActivity(this, uri)
+                return@also
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            try {
+                val apiRoot = JSONObject(it).getString("api")
+                        .also { urlString -> HttpUrl.parse(urlString) }
+                Navigator.openAddAccount(this, apiRoot)
+                return@also
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            ToastManager(this).short(R.string.error_unknown_qr)
+        }
     }
 }

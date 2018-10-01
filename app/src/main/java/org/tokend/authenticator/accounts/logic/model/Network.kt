@@ -21,7 +21,6 @@ class Network(
                 && other.name == this.name
                 && other.passphrase == this.passphrase
                 && other.masterAccountId == this.masterAccountId
-                && other.rootUrl == this.rootUrl
     }
 
     override fun hashCode(): Int {
