@@ -2,14 +2,20 @@ package org.tokend.authenticator.signers.storage
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import org.tokend.authenticator.accounts.logic.model.Account
+import org.tokend.authenticator.base.extensions.toCompletable
 import org.tokend.authenticator.base.extensions.toSingle
+import org.tokend.authenticator.base.logic.DefaultRequestSigner
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.repository.SimpleMultipleItemsRepository
 import org.tokend.authenticator.base.logic.transactions.TxManager
 import org.tokend.authenticator.signers.model.Signer
+import org.tokend.sdk.api.requests.AttributesEntity
+import org.tokend.sdk.api.requests.DataEntity
+import org.tokend.sdk.api.requests.models.CreateUserRequestBody
 import org.tokend.sdk.factory.ApiFactory
 import org.tokend.wallet.Transaction
 import org.tokend.wallet.xdr.Operation
@@ -58,7 +64,11 @@ class AccountSignersRepository(
                     org.tokend.wallet.Account.fromSecretSeed(accountSeed)
                 }
                 .flatMap { signKeyPair ->
-                    createSignerAddTransaction(signer, signKeyPair)
+                    Single.zip(
+                            createSignerAddTransaction(signer, signKeyPair),
+                            createAccountIfNeeded(signKeyPair),
+                            BiFunction { transaction: Transaction, _: Boolean -> transaction }
+                    )
                 }
                 .flatMap { transaction ->
                     txManager.submit(transaction)
@@ -122,6 +132,18 @@ class AccountSignersRepository(
                         )
                 )
         )
+    }
+
+    private fun createAccountIfNeeded(keyPair: org.tokend.wallet.Account): Single<Boolean> {
+        return ApiFactory(account.network.rootUrl)
+                .getApiService(DefaultRequestSigner(keyPair))
+                .createUser(
+                        account.originalAccountId,
+                        DataEntity(AttributesEntity(CreateUserRequestBody("not_verified")))
+                )
+                .toCompletable()
+                .toSingleDefault(true)
+                .onErrorReturnItem(false)
     }
 
     companion object {
