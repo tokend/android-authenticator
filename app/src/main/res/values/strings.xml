@@ -45,4 +45,7 @@
     <string name="error_unknown_qr">Unknown QR code format</string>
     <string name="template_authorized_app_dialog_title">\"%1$s\" is able to</string>
     <string name="revoke_access_action">Revoke access</string>
+    <string name="manage_account">Manage Account</string>
+    <string name="general">General</string>
+    <string name="access">Access</string>
 </resources>

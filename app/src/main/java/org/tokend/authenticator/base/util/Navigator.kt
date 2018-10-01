@@ -13,6 +13,7 @@ import org.jetbrains.anko.noHistory
 import org.tokend.authenticator.R
 import org.tokend.authenticator.auth.request.AuthorizeAppUseCase
 import org.tokend.authenticator.auth.view.AuthorizeAppActivity
+import org.tokend.authenticator.base.activities.GeneralAccountInfoActivity
 import org.tokend.authenticator.base.activities.RecoveryActivity
 import org.tokend.authenticator.base.activities.RecoverySeedActivity
 import org.tokend.authenticator.base.activities.account_list.AccountsListActivity
@@ -81,5 +82,11 @@ object Navigator {
                 activity.intentFor<AuthorizeAppActivity>()
                         .setData(authUri)
         )
+    }
+
+    fun openGeneralAccountInfo(activity: Activity, uid: Long) {
+        activity.startActivity(activity.intentFor<GeneralAccountInfoActivity>(
+                GeneralAccountInfoActivity.EXTRA_UID to uid
+        ))
     }
 }

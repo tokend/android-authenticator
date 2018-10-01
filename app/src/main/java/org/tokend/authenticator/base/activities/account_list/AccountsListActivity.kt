@@ -86,7 +86,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
     }
 
     override fun onManageClick(uid: Long) {
-
+        Navigator.openGeneralAccountInfo(this, uid)
     }
 
     private fun initFab() {
