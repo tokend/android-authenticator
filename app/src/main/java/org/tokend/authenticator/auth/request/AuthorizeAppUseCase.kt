@@ -4,6 +4,7 @@ import android.net.Uri
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.doAsync
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.auth.request.result.AuthResultApi
@@ -80,10 +81,9 @@ class AuthorizeAppUseCase(
                 .andThen(postAuthResult(true))
                 .onErrorResumeNext {
                     if (it is CancellationException) {
-                        postAuthResult(false)
-                    } else {
-                        Completable.error(it)
+                        postAuthResultAsync(false)
                     }
+                    Completable.error(it)
                 }
     }
 
@@ -163,6 +163,12 @@ class AuthorizeAppUseCase(
 
             resultApi.postAuthResult(authRequest.publicKey, DataEntity(result))
                     .toCompletable()
+        }
+    }
+
+    private fun postAuthResultAsync(success: Boolean) {
+        doAsync {
+            postAuthResult(success).blockingAwait()
         }
     }
 }

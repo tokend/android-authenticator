@@ -35,6 +35,7 @@ class AuthorizeAppActivity : BaseActivity() {
                         onComplete = {
                             if (!isFinishing) {
                                 ToastManager(this).short(R.string.app_authorized)
+                                finish()
                             }
                         },
                         onError = {
