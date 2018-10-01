@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.tokend.authenticator.accounts.logic.RecoverAccountUseCase
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
+import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
@@ -82,7 +83,8 @@ class AccountRecovery {
                 recoverySeed = recoverySeed,
                 cipher = cipher,
                 encryptionKeyProvider = keyProvider,
-                accountsRepository = accountRepository
+                accountsRepository = accountRepository,
+                apiFactory = DefaultApiFactory()
         )
                 .perform()
                 .compose(ObservableTransformers.defaultSchedulersCompletable())

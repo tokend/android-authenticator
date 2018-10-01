@@ -14,10 +14,12 @@ import org.tokend.authenticator.auth.request.AuthAccountSelector
 import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.auth.request.AuthRequestConfirmationProvider
 import org.tokend.authenticator.auth.request.AuthorizeAppUseCase
+import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
+import org.tokend.authenticator.base.logic.transactions.factory.DefaultTxManagerFactory
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.wallet.utils.toByteArray
 import java.net.URLEncoder
@@ -47,7 +49,7 @@ class AuthorizeApp {
                 .build()
 //        database.signersDao.deleteAll()
 
-        val signersRepositoryProvider = AccountSignersRepositoryProvider(database)
+        val signersRepositoryProvider = AccountSignersRepositoryProvider(database, DefaultApiFactory())
 
         val pubKey = org.tokend.wallet.Account.random().accountId
         val uri = "tdauth://?action=auth&api=${account.network.rootUrl}" +
@@ -73,7 +75,9 @@ class AuthorizeApp {
                 signersRepositoryProvider,
                 confirmationProvider,
                 DefaultDataCipher(),
-                TmpEncryptionKeyProvider()
+                TmpEncryptionKeyProvider(),
+                DefaultApiFactory(),
+                DefaultTxManagerFactory(DefaultApiFactory())
         )
                 .perform()
                 .blockingAwait()

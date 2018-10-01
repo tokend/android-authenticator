@@ -27,7 +27,9 @@ class AuthorizeAppActivity : BaseActivity() {
                 signersRepositoryProvider,
                 authRequestConfirmationDialogFactory.getForActivity(this),
                 dataCipher,
-                encryptionKeyProvider
+                encryptionKeyProvider,
+                apiFactory,
+                txManagerFactory
         )
                 .perform()
                 .compose(ObservableTransformers.defaultSchedulersCompletable())

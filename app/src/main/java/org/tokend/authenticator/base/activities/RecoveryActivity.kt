@@ -52,10 +52,10 @@ class RecoveryActivity : BaseActivity() {
     private val cameraPermission = Permission(Manifest.permission.CAMERA, 404)
 
     private val api: String
-    get() = intent.getStringExtra(EXTRA_API, "")
+        get() = intent.getStringExtra(EXTRA_API, "")
 
     private val email: String
-    get() = intent.getStringExtra(EXTRA_EMAIL, "")
+        get() = intent.getStringExtra(EXTRA_EMAIL, "")
 
     private lateinit var networkHttpUrl: HttpUrl
 
@@ -71,12 +71,12 @@ class RecoveryActivity : BaseActivity() {
 
     private fun initFields() {
 
-        if(api.isNotEmpty()) {
+        if (api.isNotEmpty()) {
             networkHttpUrl = HttpUrl.parse(api)
             network_edit_text.setText(networkHttpUrl.host())
         }
 
-        if(email.isNotEmpty()) {
+        if (email.isNotEmpty()) {
             email_edit_text.setText(email)
             email_edit_text.setSelection(email.length)
         }
@@ -104,7 +104,7 @@ class RecoveryActivity : BaseActivity() {
     }
 
     private fun addSimpleTextWatcher(editText: MaterialEditText) {
-        editText.addTextChangedListener(object: SimpleTextWatcher() {
+        editText.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
                 editText.error = null
                 updateRecoveryAvailability()
@@ -142,7 +142,9 @@ class RecoveryActivity : BaseActivity() {
                 recoverySeed,
                 dataCipher,
                 keyProvider,
-                accountsRepository)
+                accountsRepository,
+                apiFactory
+        )
                 .perform()
                 .compose(ObservableTransformers.defaultSchedulersCompletable())
                 .doOnSubscribe {

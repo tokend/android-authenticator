@@ -11,15 +11,15 @@ import org.tokend.authenticator.auth.request.result.AuthResultApi
 import org.tokend.authenticator.auth.request.result.AuthResultData
 import org.tokend.authenticator.base.extensions.toCompletable
 import org.tokend.authenticator.base.extensions.toSingle
+import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
-import org.tokend.authenticator.base.logic.transactions.TxManager
+import org.tokend.authenticator.base.logic.transactions.factory.TxManagerFactory
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.sdk.api.ApiService
 import org.tokend.sdk.api.requests.DataEntity
-import org.tokend.sdk.factory.ApiFactory
 import java.util.concurrent.CancellationException
 
 class AuthorizeAppUseCase(
@@ -28,7 +28,9 @@ class AuthorizeAppUseCase(
         private val accountSignersRepositoryProvider: AccountSignersRepositoryProvider,
         private val confirmationProvider: AuthRequestConfirmationProvider,
         private val cipher: DataCipher,
-        private val encryptionKeyProvider: EncryptionKeyProvider
+        private val encryptionKeyProvider: EncryptionKeyProvider,
+        private val apiFactory: ApiFactory,
+        private val txManagerFactory: TxManagerFactory
 ) {
     private lateinit var authRequest: AuthRequest
     private lateinit var api: ApiService
@@ -94,7 +96,7 @@ class AuthorizeAppUseCase(
     }
 
     private fun getApi(): ApiService {
-        return ApiFactory(authRequest.networkUrl).getApiService()
+        return apiFactory.getApi(authRequest.networkUrl)
     }
 
     private fun getNetwork(): Single<Network> {
@@ -143,7 +145,7 @@ class AuthorizeAppUseCase(
                 signer = signer,
                 cipher = cipher,
                 encryptionKeyProvider = encryptionKeyProvider,
-                txManager = TxManager(api)
+                txManager = txManagerFactory.getTxManager(api)
         )
     }
 
@@ -158,8 +160,8 @@ class AuthorizeAppUseCase(
                         null
             )
 
-            val resultApi = ApiFactory(authRequest.networkUrl)
-                    .getCustomService(AuthResultApi::class.java)
+            val resultApi = apiFactory.getCustomApi(authRequest.networkUrl,
+                    AuthResultApi::class.java)
 
             resultApi.postAuthResult(authRequest.publicKey, DataEntity(result))
                     .toCompletable()

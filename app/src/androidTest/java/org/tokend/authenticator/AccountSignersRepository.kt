@@ -9,6 +9,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
+import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
@@ -47,7 +48,7 @@ class AccountSignersRepository {
         database.signersDao.deleteAll()
 
         val getRepository = {
-            AccountSignersRepository(account, database)
+            AccountSignersRepository(account, database, DefaultApiFactory())
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
@@ -74,7 +75,7 @@ class AccountSignersRepository {
         database.signersDao.deleteAll()
 
         val getRepository = {
-            AccountSignersRepository(account, database)
+            AccountSignersRepository(account, database, DefaultApiFactory())
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
@@ -118,7 +119,7 @@ class AccountSignersRepository {
         database.signersDao.deleteAll()
 
         val getRepository = {
-            AccountSignersRepository(account, database)
+            AccountSignersRepository(account, database, DefaultApiFactory())
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
@@ -152,7 +153,7 @@ class AccountSignersRepository {
                 "app-db-test")
                 .build()
 
-        val provider = AccountSignersRepositoryProvider(database)
+        val provider = AccountSignersRepositoryProvider(database, DefaultApiFactory())
 
         Assert.assertEquals(provider.getForAccount(account), provider.getForAccount(account))
     }

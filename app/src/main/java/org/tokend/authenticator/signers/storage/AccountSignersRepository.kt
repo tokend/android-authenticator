@@ -6,7 +6,7 @@ import io.reactivex.functions.BiFunction
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.extensions.toCompletable
 import org.tokend.authenticator.base.extensions.toSingle
-import org.tokend.authenticator.base.logic.DefaultRequestSigner
+import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
@@ -16,7 +16,6 @@ import org.tokend.authenticator.signers.model.Signer
 import org.tokend.sdk.api.requests.AttributesEntity
 import org.tokend.sdk.api.requests.DataEntity
 import org.tokend.sdk.api.requests.models.CreateUserRequestBody
-import org.tokend.sdk.factory.ApiFactory
 import org.tokend.wallet.Transaction
 import org.tokend.wallet.xdr.Operation
 import org.tokend.wallet.xdr.op_extensions.RemoveSignerOp
@@ -24,13 +23,14 @@ import org.tokend.wallet.xdr.op_extensions.UpdateSignerOp
 
 class AccountSignersRepository(
         val account: Account,
-        database: AppDatabase
+        database: AppDatabase,
+        private val apiFactory: ApiFactory
 ) : SimpleMultipleItemsRepository<Signer>() {
+    private val api = apiFactory.getApi(account.network.rootUrl)
+
     override val itemsCache = AccountSignersCache(account.uid, database)
 
     override fun getItems(): Single<List<Signer>> {
-        val api = ApiFactory(account.network.rootUrl).getApiService()
-
         return api
                 .getAccountSigners(account.originalAccountId)
                 .toSingle()
@@ -135,8 +135,7 @@ class AccountSignersRepository(
     }
 
     private fun createAccountIfNeeded(keyPair: org.tokend.wallet.Account): Single<Boolean> {
-        return ApiFactory(account.network.rootUrl)
-                .getApiService(DefaultRequestSigner(keyPair))
+        return apiFactory.getSignedApi(account.network.rootUrl, keyPair)
                 .createUser(
                         account.originalAccountId,
                         DataEntity(AttributesEntity(CreateUserRequestBody("not_verified")))

@@ -8,7 +8,7 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
 import org.tokend.authenticator.base.extensions.toSingle
-import org.tokend.authenticator.base.logic.DefaultRequestSigner
+import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
@@ -17,9 +17,6 @@ import org.tokend.authenticator.base.logic.wallet.WalletUpdateManager
 import org.tokend.sdk.api.ApiService
 import org.tokend.sdk.api.models.SystemInfo
 import org.tokend.sdk.api.models.WalletData
-import org.tokend.sdk.api.requests.RequestSigner
-import org.tokend.sdk.factory.ApiFactory
-import org.tokend.sdk.keyserver.KeyStorage
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.WalletInfo
 import org.tokend.wallet.utils.toByteArray
@@ -30,14 +27,14 @@ class RecoverAccountUseCase(
         private val recoverySeed: CharArray,
         private val cipher: DataCipher,
         private val encryptionKeyProvider: EncryptionKeyProvider,
-        private val accountsRepository: AccountsRepository
+        private val accountsRepository: AccountsRepository,
+        private val apiFactory: ApiFactory
 ) {
     private val networkUrl = HttpUrl.parse(networkUrl).toString()
 
     private lateinit var signedApi: ApiService
     private lateinit var network: Network
     private lateinit var recoveryKeyPair: org.tokend.wallet.Account
-    private lateinit var requestSigner: RequestSigner
     private lateinit var recoveryWallet: WalletInfo
     private lateinit var newMasterKeyPair: org.tokend.wallet.Account
     private lateinit var walletManager: WalletManager
@@ -49,8 +46,10 @@ class RecoverAccountUseCase(
         return getRecoveryKeyPair()
                 .doOnSuccess { recoveryKeyPair ->
                     this.recoveryKeyPair = recoveryKeyPair
-                    this.requestSigner = DefaultRequestSigner(recoveryKeyPair)
-                    this.signedApi = ApiFactory(networkUrl).getApiService(this.requestSigner)
+                    this.signedApi = apiFactory.getSignedApi(networkUrl, recoveryKeyPair)
+                    this.walletManager = WalletManager(
+                            apiFactory.getSignedKeyStorage(networkUrl, recoveryKeyPair)
+                    )
                 }
                 .flatMap {
                     getSystemInfo()
@@ -61,19 +60,7 @@ class RecoverAccountUseCase(
                 .doOnSuccess { network ->
                     this.network = network
                 }
-
-                .map {
-                    WalletManager(
-                            KeyStorage(
-                                    keyServerUrl = networkUrl,
-                                    requestSigner = requestSigner
-                            )
-                    )
-                }
-                .doOnSuccess { walletManager ->
-                    this.walletManager = walletManager
-                }
-                .flatMap { walletManager ->
+                .flatMap {
                     walletManager.getWalletInfo(email, recoverySeed, true)
                 }
                 .doOnSuccess { recoveryWallet ->

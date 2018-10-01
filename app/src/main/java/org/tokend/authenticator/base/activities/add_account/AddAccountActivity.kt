@@ -119,7 +119,9 @@ class AddAccountActivity : BaseActivity() {
                 email,
                 dataCipher,
                 keyProvider,
-                accountsRepository)
+                accountsRepository,
+                apiFactory
+        )
                 .perform()
                 .compose(ObservableTransformers.defaultSchedulersSingle())
                 .doOnSubscribe {

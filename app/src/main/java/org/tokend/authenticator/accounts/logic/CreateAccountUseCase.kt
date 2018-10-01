@@ -8,14 +8,13 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
 import org.tokend.authenticator.base.extensions.toSingle
+import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.wallet.WalletManager
 import org.tokend.sdk.api.models.SystemInfo
 import org.tokend.sdk.api.models.WalletData
-import org.tokend.sdk.factory.ApiFactory
-import org.tokend.sdk.keyserver.KeyStorage
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toByteArray
 
@@ -28,7 +27,8 @@ class CreateAccountUseCase(
         private val email: String,
         private val cipher: DataCipher,
         private val encryptionKeyProvider: EncryptionKeyProvider,
-        private val accountsRepository: AccountsRepository
+        private val accountsRepository: AccountsRepository,
+        apiFactory: ApiFactory
 ) {
     class Result(
             val account: Account,
@@ -37,8 +37,8 @@ class CreateAccountUseCase(
 
     private val networkUrl = HttpUrl.parse(networkUrl).toString()
 
-    private val api = ApiFactory(networkUrl).getApiService()
-    private val keyStorageApi = KeyStorage(networkUrl)
+    private val api = apiFactory.getApi(networkUrl)
+    private val keyStorageApi = apiFactory.getKeyStorage(networkUrl)
     private val walletManager = WalletManager(keyStorageApi)
 
     private lateinit var kdfAttributes: KdfAttributes

@@ -10,11 +10,13 @@ import org.junit.runner.RunWith
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.auth.revoke.RevokeAccessUseCase
+import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.transactions.TxManager
+import org.tokend.authenticator.base.logic.transactions.factory.DefaultTxManagerFactory
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.sdk.factory.ApiFactory
@@ -47,7 +49,8 @@ class RevokeAccess {
                 .build()
 //        database.signersDao.deleteAll()
 
-        val signersRepositoryProvider = AccountSignersRepositoryProvider(database)
+        val signersRepositoryProvider = AccountSignersRepositoryProvider(database,
+                DefaultApiFactory())
 
         val publicKey = org.tokend.wallet.Account.random().accountId
         val signer = Signer(
@@ -74,7 +77,8 @@ class RevokeAccess {
                 account,
                 DefaultDataCipher(),
                 keyProvider,
-                signersRepositoryProvider
+                signersRepositoryProvider,
+                DefaultTxManagerFactory(DefaultApiFactory())
         )
                 .perform()
                 .blockingAwait()

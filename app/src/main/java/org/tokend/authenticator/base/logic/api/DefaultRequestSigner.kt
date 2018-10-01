@@ -1,4 +1,4 @@
-package org.tokend.authenticator.base.logic
+package org.tokend.authenticator.base.logic.api
 
 import org.tokend.sdk.api.requests.RequestSigner
 import org.tokend.wallet.Account

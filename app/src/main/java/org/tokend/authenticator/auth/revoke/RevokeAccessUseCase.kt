@@ -6,18 +6,18 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
-import org.tokend.authenticator.base.logic.transactions.TxManager
+import org.tokend.authenticator.base.logic.transactions.factory.TxManagerFactory
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
-import org.tokend.sdk.factory.ApiFactory
 
 class RevokeAccessUseCase(
         private val signer: Signer,
         private val account: Account,
         private val cipher: DefaultDataCipher,
         private val encryptionKeyProvider: EncryptionKeyProvider,
-        private val accountSignersRepositoryProvider: AccountSignersRepositoryProvider
+        private val accountSignersRepositoryProvider: AccountSignersRepositoryProvider,
+        private val txManagerFactory: TxManagerFactory
 ) {
     fun perform(): Completable {
         return getSignersRepository()
@@ -37,9 +37,7 @@ class RevokeAccessUseCase(
                 signer = signer,
                 cipher = cipher,
                 encryptionKeyProvider = encryptionKeyProvider,
-                txManager = TxManager(
-                        ApiFactory(account.network.rootUrl).getApiService()
-                )
+                txManager = txManagerFactory.getTxManager(account.network.rootUrl)
         )
     }
 }
