@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import com.rengwuxian.materialedittext.MaterialEditText
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_recovery.*
 import kotlinx.android.synthetic.main.layout_network_field.*
@@ -18,8 +19,10 @@ import org.tokend.authenticator.base.extensions.addSlashIfNeed
 import org.tokend.authenticator.base.extensions.getChars
 import org.tokend.authenticator.base.extensions.getStringExtra
 import org.tokend.authenticator.base.extensions.setErrorAndFocus
-import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
-import org.tokend.authenticator.base.util.*
+import org.tokend.authenticator.base.util.ObservableTransformers
+import org.tokend.authenticator.base.util.Permission
+import org.tokend.authenticator.base.util.QrScannerUtil
+import org.tokend.authenticator.base.util.SoftInputUtil
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import org.tokend.authenticator.base.view.util.SimpleTextWatcher
 import org.tokend.sdk.federation.EmailNotVerifiedException
@@ -167,6 +170,7 @@ class RecoveryActivity : BaseActivity() {
                             setResult(Activity.RESULT_OK)
                             finish()
                         })
+                .addTo(compositeDisposable)
     }
 
     private fun handleRecoveryError(error: Throwable) {

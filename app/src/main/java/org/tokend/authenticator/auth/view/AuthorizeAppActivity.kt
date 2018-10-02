@@ -2,6 +2,7 @@ package org.tokend.authenticator.auth.view
 
 import android.content.Intent
 import android.os.Bundle
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import org.tokend.authenticator.R
 import org.tokend.authenticator.auth.request.AuthorizeAppUseCase
@@ -48,6 +49,7 @@ class AuthorizeAppActivity : BaseActivity() {
                             }
                         }
                 )
+                .addTo(compositeDisposable)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
