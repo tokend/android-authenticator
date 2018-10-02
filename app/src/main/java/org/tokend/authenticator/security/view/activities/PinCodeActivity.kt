@@ -6,8 +6,9 @@ import android.text.InputFilter
 import kotlinx.android.synthetic.main.activity_pin_code.*
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.extensions.getChars
-import org.tokend.authenticator.security.view.UserKeyActivity
+import org.tokend.authenticator.base.util.SoftInputUtil
 import org.tokend.authenticator.base.view.util.SimpleTextWatcher
+import org.tokend.authenticator.security.view.UserKeyActivity
 
 open class PinCodeActivity : UserKeyActivity() {
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
@@ -35,6 +36,7 @@ open class PinCodeActivity : UserKeyActivity() {
     }
 
     protected open fun onPinCodeEntered(pin: CharArray) {
+        SoftInputUtil.hideSoftInput(this)
         finishWithKey(pin)
     }
 
