@@ -174,10 +174,13 @@ class RecoveryActivity : BaseActivity() {
                 when (error.credential) {
                     InvalidCredentialsException.Credential.EMAIL ->
                         email_edit_text.setErrorAndFocus(R.string.error_invalid_email)
+                    InvalidCredentialsException.Credential.PASSWORD ->
+                        seed_edit_text.setErrorAndFocus(R.string.error_invalid_seed)
                     is EmailNotVerifiedException ->
                         email_edit_text.setErrorAndFocus(R.string.error_email_not_verified)
                     else -> errorHandlerFactory.getDefault().handle(error)
                 }
+            else -> errorHandlerFactory.getDefault().handle(error)
         }
     }
 
