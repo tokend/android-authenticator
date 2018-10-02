@@ -19,10 +19,7 @@ import org.tokend.authenticator.base.extensions.addSlashIfNeed
 import org.tokend.authenticator.base.extensions.getChars
 import org.tokend.authenticator.base.extensions.getStringExtra
 import org.tokend.authenticator.base.extensions.setErrorAndFocus
-import org.tokend.authenticator.base.util.ObservableTransformers
-import org.tokend.authenticator.base.util.Permission
-import org.tokend.authenticator.base.util.QrScannerUtil
-import org.tokend.authenticator.base.util.SoftInputUtil
+import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import org.tokend.authenticator.base.view.util.SimpleTextWatcher
 import org.tokend.sdk.federation.EmailNotVerifiedException

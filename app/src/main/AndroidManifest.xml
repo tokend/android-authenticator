@@ -13,10 +13,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.CardsBackground">
         <activity
             android:name=".base.activities.account_list.AccountsListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.CardsBackground">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,7 +63,9 @@
         </activity>
         <activity
             android:name=".base.activities.general_account_info.GeneralAccountInfoActivity"
-            android:label="@string/manage_account" />
+            android:configChanges="screenSize|orientation"
+            android:label="@string/manage_account"
+            android:theme="@style/AppTheme.CardsBackground" />
         <activity
             android:name="org.tokend.authenticator.security.view.activities.PinCodeActivity"
             android:configChanges="orientation|screenSize"

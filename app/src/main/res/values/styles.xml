@@ -28,6 +28,14 @@
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
     </style>
 
+    <style name="AppTheme.CardsBackground" parent="AppTheme">
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.CardsBackground" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@color/colorBackground</item>
+    </style>
+
     <style name="SecondaryButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/colorSecondaryText</item>
     </style>
