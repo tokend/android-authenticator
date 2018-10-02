@@ -48,4 +48,7 @@
     <string name="manage_account">Manage Account</string>
     <string name="general">General</string>
     <string name="access">Access</string>
+    <string name="expires">Expires:</string>
+    <string name="permanent">Permanent</string>
+    <string name="no_signers_message">No associated apps</string>
 </resources>

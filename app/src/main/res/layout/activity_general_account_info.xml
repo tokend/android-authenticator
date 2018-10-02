@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".base.activities.GeneralAccountInfoActivity">
+    tools:context=".base.activities.general_account_info.GeneralAccountInfoActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,7 +61,10 @@
             app:contentPadding="0dp"
             style="@style/InfoCard">
 
+            <include layout="@layout/include_error_empty_view"/>
+
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/signers_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 

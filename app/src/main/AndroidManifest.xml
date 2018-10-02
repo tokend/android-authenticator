@@ -58,7 +58,7 @@
                     android:scheme="tokend" />
             </intent-filter>
         </activity>
-        <activity android:name=".base.activities.GeneralAccountInfoActivity"
+        <activity android:name=".base.activities.general_account_info.GeneralAccountInfoActivity"
             android:label="@string/manage_account"/>
     </application>
 

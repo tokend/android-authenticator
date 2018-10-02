@@ -8,12 +8,9 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import org.jetbrains.anko.clearTop
 import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.newTask
-import org.jetbrains.anko.noHistory
 import org.tokend.authenticator.R
-import org.tokend.authenticator.auth.request.AuthorizeAppUseCase
 import org.tokend.authenticator.auth.view.AuthorizeAppActivity
-import org.tokend.authenticator.base.activities.GeneralAccountInfoActivity
+import org.tokend.authenticator.base.activities.general_account_info.GeneralAccountInfoActivity
 import org.tokend.authenticator.base.activities.RecoveryActivity
 import org.tokend.authenticator.base.activities.RecoverySeedActivity
 import org.tokend.authenticator.base.activities.account_list.AccountsListActivity

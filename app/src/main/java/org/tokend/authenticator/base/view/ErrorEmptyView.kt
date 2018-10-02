@@ -24,6 +24,7 @@ class ErrorEmptyView : LinearLayout {
 
     private val messageTextView: TextView
     private val actionButton: Button
+    private val buttonHolder: LinearLayout
 
     private var emptyViewDenial: () -> Boolean = { false }
 
@@ -36,6 +37,7 @@ class ErrorEmptyView : LinearLayout {
                 this, true)
 
         messageTextView = findViewById(R.id.message_text_view)
+        buttonHolder = findViewById(R.id.button_holder)
         actionButton = findViewById(R.id.action_button)
     }
 
@@ -52,6 +54,7 @@ class ErrorEmptyView : LinearLayout {
 
         messageTextView.text = message
         actionButton.visibility = View.GONE
+        buttonHolder.visibility = View.GONE
     }
 
     fun showError(throwable: Throwable, errorHandler: ErrorHandler,
@@ -68,10 +71,12 @@ class ErrorEmptyView : LinearLayout {
         messageTextView.text = error
 
         if (actionButtonClick != null) {
+            buttonHolder.visibility = View.VISIBLE
             actionButton.visibility = View.VISIBLE
             actionButton.setOnClickListener { actionButtonClick.invoke() }
         } else {
             actionButton.visibility = View.GONE
+            buttonHolder.visibility = View.GONE
         }
     }
 
