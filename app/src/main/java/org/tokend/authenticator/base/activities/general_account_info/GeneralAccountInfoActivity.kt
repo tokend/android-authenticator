@@ -5,17 +5,23 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_general_account_info.*
 import kotlinx.android.synthetic.main.include_error_empty_view.*
 import kotlinx.android.synthetic.main.layout_general_card.*
 import okhttp3.HttpUrl
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.model.Account
+import org.tokend.authenticator.auth.revoke.RevokeAccessUseCase
+import org.tokend.authenticator.auth.view.AuthorizedAppDetailsDialog
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.general_account_info.adapter.SignersAdapter
 import org.tokend.authenticator.base.util.Navigator
 import org.tokend.authenticator.base.util.ObservableTransformers
+import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
+import org.tokend.authenticator.base.view.ProgressDialogFactory
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
+import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
 
 class GeneralAccountInfoActivity : BaseActivity() {
@@ -33,7 +39,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
     private lateinit var signersRepository: AccountSignersRepository
 
     private val uid: Long
-    get() = intent.getLongExtra(EXTRA_UID, -1)
+        get() = intent.getLongExtra(EXTRA_UID, -1)
 
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_general_account_info)
@@ -71,8 +77,8 @@ class GeneralAccountInfoActivity : BaseActivity() {
 
     private fun initSignersList() {
         adapter.dateFormat = dateTimeDateFormat
-        adapter.onItemClick { view, item ->
-
+        adapter.onItemClick { _, item ->
+            showSignerDetailsDialog(item)
         }
 
         error_empty_view.setPadding(0,
@@ -114,7 +120,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
         signersErrorsDisposable =
                 signersRepository.errors
                         .compose(ObservableTransformers.defaultSchedulers())
-                        .subscribe {error ->
+                        .subscribe { error ->
                             if (!adapter.hasData) {
                                 error_empty_view.showError(error, errorHandlerFactory.getDefault()) {
                                     update(true)
@@ -124,5 +130,42 @@ class GeneralAccountInfoActivity : BaseActivity() {
                             }
                         }
                         .addTo(compositeDisposable)
+    }
+
+    private fun showSignerDetailsDialog(signer: Signer) {
+        AuthorizedAppDetailsDialog(signer, this, dateTimeDateFormat) {
+            revokeSignerAccess(signer)
+        }.show()
+    }
+
+    private fun revokeSignerAccess(signer: Signer) {
+        var disposable: Disposable? = null
+
+        val progress = ProgressDialogFactory(this).getDefault() {
+            disposable?.dispose()
+        }
+
+        disposable = RevokeAccessUseCase(
+                signer = signer,
+                account = signersRepository.account,
+                cipher = dataCipher,
+                encryptionKeyProvider = encryptionKeyProvider,
+                accountSignersRepositoryProvider = signersRepositoryProvider,
+                txManagerFactory = txManagerFactory
+        )
+                .perform()
+                .compose(ObservableTransformers.defaultSchedulersCompletable())
+                .subscribeBy(
+                        onComplete = {
+                            progress.dismiss()
+                        },
+                        onError = {
+                            progress.dismiss()
+                            ErrorHandlerFactory(this).getDefault().handle(it)
+                        }
+                )
+                .addTo(compositeDisposable)
+
+        progress.show()
     }
 }

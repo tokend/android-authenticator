@@ -56,4 +56,5 @@
     <string name="enter_pin_code">Enter PIN code</string>
     <string name="confirm_pin_code">Confirm PIN code</string>
     <string name="error_pin_confirmation_mismatch">Incorrect PIN code</string>
+    <string name="processing_progress">Processing…</string>
 </resources>
