@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -30,14 +29,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/include_error_empty_view"/>
+            <include layout="@layout/include_error_empty_view" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list_account"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="56dp"
-                android:clipToPadding="false"/>
+                android:clipToPadding="false"
+                android:paddingBottom="56dp" />
 
         </LinearLayout>
 
@@ -47,10 +46,10 @@
         android:id="@+id/add_account_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/double_margin"
-        app:srcCompat="@drawable/ic_plus"
+        android:layout_margin="@dimen/standard_margin"
         app:fabSize="normal"
         app:layout_anchor="@id/swipe_refresh"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/ic_plus" />
 
 </android.support.design.widget.CoordinatorLayout>
