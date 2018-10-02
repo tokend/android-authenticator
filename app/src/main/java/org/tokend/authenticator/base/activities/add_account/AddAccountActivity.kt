@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_add_account.*
 import kotlinx.android.synthetic.main.layout_network_field.*
@@ -17,7 +18,6 @@ import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.extensions.addSlashIfNeed
 import org.tokend.authenticator.base.extensions.hasError
 import org.tokend.authenticator.base.extensions.setErrorAndFocus
-import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
 import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.util.validators.EmailValidator
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
@@ -144,6 +144,7 @@ class AddAccountActivity : BaseActivity() {
                             it.printStackTrace()
                             handleAddError(it)
                         })
+                .addTo(compositeDisposable)
     }
 
     private fun handleAddError(error: Throwable) {
@@ -171,7 +172,7 @@ class AddAccountActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when(setOf(requestCode, resultCode)) {
+        when (setOf(requestCode, resultCode)) {
             setOf(SAVE_SEED_REQUEST, Activity.RESULT_OK) -> onSuccessfulCreated()
             setOf(RECOVER_REQUEST, Activity.RESULT_OK) -> onRecoverSuccess()
             else -> {

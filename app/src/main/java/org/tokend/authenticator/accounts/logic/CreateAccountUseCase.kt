@@ -2,6 +2,7 @@ package org.tokend.authenticator.accounts.logic
 
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import okhttp3.HttpUrl
 import org.spongycastle.util.encoders.Base64
 import org.tokend.authenticator.accounts.logic.model.Account
@@ -48,7 +49,10 @@ class CreateAccountUseCase(
     private lateinit var walletId: String
 
     fun perform(): Single<Result> {
+        val scheduler = Schedulers.newThread()
+
         return getKdfAttributes()
+                .observeOn(scheduler)
                 .doOnSuccess { kdfAttributes ->
                     this.kdfAttributes = kdfAttributes
                 }
@@ -56,9 +60,11 @@ class CreateAccountUseCase(
                 .flatMap {
                     getSystemInfo()
                 }
+                .observeOn(scheduler)
                 .map { systemInfo ->
                     Network.fromSystemInfo(networkUrl, systemInfo)
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { network ->
                     this.network = network
                 }
@@ -73,6 +79,7 @@ class CreateAccountUseCase(
                             }
                     )
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { (masterKeyPair, recoveryKeyPair) ->
                     this.masterKeyPair = masterKeyPair
                     this.recoveryKeyPair = recoveryKeyPair
@@ -81,6 +88,7 @@ class CreateAccountUseCase(
                 .flatMap {
                     getWallet()
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { wallet ->
                     this.walletId = wallet.id!!
                 }
@@ -88,10 +96,12 @@ class CreateAccountUseCase(
                 .flatMap { wallet ->
                     postWallet(wallet)
                 }
+                .observeOn(scheduler)
                 // Create account.
                 .flatMap {
                     createAccount()
                 }
+                .observeOn(scheduler)
                 // Save it finally.
                 .doOnSuccess { account ->
                     accountsRepository.add(account)
