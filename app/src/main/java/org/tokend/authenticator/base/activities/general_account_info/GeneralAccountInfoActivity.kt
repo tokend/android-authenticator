@@ -13,6 +13,7 @@ import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.general_account_info.adapter.SignersAdapter
+import org.tokend.authenticator.base.util.Navigator
 import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
@@ -41,6 +42,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
         accountsRepository.itemsList.find { it.uid == uid }?.let {
             signersRepository = signersRepositoryProvider.getForAccount(it)
             initGeneralCard(it)
+            initRecoverButton(it)
             initSignersList()
             subscribeSigners()
             update(true)
@@ -59,6 +61,12 @@ class GeneralAccountInfoActivity : BaseActivity() {
         network_name.text = account.network.name
         network_host.text = HttpUrl.parse(account.network.rootUrl).host()
         email.text = account.email
+    }
+
+    private fun initRecoverButton(account: Account) {
+        recover_button.setOnClickListener {
+            Navigator.openRecoveryActivity(this, account.network.rootUrl, account.email)
+        }
     }
 
     private fun initSignersList() {

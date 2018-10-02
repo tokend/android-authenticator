@@ -62,15 +62,18 @@ object Navigator {
         ), requestCode)
     }
 
+    fun openRecoveryActivity(activity: Activity, api: String, email: String, requestCode: Int) {
+        activity.startActivityForResult(activity.intentFor<RecoveryActivity>(
+                RecoveryActivity.EXTRA_API to api,
+                RecoveryActivity.EXTRA_EMAIL to email
+        ), requestCode)
+    }
+
     fun openRecoveryActivity(activity: Activity, api: String, email: String) {
         activity.startActivity(activity.intentFor<RecoveryActivity>(
                 RecoveryActivity.EXTRA_API to api,
                 RecoveryActivity.EXTRA_EMAIL to email
         ))
-    }
-
-    fun toAccountsList(activity: Activity) {
-        activity.startActivity(activity.intentFor<AccountsListActivity>().clearTop())
     }
 
     fun openAuthorizeAppActivity(activity: Activity,

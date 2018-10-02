@@ -1,6 +1,7 @@
 package org.tokend.authenticator.base.activities
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -113,7 +114,7 @@ class RecoveryActivity : BaseActivity() {
     }
 
     private fun tryToRecover() {
-//        checkSeed()
+        checkSeed()
         updateRecoveryAvailability()
         if (canRecover) {
             SoftInputUtil.hideSoftInput(this)
@@ -160,7 +161,8 @@ class RecoveryActivity : BaseActivity() {
                             handleRecoveryError(it)
                         },
                         onComplete = {
-                            Navigator.toAccountsList(this)
+                            setResult(Activity.RESULT_OK)
+                            finish()
                         })
     }
 

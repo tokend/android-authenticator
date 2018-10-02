@@ -1,6 +1,7 @@
 package org.tokend.authenticator.base.activities.add_account
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -27,6 +28,7 @@ class AddAccountActivity : BaseActivity() {
 
     companion object {
         private val SAVE_SEED_REQUEST = "save_recovery_seed".hashCode() and 0xffff
+        private val RECOVER_REQUEST = "recover".hashCode() and 0xffff
         const val NETWORK_URL_EXTRA = "network_url"
     }
 
@@ -93,7 +95,7 @@ class AddAccountActivity : BaseActivity() {
 
         recovery_button.setOnClickListener {
             val email = email_edit_text.text.toString()
-            Navigator.openRecoveryActivity(this, networkUrl, email)
+            Navigator.openRecoveryActivity(this, networkUrl, email, RECOVER_REQUEST)
         }
     }
 
@@ -169,15 +171,17 @@ class AddAccountActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == SAVE_SEED_REQUEST) {
-            onSuccessfulCreated()
-        } else {
-            QrScannerUtil.getStringFromResult(requestCode, resultCode, data)?.also {
-                try {
-                    val api = JSONObject(it).getString("api").addSlashIfNeed()
-                    onNetworkUrlObtained(api)
-                } catch (e: Exception) {
-                    e.printStackTrace()
+        when(setOf(requestCode, resultCode)) {
+            setOf(SAVE_SEED_REQUEST, Activity.RESULT_OK) -> onSuccessfulCreated()
+            setOf(RECOVER_REQUEST, Activity.RESULT_OK) -> onRecoverSuccess()
+            else -> {
+                QrScannerUtil.getStringFromResult(requestCode, resultCode, data)?.also {
+                    try {
+                        val api = JSONObject(it).getString("api").addSlashIfNeed()
+                        onNetworkUrlObtained(api)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
             }
         }
@@ -188,6 +192,10 @@ class AddAccountActivity : BaseActivity() {
             this.networkUrl = httpUrl.toString()
             network_edit_text.setText(httpUrl.host())
         }
+    }
+
+    private fun onRecoverSuccess() {
+        finish()
     }
 
     private fun onSuccessfulCreated() {
