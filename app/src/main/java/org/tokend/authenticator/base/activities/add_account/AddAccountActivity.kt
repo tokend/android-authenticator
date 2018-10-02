@@ -175,12 +175,16 @@ class AddAccountActivity : BaseActivity() {
             setOf(SAVE_SEED_REQUEST, Activity.RESULT_OK) -> onSuccessfulCreated()
             setOf(RECOVER_REQUEST, Activity.RESULT_OK) -> onRecoverSuccess()
             else -> {
-                QrScannerUtil.getStringFromResult(requestCode, resultCode, data)?.also {
+                QrScannerUtil.getStringFromResult(requestCode, resultCode, data).also {
                     try {
                         val api = JSONObject(it).getString("api").addSlashIfNeed()
                         onNetworkUrlObtained(api)
                     } catch (e: Exception) {
                         e.printStackTrace()
+                    }
+
+                    if (it != null) {
+                        ToastManager(this).short(R.string.error_unknown_qr)
                     }
                 }
             }

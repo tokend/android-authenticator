@@ -102,6 +102,8 @@ class RecoveryActivity : BaseActivity() {
                 && network_edit_text.text.isNotBlank()
                 && email_edit_text.text.isNotBlank()
                 && seed_edit_text.text.isNotBlank()
+                && email_edit_text.error == null
+                && seed_edit_text.error == null
     }
 
     private fun addSimpleTextWatcher(editText: MaterialEditText) {
@@ -182,6 +184,7 @@ class RecoveryActivity : BaseActivity() {
                 }
             else -> errorHandlerFactory.getDefault().handle(error)
         }
+        updateRecoveryAvailability()
     }
 
     private fun tryOpenQrScanner() {
@@ -199,10 +202,18 @@ class RecoveryActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        QrScannerUtil.getStringFromResult(requestCode, resultCode, data)?.also {
-            val api = JSONObject(it).getString("api").addSlashIfNeed()
-            networkHttpUrl = HttpUrl.parse(api).also { httpUrl ->
-                network_edit_text.setText(httpUrl.host())
+        QrScannerUtil.getStringFromResult(requestCode, resultCode, data).also {
+            try {
+                val api = JSONObject(it).getString("api").addSlashIfNeed()
+                networkHttpUrl = HttpUrl.parse(api).also { httpUrl ->
+                    network_edit_text.setText(httpUrl.host())
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            if (it != null) {
+                ToastManager(this).short(R.string.error_unknown_qr)
             }
         }
     }
