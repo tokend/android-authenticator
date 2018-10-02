@@ -36,7 +36,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="56dp" />
+                android:paddingBottom="56dp"
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="@dimen/half_standard_margin" />
 
         </LinearLayout>
 

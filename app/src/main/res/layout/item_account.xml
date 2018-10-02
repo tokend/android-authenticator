@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/account_card"
@@ -9,6 +8,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/quarter_standard_margin"
     android:layout_marginEnd="@dimen/half_standard_margin"
+    android:layout_marginLeft="@dimen/half_standard_margin"
+    android:layout_marginRight="@dimen/half_standard_margin"
     android:layout_marginStart="@dimen/half_standard_margin"
     android:layout_marginTop="@dimen/quarter_standard_margin"
     android:transitionName="@string/transition_account_card"
@@ -24,8 +25,8 @@
             android:layout_width="@dimen/account_list_item_logo_size"
             android:layout_height="@dimen/account_list_item_logo_size"
             android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/standard_margin"
             android:layout_marginLeft="@dimen/standard_margin"
+            android:layout_marginStart="@dimen/standard_margin"
             app:layout_constraintBottom_toBottomOf="@id/email_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/network_text_view" />
@@ -74,16 +75,16 @@
             style="@style/DialogButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="@dimen/half_standard_margin"
             android:layout_marginStart="@dimen/half_standard_margin"
             android:tag="primary_action"
+            android:text="@string/manage"
             android:theme="@style/PrimaryButton.Overlay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/account_card_divider"
-            android:text="@string/manage" />
+            app:layout_constraintTop_toBottomOf="@id/account_card_divider" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
