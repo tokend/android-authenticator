@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.support.multidex.MultiDexApplication
 import android.util.Log
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.security.ProviderInstaller
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import org.tokend.authenticator.base.logic.di.*
@@ -24,7 +27,18 @@ class App : MultiDexApplication() {
                 )
                 .build()
 
+        initTls()
         initRxErrorHandler()
+    }
+
+    private fun initTls() {
+        try {
+            if (areGooglePlayServicesAvailable()) {
+                ProviderInstaller.installIfNeeded(this)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initRxErrorHandler() {
@@ -59,6 +73,12 @@ class App : MultiDexApplication() {
 
     private fun getKeystorePreferences(): SharedPreferences {
         return getSharedPreferences(KEYSTORE_PREF_NAME, Context.MODE_PRIVATE)
+    }
+
+    private fun areGooglePlayServicesAvailable(): Boolean {
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(this)
+        return resultCode == ConnectionResult.SUCCESS
     }
 
     companion object {
