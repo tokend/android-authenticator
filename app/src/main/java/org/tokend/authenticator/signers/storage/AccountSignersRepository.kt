@@ -20,6 +20,8 @@ import org.tokend.wallet.Transaction
 import org.tokend.wallet.xdr.Operation
 import org.tokend.wallet.xdr.op_extensions.RemoveSignerOp
 import org.tokend.wallet.xdr.op_extensions.UpdateSignerOp
+import retrofit2.HttpException
+import java.net.HttpURLConnection
 
 class AccountSignersRepository(
         val account: Account,
@@ -36,6 +38,15 @@ class AccountSignersRepository(
                 .toSingle()
                 .map { accountResponse ->
                     accountResponse.signers
+                }
+                .onErrorReturn { error ->
+                    // No account on server means there are no signers ¯\_(ツ)_/¯
+                    if (error is HttpException &&
+                            error.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                        emptyList()
+                    } else {
+                        throw error
+                    }
                 }
                 .map { signersResponse ->
                     val existingSigners = itemsCache.items.associateBy { it.publicKey }
