@@ -144,6 +144,7 @@ class RecoveryActivity : BaseActivity() {
                 dataCipher,
                 keyProvider,
                 accountsRepository,
+                signersRepositoryProvider,
                 apiFactory
         )
                 .perform()

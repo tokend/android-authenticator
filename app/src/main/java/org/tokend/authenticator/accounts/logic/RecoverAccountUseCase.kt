@@ -14,6 +14,7 @@ import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.wallet.WalletManager
 import org.tokend.authenticator.base.logic.wallet.WalletUpdateManager
+import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.sdk.api.ApiService
 import org.tokend.sdk.api.models.SystemInfo
 import org.tokend.sdk.api.models.WalletData
@@ -28,6 +29,7 @@ class RecoverAccountUseCase(
         private val cipher: DataCipher,
         private val encryptionKeyProvider: EncryptionKeyProvider,
         private val accountsRepository: AccountsRepository,
+        private val accountSignersRepositoryProvider: AccountSignersRepositoryProvider,
         private val apiFactory: ApiFactory
 ) {
     private val networkUrl = HttpUrl.parse(networkUrl).toString()
@@ -139,6 +141,8 @@ class RecoverAccountUseCase(
                         accountToUpdate.kdfAttributes = newKdfAttributes
                         accountToUpdate.walletId = newWalletId
                         accountsRepository.update(accountToUpdate)
+                        accountSignersRepositoryProvider.getForAccount(accountToUpdate)
+                                .update()
                     } else {
                         val newAccount = Account(
                                 network = network,

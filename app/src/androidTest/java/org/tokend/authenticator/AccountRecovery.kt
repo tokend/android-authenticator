@@ -13,6 +13,7 @@ import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
 import org.tokend.authenticator.base.util.ObservableTransformers
+import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 
 @RunWith(AndroidJUnit4::class)
 class AccountRecovery {
@@ -36,7 +37,7 @@ class AccountRecovery {
 
         val accountRepository = getRepository()
 
-        performRecovery(accountRepository)
+        performRecovery(accountRepository, database)
 
         Assert.assertEquals(email, accountRepository.itemsList.first().email)
     }
@@ -59,11 +60,11 @@ class AccountRecovery {
 
         val accountRepository = getRepository()
 
-        performRecovery(accountRepository)
+        performRecovery(accountRepository, database)
 
         val currentKdfSalt = accountRepository.itemsList.first().kdfAttributes.encodedSalt
 
-        performRecovery(accountRepository)
+        performRecovery(accountRepository, database)
 
         val newKdfSalt = accountRepository.itemsList.first().kdfAttributes.encodedSalt
 
@@ -71,7 +72,7 @@ class AccountRecovery {
         Assert.assertEquals(1, accountRepository.itemsList.size)
     }
 
-    private fun performRecovery(accountRepository: AccountsRepository) {
+    private fun performRecovery(accountRepository: AccountsRepository, database: AppDatabase) {
         val network = "https://api.testnet.tokend.org/"
         val recoverySeed = "SCIUKFBGL364Q2A2BVO474BBOFS6VV2K5WFAQG6WQS7WHAATGLE6CVP3".toCharArray()
         val cipher = DefaultDataCipher()
@@ -84,6 +85,8 @@ class AccountRecovery {
                 cipher = cipher,
                 encryptionKeyProvider = keyProvider,
                 accountsRepository = accountRepository,
+                accountSignersRepositoryProvider =
+                AccountSignersRepositoryProvider(database, DefaultApiFactory()),
                 apiFactory = DefaultApiFactory()
         )
                 .perform()
