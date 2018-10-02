@@ -24,12 +24,11 @@ import org.tokend.authenticator.R
 import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountsListAdapter
-import org.tokend.authenticator.base.activities.account_list.adapter.ManageClickListener
 import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import java.util.concurrent.TimeUnit
 
-class AccountsListActivity : BaseActivity(), ManageClickListener {
+class AccountsListActivity : BaseActivity() {
 
     private var searchItem: MenuItem? = null
     private val adapter = AccountsListAdapter()
@@ -79,14 +78,13 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
         error_empty_view.observeAdapter(adapter, R.string.no_accounts_message)
         error_empty_view.setEmptyViewDenial { accountsRepository.isNeverUpdated }
 
+        adapter.onItemClick { view, item ->
+            Navigator.openGeneralAccountInfo(this, item.uid)
+        }
+
         list_account.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        adapter.listener = this
         list_account.adapter = adapter
         list_account.addOnScrollListener(hideFabScrollListener)
-    }
-
-    override fun onManageClick(uid: Long) {
-        Navigator.openGeneralAccountInfo(this, uid)
     }
 
     private fun initFab() {
@@ -167,13 +165,12 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
     private fun displayAccounts() {
         val items = accountsRepository.itemsList
                 .let { items ->
-                    filter?.let {
+                    filter?.let { query ->
                         items.filter { item ->
-                            item.email.contains(it, true)
-                                    || item.network.name.contains(it, true)
-                        }
-                    }
+                            item.email.contains(query) || item.network.name.contains(query)
                 }
+            } ?: items
+        }
         adapter.setData(items)
     }
 
@@ -186,7 +183,7 @@ class AccountsListActivity : BaseActivity(), ManageClickListener {
                 accountsRepository.itemsObservable
                         .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe {
-                            adapter.addData(it)
+                            adapter.setData(it)
                         }
                         .addTo(compositeDisposable)
 

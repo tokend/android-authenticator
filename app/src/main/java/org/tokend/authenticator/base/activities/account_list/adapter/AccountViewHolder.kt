@@ -1,25 +1,29 @@
 package org.tokend.authenticator.base.activities.account_list.adapter
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.item_account.view.*
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.AccountLogoFactory
 import org.tokend.authenticator.accounts.logic.model.Account
+import org.tokend.authenticator.base.view.adapter.BaseViewHolder
+import org.tokend.authenticator.base.view.adapter.SimpleItemClickListener
 
-class AccountViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class AccountViewHolder(itemView: View) : BaseViewHolder<Account>(itemView) {
 
     private val logoSize: Int by lazy {
         itemView.context.resources.getDimensionPixelSize(R.dimen.account_list_item_logo_size)
     }
 
-    fun bind(account: Account, listener: ManageClickListener?) {
+    override fun bind(item: Account) {
         itemView.account_logo_image_view.setImageBitmap(AccountLogoFactory(itemView.context)
-                .getForCode(account.network.name, logoSize))
-        itemView.network_text_view.text = account.network.name
-        itemView.email_text_view.text = account.email
+                .getForCode(item.network.name, logoSize))
+        itemView.network_text_view.text = item.network.name
+        itemView.email_text_view.text = item.email
+    }
+
+    override fun bind(item: Account, clickListener: SimpleItemClickListener<Account>?) {
+        bind(item)
         itemView.account_manage_button.setOnClickListener {
-            listener?.onManageClick(account.uid)
-        }
+            clickListener?.invoke(itemView.account_manage_button, item) }
     }
 }
