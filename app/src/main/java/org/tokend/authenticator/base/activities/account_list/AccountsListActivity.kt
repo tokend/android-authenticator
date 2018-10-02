@@ -247,7 +247,9 @@ class AccountsListActivity : BaseActivity() {
                 e.printStackTrace()
             }
 
-            ToastManager(this).short(R.string.error_unknown_qr)
+            if (it != null) {
+                ToastManager(this).short(R.string.error_unknown_qr)
+            }
         }
     }
 }

@@ -51,4 +51,9 @@
     <string name="expires">Expires:</string>
     <string name="permanent">Permanent</string>
     <string name="no_signers_message">No associated apps</string>
+    <string name="pin_code_title">PIN code</string>
+    <string name="set_up_pin_code_title">Set up PIN code</string>
+    <string name="enter_pin_code">Enter PIN code</string>
+    <string name="confirm_pin_code">Confirm PIN code</string>
+    <string name="error_pin_confirmation_mismatch">Incorrect PIN code</string>
 </resources>

@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".App"
@@ -58,8 +59,19 @@
                     android:scheme="tokend" />
             </intent-filter>
         </activity>
-        <activity android:name=".base.activities.general_account_info.GeneralAccountInfoActivity"
-            android:label="@string/manage_account"/>
+        <activity
+            android:name=".base.activities.general_account_info.GeneralAccountInfoActivity"
+            android:label="@string/manage_account" />
+        <activity
+            android:name="org.tokend.authenticator.security.view.activities.PinCodeActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/pin_code_title"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="org.tokend.authenticator.security.view.activities.SetUpPinCodeActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/set_up_pin_code_title"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

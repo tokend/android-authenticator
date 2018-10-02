@@ -114,7 +114,7 @@ class AddAccountActivity : BaseActivity() {
     private fun addAccount() {
 
         val email = email_edit_text.text.toString()
-        val keyProvider = TmpEncryptionKeyProvider()
+        val keyProvider = encryptionKeyProvider
 
         CreateAccountUseCase(
                 networkUrl,

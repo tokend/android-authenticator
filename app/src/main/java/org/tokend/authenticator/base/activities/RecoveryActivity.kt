@@ -133,7 +133,7 @@ class RecoveryActivity : BaseActivity() {
     }
 
     private fun recover() {
-        val keyProvider = TmpEncryptionKeyProvider()
+        val keyProvider = encryptionKeyProvider
         val email = email_edit_text.text.toString()
         val recoverySeed = seed_edit_text.text.getChars()
 

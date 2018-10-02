@@ -21,7 +21,9 @@ import org.tokend.authenticator.base.util.Navigator
 import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 
-class AuthAccountSelectionActivity : BaseActivity() {
+class AuthAccountSelectionActivity : BaseActivity(
+        canShowUserKeyRequest = false
+) {
     private lateinit var appName: String
     private lateinit var network: Network
 

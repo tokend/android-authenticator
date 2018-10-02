@@ -1,13 +1,12 @@
 package org.tokend.authenticator
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.support.multidex.MultiDexApplication
 import android.util.Log
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
-import org.tokend.authenticator.base.logic.di.AppComponent
-import org.tokend.authenticator.base.logic.di.AppDatabaseModule
-import org.tokend.authenticator.base.logic.di.AppModule
-import org.tokend.authenticator.base.logic.di.DaggerAppComponent
+import org.tokend.authenticator.base.logic.di.*
 import java.io.IOException
 import java.net.SocketException
 
@@ -20,6 +19,9 @@ class App : MultiDexApplication() {
         appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .appDatabaseModule(AppDatabaseModule(DATABASE_NAME))
+                .appEncryptionKeyProviderModule(
+                        AppEncryptionKeyProviderModule(getKeystorePreferences())
+                )
                 .build()
 
         initRxErrorHandler()
@@ -55,7 +57,12 @@ class App : MultiDexApplication() {
         }
     }
 
+    private fun getKeystorePreferences(): SharedPreferences {
+        return getSharedPreferences(KEYSTORE_PREF_NAME, Context.MODE_PRIVATE)
+    }
+
     companion object {
-        const val DATABASE_NAME = "app-db"
+        private const val DATABASE_NAME = "app-db"
+        private const val KEYSTORE_PREF_NAME = "keystore"
     }
 }

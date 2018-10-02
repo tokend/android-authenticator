@@ -15,9 +15,10 @@ import javax.inject.Singleton
             DateFormatModule::class,
             AuthRequestConfirmationProviderFactoryModule::class,
             AuthAccountSelectorFactoryModule::class,
-            EncryptionKeyProviderModule::class,
+            AppEncryptionKeyProviderModule::class,
             ApiFactoryModule::class,
-            TxManagerFactoryModule::class
+            TxManagerFactoryModule::class,
+            AppUserKeyProvidersHolderModule::class
         ]
 )
 @Singleton
