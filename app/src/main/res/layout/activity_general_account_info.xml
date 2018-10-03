@@ -60,21 +60,25 @@
 
         </RelativeLayout>
 
-        <android.support.v7.widget.CardView
-            style="@style/InfoCard"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentPadding="0dp">
+            android:layout_height="match_parent">
 
             <include layout="@layout/include_error_empty_view" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/signers_list"
+            <android.support.v7.widget.CardView
+                android:id="@+id/list_holder"
+                style="@style/InfoCard"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                app:contentPadding="0dp">
 
-        </android.support.v7.widget.CardView>
-
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/signers_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
