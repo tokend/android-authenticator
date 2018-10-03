@@ -1,7 +1,7 @@
 package org.tokend.authenticator.base.activities.general_account_info
 
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -20,6 +20,7 @@ import org.tokend.authenticator.base.util.Navigator
 import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
 import org.tokend.authenticator.base.view.ProgressDialogFactory
+import org.tokend.authenticator.base.view.util.DividerItemDecoration
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
@@ -89,7 +90,9 @@ class GeneralAccountInfoActivity : BaseActivity() {
 
         signers_list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         signers_list.adapter = adapter
-        signers_list.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        signers_list.addItemDecoration(
+                DividerItemDecoration(ContextCompat.getDrawable(this, R.drawable.horizontal_divider))
+        )
     }
 
     private var signersDisposable: Disposable? = null

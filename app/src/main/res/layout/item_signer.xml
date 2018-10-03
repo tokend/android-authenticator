@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/standard_margin"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    android:padding="@dimen/standard_margin">
 
     <TextView
         android:id="@+id/app_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="TokenD Web client"
-        android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="TokenD Web client" />
 
     <TextView
         android:id="@+id/expiration_date_text_view"
+        style="@style/SecondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/quarter_standard_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/app_name_text_view"
         app:layout_constraintTop_toBottomOf="@id/app_name_text_view"
@@ -31,9 +31,9 @@
         android:id="@+id/permissions_image_view"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        app:srcCompat="@drawable/ic_arrow_forward"
+        app:layout_constraintBottom_toBottomOf="@id/expiration_date_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/app_name_text_view"
-        app:layout_constraintBottom_toBottomOf="@id/expiration_date_text_view"/>
+        app:srcCompat="@drawable/ic_arrow_forward" />
 
 </android.support.constraint.ConstraintLayout>

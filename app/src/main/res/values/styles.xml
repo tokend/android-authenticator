@@ -91,4 +91,8 @@
         <item name="android:visibility">visible</item>
     </style>
 
+    <style name="HintText" parent="@style/SecondaryText">
+        <item name="android:textSize">@dimen/text_size_hint</item>
+    </style>
+
 </resources>
