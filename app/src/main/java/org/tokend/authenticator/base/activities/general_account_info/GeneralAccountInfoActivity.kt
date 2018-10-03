@@ -3,7 +3,6 @@ package org.tokend.authenticator.base.activities.general_account_info
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -108,7 +107,6 @@ class GeneralAccountInfoActivity : BaseActivity() {
                             adapter.setData(it.filter { signer ->
                                 signer.name.isNotEmpty()
                             })
-                            updateListVisibility(adapter.hasData)
                         }
                         .addTo(compositeDisposable)
 
@@ -128,22 +126,13 @@ class GeneralAccountInfoActivity : BaseActivity() {
                         .subscribe { error ->
                             if (!adapter.hasData) {
                                 error_empty_view.showError(error, errorHandlerFactory.getDefault()) {
-                                    update()
+                                    update(force = true)
                                 }
                             } else {
                                 errorHandlerFactory.getDefault().handle(error)
                             }
-                            updateListVisibility(false)
                         }
                         .addTo(compositeDisposable)
-    }
-
-    private fun updateListVisibility(isVisible: Boolean) {
-        val visible = when(isVisible) {
-            true -> View.VISIBLE
-            false -> View.GONE
-        }
-        list_holder.visibility = visible
     }
 
     private fun showSignerDetailsDialog(signer: Signer) {
