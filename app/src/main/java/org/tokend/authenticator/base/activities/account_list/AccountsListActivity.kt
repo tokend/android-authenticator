@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.include_error_empty_view.*
 import okhttp3.HttpUrl
 import org.json.JSONObject
 import org.tokend.authenticator.R
+import org.tokend.authenticator.accounts.logic.AccountLogoFactory
 import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountsListAdapter
@@ -31,7 +32,7 @@ import java.util.concurrent.TimeUnit
 class AccountsListActivity : BaseActivity() {
 
     private var searchItem: MenuItem? = null
-    private val adapter = AccountsListAdapter()
+    private val adapter = AccountsListAdapter(AccountLogoFactory(this))
     private var filter: String? = null
         set(value) {
             if (value != field) {

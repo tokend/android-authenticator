@@ -8,15 +8,20 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.view.adapter.BaseViewHolder
 import org.tokend.authenticator.base.view.adapter.SimpleItemClickListener
 
-class AccountViewHolder(itemView: View) : BaseViewHolder<Account>(itemView) {
+class AccountViewHolder(
+        itemView: View,
+        private val logoFactory: AccountLogoFactory
+) : BaseViewHolder<Account>(itemView) {
 
     private val logoSize: Int by lazy {
         itemView.context.resources.getDimensionPixelSize(R.dimen.account_list_item_logo_size)
     }
 
     override fun bind(item: Account) {
-        itemView.account_logo_image_view.setImageBitmap(AccountLogoFactory(itemView.context)
-                .getForCode(item.network.name, logoSize))
+        itemView.account_logo_image_view.setImageBitmap(
+                logoFactory
+                        .getWithAutoBackground(item, logoSize)
+        )
         itemView.network_text_view.text = item.network.name
         itemView.email_text_view.text = item.email
     }
@@ -24,6 +29,7 @@ class AccountViewHolder(itemView: View) : BaseViewHolder<Account>(itemView) {
     override fun bind(item: Account, clickListener: SimpleItemClickListener<Account>?) {
         bind(item)
         itemView.account_manage_button.setOnClickListener {
-            clickListener?.invoke(itemView.account_manage_button, item) }
+            clickListener?.invoke(itemView.account_manage_button, item)
+        }
     }
 }

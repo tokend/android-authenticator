@@ -5,14 +5,17 @@ import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.tokend.authenticator.R
+import org.tokend.authenticator.accounts.logic.AccountLogoFactory
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.view.adapter.BaseRecyclerAdapter
 
-class AccountsListAdapter : BaseRecyclerAdapter<Account, AccountViewHolder>() {
+class AccountsListAdapter(
+        private val logoFactory: AccountLogoFactory
+) : BaseRecyclerAdapter<Account, AccountViewHolder>() {
 
     override fun createItemViewHolder(parent: ViewGroup): AccountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_account, parent, false)
-        return AccountViewHolder(view)
+        return AccountViewHolder(view, logoFactory)
     }
 
     override fun getDiffCallback(newItems: List<Account>): DiffUtil.Callback? {
