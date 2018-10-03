@@ -1,6 +1,7 @@
 package org.tokend.authenticator.security.view.activities
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.widget.TextView
@@ -9,6 +10,7 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.vibrator
 import org.tokend.authenticator.R
+import org.tokend.wallet.utils.toByteArray
 
 class SetUpPinCodeActivity : PinCodeActivity() {
     private var isFirstEnter = true
@@ -25,6 +27,7 @@ class SetUpPinCodeActivity : PinCodeActivity() {
             switchToConfirmationEnter()
         } else {
             if (enteredPin.contentEquals(pin)) {
+                savePinCodeIfAvailable(pin)
                 super.onPinCodeEntered(pin)
             } else {
                 showConfirmationError()
@@ -62,5 +65,15 @@ class SetUpPinCodeActivity : PinCodeActivity() {
                             .textColor = Color.WHITE
                 }
                 .show()
+    }
+
+    override fun requestFingerprintAuthIfAvailable() {
+        hideFingerprintHint()
+    }
+
+    private fun savePinCodeIfAvailable(pin: CharArray) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            secureStorage.save(pin.toByteArray(), PIN_CODE_STORAGE_KEY)
+        }
     }
 }

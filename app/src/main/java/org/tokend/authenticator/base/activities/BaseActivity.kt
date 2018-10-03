@@ -13,6 +13,7 @@ import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.di.DateOnlyDateFormat
 import org.tokend.authenticator.base.logic.di.DateTimeDateFormat
 import org.tokend.authenticator.base.logic.encryption.DataCipher
+import org.tokend.authenticator.base.logic.encryption.SecureStorage
 import org.tokend.authenticator.base.logic.transactions.factory.TxManagerFactory
 import org.tokend.authenticator.base.util.ToastManager
 import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
@@ -56,6 +57,8 @@ abstract class BaseActivity(
     lateinit var txManagerFactory: TxManagerFactory
     @Inject
     lateinit var userKeyProvidersHolder: AppUserKeyProvidersHolder
+    @Inject
+    lateinit var secureStorage: SecureStorage
 
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
 

@@ -1,4 +1,4 @@
-package org.tokend.authenticator.security.logic
+package org.tokend.authenticator.security.logic.persistence
 
 import android.content.SharedPreferences
 import org.tokend.sdk.api.models.KeychainData

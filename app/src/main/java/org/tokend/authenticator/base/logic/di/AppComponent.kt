@@ -18,7 +18,8 @@ import javax.inject.Singleton
             AppEncryptionKeyProviderModule::class,
             ApiFactoryModule::class,
             TxManagerFactoryModule::class,
-            AppUserKeyProvidersHolderModule::class
+            AppUserKeyProvidersHolderModule::class,
+            SecureStorageModule::class
         ]
 )
 @Singleton

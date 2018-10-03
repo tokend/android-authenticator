@@ -8,6 +8,8 @@ import io.reactivex.schedulers.Schedulers
 import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
+import org.tokend.authenticator.security.logic.persistence.EncryptedMasterKeyStorage
+import org.tokend.authenticator.security.logic.persistence.MasterKeyKdfAttributesStorage
 import org.tokend.kdf.ScryptKeyDerivation
 import org.tokend.sdk.api.models.KeychainData
 import org.tokend.sdk.keyserver.models.KdfAttributes

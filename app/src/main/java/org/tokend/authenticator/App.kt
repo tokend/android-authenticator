@@ -25,6 +25,9 @@ class App : MultiDexApplication() {
                 .appEncryptionKeyProviderModule(
                         AppEncryptionKeyProviderModule(getKeystorePreferences())
                 )
+                .secureStorageModule(
+                        SecureStorageModule(getKeystorePreferences())
+                )
                 .build()
 
         initTls()
@@ -71,7 +74,7 @@ class App : MultiDexApplication() {
         }
     }
 
-    private fun getKeystorePreferences(): SharedPreferences {
+    fun getKeystorePreferences(): SharedPreferences {
         return getSharedPreferences(KEYSTORE_PREF_NAME, Context.MODE_PRIVATE)
     }
 
