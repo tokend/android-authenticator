@@ -15,6 +15,7 @@ class AccountSignersCache(
         return first.scope == second.scope
                 && first.name == second.name
                 && first.publicKey == second.publicKey
+                && first.expirationDate == second.expirationDate
     }
 
     override fun getAllFromDb(): List<Signer> {
