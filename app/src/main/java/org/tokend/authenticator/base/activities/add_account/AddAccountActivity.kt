@@ -180,6 +180,7 @@ class AddAccountActivity : BaseActivity() {
                     try {
                         val api = JSONObject(it).getString("api").addSlashIfNeed()
                         onNetworkUrlObtained(api)
+                        return@also
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }

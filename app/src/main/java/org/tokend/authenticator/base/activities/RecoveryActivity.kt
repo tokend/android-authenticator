@@ -209,6 +209,7 @@ class RecoveryActivity : BaseActivity() {
                 networkHttpUrl = HttpUrl.parse(api).also { httpUrl ->
                     network_edit_text.setText(httpUrl.host())
                 }
+                return@also
             } catch (e: Exception) {
                 e.printStackTrace()
             }
