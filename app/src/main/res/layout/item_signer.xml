@@ -29,8 +29,8 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/permissions_image_view"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         app:srcCompat="@drawable/ic_arrow_forward"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/app_name_text_view"
