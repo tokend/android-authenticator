@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme.CardsBackground">
         <activity
             android:name=".base.activities.account_list.AccountsListActivity"
-            android:theme="@style/AppTheme.NoActionBar.CardsBackground">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
