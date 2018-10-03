@@ -41,7 +41,7 @@ data class SignerEntity(
                     publicKey = signer.publicKey,
                     name = signer.name,
                     scope = signer.scope,
-                    expirationDateString = signer.expirationDate.toString()
+                    expirationDateString = signer.expirationDate?.toString()
             )
         }
     }
