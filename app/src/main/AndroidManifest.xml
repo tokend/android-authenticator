@@ -60,6 +60,16 @@
                     android:host="auth"
                     android:scheme="tokend" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="intent.action.TOKEND_AUTH"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data
+                    android:host="auth"
+                    android:scheme="tokend" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".base.activities.general_account_info.GeneralAccountInfoActivity"

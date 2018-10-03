@@ -1,5 +1,6 @@
 package org.tokend.authenticator.auth.view
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import io.reactivex.rxkotlin.addTo
@@ -38,6 +39,7 @@ class AuthorizeAppActivity : BaseActivity() {
                         onComplete = {
                             if (!isFinishing) {
                                 ToastManager(this).short(R.string.app_authorized)
+                                setResult(Activity.RESULT_OK)
                                 finish()
                             }
                         },
