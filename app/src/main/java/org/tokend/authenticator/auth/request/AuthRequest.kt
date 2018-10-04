@@ -3,7 +3,6 @@ package org.tokend.authenticator.auth.request
 import android.net.Uri
 import org.tokend.wallet.Base32Check
 import org.tokend.wallet.xdr.SignerType
-import java.net.URLDecoder
 import java.util.*
 
 class AuthRequest(
@@ -29,7 +28,6 @@ class AuthRequest(
         private const val URI_PUBKEY_KEY = "pubkey"
         private const val URI_SCOPE_KEY = "scope"
         private const val URI_EXPIRATION_TIMESTAMP_KEY = "expires_at"
-        private const val URI_ENCODING = "UTF-8"
 
         fun fromUri(uri: Uri): AuthRequest {
             if (uri.scheme != URI_SCHEME) {
@@ -46,7 +44,7 @@ class AuthRequest(
                             ?: throw IllegalArgumentException("No API URL specified"),
                     appName =
                     try {
-                        URLDecoder.decode(uri.getQueryParameter(URI_APP_NAME_KEY), URI_ENCODING)
+                        uri.getQueryParameter(URI_APP_NAME_KEY)
                     } catch (e: Exception) {
                         throw IllegalArgumentException("Invalid app name")
                     },
