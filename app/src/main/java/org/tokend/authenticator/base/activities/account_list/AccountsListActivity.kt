@@ -213,6 +213,16 @@ class AccountsListActivity : BaseActivity() {
                         .addTo(compositeDisposable)
     }
 
+    override fun onBackPressed() {
+            (searchItem?.actionView as? SearchView)?.apply {
+                if (query.isNotEmpty()) {
+                    setQuery("", false)
+                    clearFocus()
+                    searchItem?.collapseActionView()
+                } else super.onBackPressed()
+            }
+    }
+
     // region QR
     private fun tryOpenQrScanner() {
         cameraPermission.check(this) {
