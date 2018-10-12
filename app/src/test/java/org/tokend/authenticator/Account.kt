@@ -37,7 +37,8 @@ class Account {
                 email = "",
                 originalAccountId = "",
                 kdfAttributes = kdf,
-                encryptedSeed = encryptedSeed
+                encryptedSeed = encryptedSeed,
+                walletId = ""
         )
 
         Assert.assertArrayEquals(seed,
