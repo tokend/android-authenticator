@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import io.reactivex.Single
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
+import org.tokend.authenticator.base.util.LongUid
 import org.tokend.sdk.api.models.KeychainData
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toCharArray
@@ -22,7 +23,7 @@ class Account(
         @SerializedName("kdfAttributes")
         var kdfAttributes: KdfAttributes,
         @SerializedName("uid")
-        val uid: Long = System.nanoTime()
+        val uid: Long = LongUid.get()
 ) {
     fun getSeed(cipher: DataCipher,
                 keyProvider: EncryptionKeyProvider): Single<CharArray> {

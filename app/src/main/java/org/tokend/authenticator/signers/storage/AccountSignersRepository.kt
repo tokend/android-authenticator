@@ -12,6 +12,7 @@ import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.repository.SimpleMultipleItemsRepository
 import org.tokend.authenticator.base.logic.transactions.TxManager
+import org.tokend.authenticator.base.util.LongUid
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.sdk.api.requests.AttributesEntity
 import org.tokend.sdk.api.requests.DataEntity
@@ -55,7 +56,7 @@ class AccountSignersRepository(
                         val existingSigner = existingSigners[signerResponse.accountId]
 
                         Signer(
-                                uid = existingSigner?.uid ?: System.nanoTime(),
+                                uid = existingSigner?.uid ?: LongUid.get(),
                                 accountId = account.uid,
                                 name = signerResponse.name,
                                 publicKey = signerResponse.accountId,

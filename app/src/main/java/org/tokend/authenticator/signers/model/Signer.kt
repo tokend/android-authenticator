@@ -1,6 +1,7 @@
 package org.tokend.authenticator.signers.model
 
 import com.google.gson.annotations.SerializedName
+import org.tokend.authenticator.base.util.LongUid
 import org.tokend.wallet.xdr.SignerType
 import java.util.*
 
@@ -19,7 +20,7 @@ class Signer(
         @SerializedName("expirationDate")
         val expirationDate: Date?,
         @SerializedName("uid")
-        val uid: Long = System.nanoTime()
+        val uid: Long = LongUid.get()
 ) {
     val types: List<SignerType> =
             SignerType.values().fold(mutableListOf()) { result, type ->
