@@ -27,5 +27,6 @@ abstract class UserKeyActivity : BaseActivity(
 
     companion object {
         const val USER_KEY_RESULT_EXTRA = "user_key"
+        const val IS_RETRY_EXTRA = "is_retry"
     }
 }

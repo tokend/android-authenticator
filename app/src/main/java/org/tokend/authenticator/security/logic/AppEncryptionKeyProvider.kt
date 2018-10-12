@@ -10,6 +10,7 @@ import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.security.logic.persistence.EncryptedMasterKeyStorage
 import org.tokend.authenticator.security.logic.persistence.MasterKeyKdfAttributesStorage
+import org.tokend.crypto.cipher.InvalidCipherTextException
 import org.tokend.kdf.ScryptKeyDerivation
 import org.tokend.sdk.api.models.KeychainData
 import org.tokend.sdk.keyserver.models.KdfAttributes
@@ -64,6 +65,9 @@ class AppEncryptionKeyProvider(
                     }
                     .flatMap { (encryptedMasterKey, decryptionKey) ->
                         cipher.decrypt(encryptedMasterKey, decryptionKey)
+                    }
+                    .retry { attempt, error ->
+                        error is InvalidCipherTextException && attempt < 3
                     }
         } else {
             generateMasterKey()

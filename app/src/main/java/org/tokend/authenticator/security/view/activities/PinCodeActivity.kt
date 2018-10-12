@@ -8,6 +8,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_pin_code.*
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.extensions.getChars
+import org.tokend.authenticator.base.extensions.setErrorAndFocus
 import org.tokend.authenticator.base.logic.fingerprint.FingerprintUtil
 import org.tokend.authenticator.base.util.SoftInputUtil
 import org.tokend.authenticator.base.util.ToastManager
@@ -46,6 +47,10 @@ open class PinCodeActivity : UserKeyActivity() {
                     }
                 }
         )
+
+        if(intent.getBooleanExtra(IS_RETRY_EXTRA, false)) {
+            pin_code_edit_text.setErrorAndFocus(getString(R.string.invalid_pin))
+        }
     }
 
     protected open fun onPinCodeEntered(pin: CharArray) {

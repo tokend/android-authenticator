@@ -59,4 +59,6 @@
     <string name="processing_progress">Processing…</string>
     <string name="error_fingerprint_locked">Too many failed attempts. Try again later</string>
     <string name="or_use_fingerprint">Or use your fingerprint</string>
+    <string name="invalid_pin">Invalid Pin</string>
+    <string name="error_many_pin_entry_attempts">To many Pin entry attempts</string>
 </resources>
