@@ -69,6 +69,7 @@ class ActivityUserKeyProvider(
     private fun cancelInput() {
         val backupSubject = resultSubject
         resultSubject = null
+        isRetry = false
         backupSubject?.onComplete()
     }
 
