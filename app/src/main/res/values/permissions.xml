@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="signer_type_descriptions">
-        <item>Read account information</item>
-        <item>Manage non-verified account</item>
-        <item>Perform general account management</item>
-        <item>Operate direct debit</item>
-        <item>Manage assets</item>
-        <item>Manage asset rates</item>
-        <item>Manage balances</item>
-        <item>Manage issuance</item>
-        <item>Manage invoices</item>
-        <item>Operate payments</item>
-        <item>Manage limits</item>
-        <item>Manage accounts</item>
-        <item>Manage commission balances</item>
-        <item>Manage operational balances</item>
-        <item>Check system events</item>
+        <item>Read data from API and Horizon</item>
+        <item>Manage not verified accounts and block/unblock general accounts</item>
+        <item>Create account, block/unblock general accounts</item>
+        <item>Create assets, create asset pairs and update policies</item>
+        <item>Set physical asset price</item>
+        <item>Create balances, spend assets from balances</item>
+        <item>Create preissuance request</item>
+        <item>Create and review invoice requests to other accounts</item>
+        <item>Change limits</item>
+        <item>Add/delete signers and trust</item>
+        <item>Spend from commission balances</item>
+        <item>Spend from operational balances</item>
+        <item>Check and trigger events</item>
         <item>Manage exchange account</item>
         <item>Manage syndicate account</item>
-        <item>Manage user assets</item>
-        <item>Manage user issuance</item>
-        <item>Manage withdrawals</item>
-        <item>Manage fees</item>
-        <item>Send transactions</item>
-        <item>Manage AML alerts</item>
-        <item>Review AML alerts</item>
-        <item>Manage KYC accounts</item>
-        <item>Administrate KYC (super)</item>
-        <item>Manage external system accounts pool</item>
-        <item>Manage key-value storage</item>
-        <item>Manage issuance (super)</item>
-        <item>Manage contracts</item>
+        <item>Review sale, asset creation/update requests</item>
+        <item>Review pre-issuance/issuance requests</item>
+        <item>Review withdraw requests</item>
+        <item>Manage custom fees imposition rules</item>
+        <item>Send tx</item>
+        <item>Manage AML alert requests</item>
+        <item>Review AML alert requests</item>
+        <item>Manage kyc</item>
+        <item>Create kyc requests with tasks and kyc requests for other users, manage kyc rule key value, review kyc requests create/update request</item>
+        <item>Manage external system pools</item>
+        <item>Manage keyValue</item>
+        <item>Review issuance/pre-issuance requests</item>
+        <item>Create and review contract requests, manage contracts</item>
+        <item>Create and review atomic swap bid requests, create and review atomic swap requests, cancel atomic swap bids</item>
     </string-array>
 
     <string name="template_permission_finite_access">Access the account until %1$s</string>
