@@ -14,9 +14,6 @@ import org.tokend.authenticator.base.logic.repository.SimpleMultipleItemsReposit
 import org.tokend.authenticator.base.logic.transactions.TxManager
 import org.tokend.authenticator.base.util.LongUid
 import org.tokend.authenticator.signers.model.Signer
-import org.tokend.sdk.api.requests.AttributesEntity
-import org.tokend.sdk.api.requests.DataEntity
-import org.tokend.sdk.api.requests.models.CreateUserRequestBody
 import org.tokend.wallet.Transaction
 import org.tokend.wallet.xdr.Operation
 import org.tokend.wallet.xdr.op_extensions.RemoveSignerOp
@@ -35,11 +32,9 @@ class AccountSignersRepository(
 
     override fun getItems(): Single<List<Signer>> {
         return api
-                .getAccountSigners(account.originalAccountId)
+                .accounts
+                .getSigners(account.originalAccountId)
                 .toSingle()
-                .map { accountResponse ->
-                    accountResponse.signers
-                }
                 .onErrorReturn { error ->
                     // No account on server means there are no signers ¯\_(ツ)_/¯
                     if (error is HttpException &&
@@ -147,11 +142,10 @@ class AccountSignersRepository(
     }
 
     private fun createAccountIfNeeded(keyPair: org.tokend.wallet.Account): Single<Boolean> {
-        return apiFactory.getSignedApi(account.network.rootUrl, keyPair)
-                .createUser(
-                        account.originalAccountId,
-                        DataEntity(AttributesEntity(CreateUserRequestBody("not_verified")))
-                )
+        return apiFactory
+                .getSignedApi(account.network.rootUrl, keyPair)
+                .users
+                .create(account.originalAccountId)
                 .toCompletable()
                 .toSingleDefault(true)
                 .onErrorReturnItem(false)

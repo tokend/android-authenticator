@@ -79,7 +79,7 @@ class AccountsListActivity : BaseActivity() {
         error_empty_view.observeAdapter(adapter, R.string.no_accounts_message)
         error_empty_view.setEmptyViewDenial { accountsRepository.isNeverUpdated }
 
-        adapter.onItemClick { view, item ->
+        adapter.onItemClick { _, item ->
             Navigator.openGeneralAccountInfo(this, item.uid)
         }
 

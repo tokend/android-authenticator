@@ -11,7 +11,6 @@ import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
 import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
-import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
 import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 
@@ -76,7 +75,7 @@ class AccountRecovery {
         val network = "https://api.testnet.tokend.org/"
         val recoverySeed = "SCIUKFBGL364Q2A2BVO474BBOFS6VV2K5WFAQG6WQS7WHAATGLE6CVP3".toCharArray()
         val cipher = DefaultDataCipher()
-        val keyProvider = TmpEncryptionKeyProvider()
+        val keyProvider = DumbEncryptionKeyProvider()
 
         RecoverAccountUseCase(
                 networkUrl = network,

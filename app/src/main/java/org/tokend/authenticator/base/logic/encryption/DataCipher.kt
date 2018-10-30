@@ -1,7 +1,7 @@
 package org.tokend.authenticator.base.logic.encryption
 
 import io.reactivex.Single
-import org.tokend.sdk.api.models.KeychainData
+import org.tokend.sdk.keyserver.models.KeychainData
 
 interface DataCipher {
     fun encrypt(data: ByteArray, key: ByteArray): Single<KeychainData>

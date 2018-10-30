@@ -5,16 +5,9 @@ import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
-import org.tokend.crypto.cipher.Aes256GCM
-import org.tokend.kdf.KeyDerivationFunction
-import org.tokend.kdf.ScryptKeyDerivation
-import org.tokend.sdk.api.models.KeychainData
 import org.tokend.sdk.factory.GsonFactory
-import org.tokend.sdk.keyserver.models.KdfAttributes
-import org.tokend.sdk.utils.extentions.toBytes
-import org.tokend.wallet.utils.toByteArray
+import org.tokend.sdk.keyserver.models.KeychainData
 import java.security.KeyStore
-import java.security.SecureRandom
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -40,7 +33,7 @@ class SecureStorage(
         try {
             val encryptCipher = getEncryptCipher(secretKey)!!
             val encryptedData = encryptCipher.doFinal(data)
-            val keychainData = KeychainData.fromDecoded(encryptCipher.iv, encryptedData)
+            val keychainData = KeychainData.fromRaw(encryptCipher.iv, encryptedData)
             saveKeychainData(keychainData, key)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -52,80 +45,26 @@ class SecureStorage(
 
     /**
      * Loads data by given key and decrypts it with secure key from Android [KeyStore]
-     * @return decrypted data or [null] if it is not exists or decryption failed
+     * @return decrypted data or null if it is not exists or decryption failed
      */
     @RequiresApi(Build.VERSION_CODES.M)
     fun load(key: String): ByteArray? {
         val secretKey = getSecretKey(key)
                 ?: return null
 
-        try {
+        return try {
             val keychainData = loadKeychainData(key)!!
             val decryptCipher = getDecryptCipher(secretKey, keychainData.iv)!!
-            return decryptCipher.doFinal(keychainData.cipherText)
+            decryptCipher.doFinal(keychainData.cipherText)
         } catch (e: Exception) {
             e.printStackTrace()
-            return null
+            null
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun hasSecretKey(key: String): Boolean {
         return getSecretKey(key) != null
-    }
-
-    /**
-     * Encrypts data with given password
-     * and saves cipher text in [SharedPreferences].
-     */
-    fun saveWithPassword(data: ByteArray, key: String, password: CharArray): Boolean {
-        var keyBytes = ByteArray(0)
-        val passwordBytes = password.toByteArray()
-        return try {
-            val seed = SecureRandom.getSeed(16)
-            keyBytes = getKeyDerivation()
-                    .derive(passwordBytes, seed, KDF_PARAMS.bits.toBytes())
-            val encryptedData = Aes256GCM(seed).encrypt(data, keyBytes)
-            keyBytes.fill(0)
-            val keychainData = KeychainData.fromDecoded(seed, encryptedData)
-            saveKeychainData(keychainData, key)
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        } finally {
-            keyBytes.fill(0)
-            passwordBytes.fill(0)
-        }
-    }
-
-    /**
-     * Loads data by given key and decrypts it with password.
-     * @return decrypted data or null if it is not exists or decryption failed
-     */
-    fun loadWithPassword(key: String, password: CharArray): ByteArray? {
-        var keyBytes = ByteArray(0)
-        val passwordBytes = password.toByteArray()
-        return try {
-            val keychainData = loadKeychainData(key)!!
-            val seed = keychainData.iv
-            keyBytes = getKeyDerivation()
-                    .derive(passwordBytes, seed, KDF_PARAMS.bits.toBytes())
-            return Aes256GCM(seed).decrypt(keychainData.cipherText, keyBytes)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        } finally {
-            keyBytes.fill(0)
-            passwordBytes.fill(0)
-        }
-    }
-
-    /**
-     * Clears encrypted data entry for given key.
-     */
-    fun clear(key: String) {
-        preferences.edit().remove(key).apply()
     }
 
     private fun saveKeychainData(data: KeychainData, key: String) {
@@ -202,22 +141,10 @@ class SecureStorage(
         }
     }
 
-    private fun getKeyDerivation(): KeyDerivationFunction {
-        return ScryptKeyDerivation(KDF_PARAMS.n, KDF_PARAMS.r, KDF_PARAMS.p)
-    }
-
     companion object {
         private const val SECRET_KEY_NAME_PREFIX = "ss_"
         private const val SECRET_KEY_ALG = "AES"
         private const val KEYSTORE_NAME = "AndroidKeyStore"
         private const val CIPHER = "AES/CBC/PKCS7Padding"
-        private val KDF_PARAMS = KdfAttributes(
-                "scrypt",
-                256,
-                2048,
-                1,
-                4,
-                ""
-        )
     }
 }

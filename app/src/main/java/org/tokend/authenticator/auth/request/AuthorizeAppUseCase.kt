@@ -7,10 +7,10 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
-import org.tokend.authenticator.auth.request.result.AuthResultApi
-import org.tokend.authenticator.auth.request.result.AuthResultData
 import org.tokend.authenticator.base.extensions.toCompletable
 import org.tokend.authenticator.base.extensions.toSingle
+import org.tokend.authenticator.base.logic.api.AuthenticatorApi
+import org.tokend.authenticator.base.logic.api.authresult.AuthResultData
 import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
@@ -18,8 +18,6 @@ import org.tokend.authenticator.base.logic.transactions.factory.TxManagerFactory
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
-import org.tokend.sdk.api.ApiService
-import org.tokend.sdk.api.requests.DataEntity
 import java.util.concurrent.CancellationException
 
 class AuthorizeAppUseCase(
@@ -33,7 +31,7 @@ class AuthorizeAppUseCase(
         private val txManagerFactory: TxManagerFactory
 ) {
     private lateinit var authRequest: AuthRequest
-    private lateinit var api: ApiService
+    private lateinit var api: AuthenticatorApi
     private lateinit var network: Network
     private lateinit var account: Account
     private lateinit var signersRepository: AccountSignersRepository
@@ -95,12 +93,13 @@ class AuthorizeAppUseCase(
         }.toSingle()
     }
 
-    private fun getApi(): ApiService {
+    private fun getApi(): AuthenticatorApi {
         return apiFactory.getApi(authRequest.networkUrl)
     }
 
     private fun getNetwork(): Single<Network> {
         return api
+                .general
                 .getSystemInfo()
                 .toSingle()
                 .map {
@@ -160,10 +159,7 @@ class AuthorizeAppUseCase(
                         null
             )
 
-            val resultApi = apiFactory.getCustomApi(authRequest.networkUrl,
-                    AuthResultApi::class.java)
-
-            resultApi.postAuthResult(authRequest.publicKey, DataEntity(result))
+            api.authResult.post(authRequest.publicKey, result)
                     .toCompletable()
         }
     }

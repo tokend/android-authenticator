@@ -19,7 +19,6 @@ import org.tokend.authenticator.base.logic.transactions.TxManager
 import org.tokend.authenticator.base.logic.transactions.factory.DefaultTxManagerFactory
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
-import org.tokend.sdk.factory.ApiFactory
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toByteArray
 import org.tokend.wallet.xdr.SignerType
@@ -70,7 +69,7 @@ class RevokeAccess {
         val repository = signersRepositoryProvider.getForAccount(account)
 
         repository.add(signer, DefaultDataCipher(), keyProvider,
-                TxManager(ApiFactory(account.network.rootUrl).getApiService())).blockingAwait()
+                TxManager(DefaultApiFactory().getApi(account.network.rootUrl))).blockingAwait()
 
         RevokeAccessUseCase(
                 signer,

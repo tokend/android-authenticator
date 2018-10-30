@@ -2,7 +2,7 @@ package org.tokend.authenticator.base.logic.encryption
 
 import io.reactivex.Single
 import org.tokend.crypto.cipher.Aes256GCM
-import org.tokend.sdk.api.models.KeychainData
+import org.tokend.sdk.keyserver.models.KeychainData
 import java.security.SecureRandom
 
 class DefaultDataCipher : DataCipher {
@@ -13,7 +13,7 @@ class DefaultDataCipher : DataCipher {
             val cipherText = cipher.encrypt(data, key)
 
             Single.just(
-                    KeychainData.fromDecoded(iv, cipherText)
+                    KeychainData.fromRaw(iv, cipherText)
             )
         }
     }

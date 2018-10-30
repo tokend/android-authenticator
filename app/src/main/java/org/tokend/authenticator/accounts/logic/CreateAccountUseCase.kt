@@ -4,7 +4,6 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import okhttp3.HttpUrl
-import org.spongycastle.util.encoders.Base64
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
@@ -14,9 +13,9 @@ import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.wallet.WalletManager
-import org.tokend.sdk.api.models.SystemInfo
-import org.tokend.sdk.api.models.WalletData
+import org.tokend.sdk.api.general.model.SystemInfo
 import org.tokend.sdk.keyserver.models.KdfAttributes
+import org.tokend.sdk.keyserver.models.WalletData
 import org.tokend.wallet.utils.toByteArray
 
 /**
@@ -116,21 +115,18 @@ class CreateAccountUseCase(
 
     private fun getKdfAttributes(): Single<KdfAttributes> {
         return {
-            keyStorageApi.getApiLoginParams()
+            keyStorageApi.getLoginParams()
         }
                 .toSingle()
                 .map {
-                    it.kdfAttributes
-                }
-                .map {
-                    it.copy(encodedSalt = Base64.toBase64String(
-                            KdfAttributesGenerator().getRandomSalt()
-                    ))
+                    it.kdfAttributes.also { kdf ->
+                        kdf.salt = KdfAttributesGenerator().getRandomSalt()
+                    }
                 }
     }
 
     private fun getSystemInfo(): Single<SystemInfo> {
-        return api.getSystemInfo().toSingle()
+        return api.general.getSystemInfo().toSingle()
     }
 
     private fun getRandomKeyPair(): Single<org.tokend.wallet.Account> {

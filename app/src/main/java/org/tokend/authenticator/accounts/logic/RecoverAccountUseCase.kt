@@ -15,10 +15,10 @@ import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.wallet.WalletManager
 import org.tokend.authenticator.base.logic.wallet.WalletUpdateManager
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
-import org.tokend.sdk.api.ApiService
-import org.tokend.sdk.api.models.SystemInfo
-import org.tokend.sdk.api.models.WalletData
+import org.tokend.sdk.api.TokenDApi
+import org.tokend.sdk.api.general.model.SystemInfo
 import org.tokend.sdk.keyserver.models.KdfAttributes
+import org.tokend.sdk.keyserver.models.WalletData
 import org.tokend.sdk.keyserver.models.WalletInfo
 import org.tokend.wallet.utils.toByteArray
 
@@ -34,7 +34,7 @@ class RecoverAccountUseCase(
 ) {
     private val networkUrl = HttpUrl.parse(networkUrl).toString()
 
-    private lateinit var signedApi: ApiService
+    private lateinit var signedApi: TokenDApi
     private lateinit var network: Network
     private lateinit var recoveryKeyPair: org.tokend.wallet.Account
     private lateinit var recoveryWallet: WalletInfo
@@ -99,7 +99,7 @@ class RecoverAccountUseCase(
     }
 
     private fun getSystemInfo(): Single<SystemInfo> {
-        return signedApi.getSystemInfo().toSingle()
+        return signedApi.general.getSystemInfo().toSingle()
     }
 
     private fun getRandomKeyPair(): Single<org.tokend.wallet.Account> {

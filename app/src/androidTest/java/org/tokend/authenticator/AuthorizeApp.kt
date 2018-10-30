@@ -18,7 +18,6 @@ import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
-import org.tokend.authenticator.base.logic.encryption.TmpEncryptionKeyProvider
 import org.tokend.authenticator.base.logic.transactions.factory.DefaultTxManagerFactory
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.wallet.utils.toByteArray
@@ -26,7 +25,9 @@ import java.net.URLEncoder
 
 @RunWith(AndroidJUnit4::class)
 class AuthorizeApp {
-    private val key = ByteArray(32)
+    private val key = DumbEncryptionKeyProvider()
+            .getKey(KdfAttributesGenerator().withRandomSalt())
+            .blockingGet()
     private val seed = "SCIUKFBGL364Q2A2BVO474BBOFS6VV2K5WFAQG6WQS7WHAATGLE6CVP3".toCharArray()
 
     private val account = Account(
@@ -52,7 +53,7 @@ class AuthorizeApp {
         val signersRepositoryProvider = AccountSignersRepositoryProvider(database, DefaultApiFactory())
 
         val pubKey = org.tokend.wallet.Account.random().accountId
-        val uri = "tdauth://?action=auth&api=${account.network.rootUrl}" +
+        val uri = "tokend://auth?api=${account.network.rootUrl}" +
                 "&app=${URLEncoder.encode("Test App", "UTF-8")}" +
                 "&pubkey=$pubKey&scope=1&expires_at=0"
 
@@ -75,7 +76,7 @@ class AuthorizeApp {
                 signersRepositoryProvider,
                 confirmationProvider,
                 DefaultDataCipher(),
-                TmpEncryptionKeyProvider(),
+                DumbEncryptionKeyProvider(),
                 DefaultApiFactory(),
                 DefaultTxManagerFactory(DefaultApiFactory())
         )

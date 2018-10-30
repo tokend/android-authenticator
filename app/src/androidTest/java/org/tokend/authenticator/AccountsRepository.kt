@@ -9,7 +9,7 @@ import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
-import org.tokend.sdk.api.models.KeychainData
+import org.tokend.sdk.keyserver.models.KeychainData
 
 class AccountsRepository {
     private val account = Account(
@@ -18,7 +18,7 @@ class AccountsRepository {
             "EMAIL",
             "ORIGINAL_ACCOUNT_ID",
             "",
-            KeychainData.fromDecoded(ByteArray(16), ByteArray(16)),
+            KeychainData.fromRaw(ByteArray(16), ByteArray(16)),
             KdfAttributesGenerator().withRandomSalt()
     )
 
@@ -67,12 +67,14 @@ class AccountsRepository {
 
         repository.add(account)
         val newKdf = KdfAttributesGenerator().withRandomSalt()
-        val newEncryptedSeed = KeychainData.fromDecoded(byteArrayOf(1, 2, 3, 4), byteArrayOf(5, 6, 7, 8))
+        val newEncryptedSeed = KeychainData.fromRaw(byteArrayOf(1, 2, 3, 4), byteArrayOf(5, 6, 7, 8))
         account.apply {
             kdfAttributes = newKdf
             encryptedSeed = newEncryptedSeed
         }
         repository.update(account)
+
+        Thread.sleep(250)
 
         val loadedAccount = getRepository().itemsList.first()
 

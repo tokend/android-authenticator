@@ -18,7 +18,6 @@ import org.tokend.authenticator.base.logic.transactions.TxManager
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
-import org.tokend.sdk.factory.ApiFactory
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toByteArray
 import org.tokend.wallet.xdr.SignerType
@@ -106,7 +105,7 @@ class AccountSignersRepository {
             override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
                 return Single.just(key)
             }
-        }, TxManager(ApiFactory(account.network.rootUrl).getApiService())).blockingAwait()
+        }, TxManager(DefaultApiFactory().getApi(account.network.rootUrl))).blockingAwait()
     }
 
     @Test
@@ -136,7 +135,7 @@ class AccountSignersRepository {
             override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
                 return Single.just(key)
             }
-        }, TxManager(ApiFactory(account.network.rootUrl).getApiService())).blockingAwait()
+        }, TxManager(DefaultApiFactory().getApi(account.network.rootUrl))).blockingAwait()
 
         Assert.assertNull(repository.itemsList.find { it.publicKey == publicKey })
 

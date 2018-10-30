@@ -5,9 +5,9 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
-import org.tokend.sdk.api.models.KeychainData
 import org.tokend.sdk.factory.GsonFactory
 import org.tokend.sdk.keyserver.models.KdfAttributes
+import org.tokend.sdk.keyserver.models.KeychainData
 
 @Entity(tableName = "account")
 data class AccountEntity(

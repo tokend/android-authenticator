@@ -1,4 +1,4 @@
-package org.tokend.authenticator.auth.request.result
+package org.tokend.authenticator.base.logic.api.authresult
 
 import com.google.gson.annotations.SerializedName
 

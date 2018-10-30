@@ -12,8 +12,8 @@ import org.tokend.authenticator.security.logic.persistence.EncryptedMasterKeySto
 import org.tokend.authenticator.security.logic.persistence.MasterKeyKdfAttributesStorage
 import org.tokend.crypto.cipher.InvalidCipherTextException
 import org.tokend.kdf.ScryptKeyDerivation
-import org.tokend.sdk.api.models.KeychainData
 import org.tokend.sdk.keyserver.models.KdfAttributes
+import org.tokend.sdk.keyserver.models.KeychainData
 import org.tokend.wallet.utils.toByteArray
 import java.util.concurrent.CancellationException
 import javax.crypto.KeyGenerator
@@ -39,7 +39,7 @@ class AppEncryptionKeyProvider(
                             kdfAttributes.n,
                             kdfAttributes.r,
                             kdfAttributes.p
-                    ).derive(masterKey, kdfAttributes.salt, KEY_LENGTH_BYTES)
+                    ).derive(masterKey, kdfAttributes.salt!!, KEY_LENGTH_BYTES)
                 }
     }
 
@@ -126,7 +126,7 @@ class AppEncryptionKeyProvider(
                             kdfAttributes.n,
                             kdfAttributes.r,
                             kdfAttributes.p
-                    ).derive(userKey, kdfAttributes.salt, KEY_LENGTH_BYTES)
+                    ).derive(userKey, kdfAttributes.salt!!, KEY_LENGTH_BYTES)
                 }
     }
 

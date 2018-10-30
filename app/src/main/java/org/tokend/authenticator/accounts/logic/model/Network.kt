@@ -2,7 +2,7 @@ package org.tokend.authenticator.accounts.logic.model
 
 import com.google.gson.annotations.SerializedName
 import org.tokend.authenticator.base.extensions.addSlashIfNeed
-import org.tokend.sdk.api.models.SystemInfo
+import org.tokend.sdk.api.general.model.SystemInfo
 import org.tokend.wallet.NetworkParams
 import java.io.Serializable
 

@@ -22,8 +22,8 @@ import org.tokend.authenticator.base.extensions.setErrorAndFocus
 import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import org.tokend.authenticator.base.view.util.SimpleTextWatcher
-import org.tokend.sdk.federation.EmailNotVerifiedException
-import org.tokend.sdk.federation.InvalidCredentialsException
+import org.tokend.sdk.api.wallets.model.EmailNotVerifiedException
+import org.tokend.sdk.api.wallets.model.InvalidCredentialsException
 import org.tokend.wallet.Base32Check
 
 class RecoveryActivity : BaseActivity() {

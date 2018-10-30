@@ -1,8 +1,8 @@
 package org.tokend.authenticator.security.logic.persistence
 
 import android.content.SharedPreferences
-import org.tokend.sdk.api.models.KeychainData
 import org.tokend.sdk.factory.GsonFactory
+import org.tokend.sdk.keyserver.models.KeychainData
 
 class EncryptedMasterKeyStorage(
         private val sharedPreferences: SharedPreferences
