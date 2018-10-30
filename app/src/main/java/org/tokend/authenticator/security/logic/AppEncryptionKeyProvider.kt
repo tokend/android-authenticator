@@ -67,7 +67,16 @@ class AppEncryptionKeyProvider(
                         cipher.decrypt(encryptedMasterKey, decryptionKey)
                     }
                     .retry { attempt, error ->
-                        error is InvalidCipherTextException && attempt < 3
+                        error is InvalidCipherTextException
+                                && attempt < MAX_FAILED_USER_KEY_ATTEMPTS
+                    }
+                    .onErrorResumeNext { error ->
+                        if (error is InvalidCipherTextException)
+                            Single.error(
+                                    TooManyUserKeyAttemptsException(MAX_FAILED_USER_KEY_ATTEMPTS)
+                            )
+                        else
+                            Single.error(error)
                     }
         } else {
             generateMasterKey()
@@ -151,5 +160,6 @@ class AppEncryptionKeyProvider(
 
     companion object {
         private const val KEY_LENGTH_BYTES = 32
+        private const val MAX_FAILED_USER_KEY_ATTEMPTS = 3
     }
 }
