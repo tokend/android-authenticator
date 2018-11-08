@@ -13,6 +13,8 @@ import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.wallet.WalletManager
+import org.tokend.rx.extensions.saveWalletCompletable
+import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.general.model.SystemInfo
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.WalletData
@@ -39,7 +41,6 @@ class CreateAccountUseCase(
 
     private val api = apiFactory.getApi(networkUrl)
     private val keyStorageApi = apiFactory.getKeyStorage(networkUrl)
-    private val walletManager = WalletManager(keyStorageApi)
 
     private lateinit var kdfAttributes: KdfAttributes
     private lateinit var network: Network
@@ -145,7 +146,7 @@ class CreateAccountUseCase(
     }
 
     private fun postWallet(wallet: WalletData): Single<Boolean> {
-        return walletManager.saveWallet(wallet).toSingleDefault(true)
+        return keyStorageApi.saveWalletCompletable(wallet).toSingleDefault(true)
     }
 
     private fun createAccount(): Single<Account> {

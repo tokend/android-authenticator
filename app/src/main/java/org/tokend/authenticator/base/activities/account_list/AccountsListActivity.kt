@@ -169,9 +169,9 @@ class AccountsListActivity : BaseActivity() {
                     filter?.let { query ->
                         items.filter { item ->
                             item.email.contains(query) || item.network.name.contains(query)
+                        }
+                    } ?: items
                 }
-            } ?: items
-        }
         adapter.setData(items)
     }
 
@@ -214,13 +214,13 @@ class AccountsListActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-            (searchItem?.actionView as? SearchView)?.apply {
-                if (query.isNotEmpty()) {
-                    setQuery("", false)
-                    clearFocus()
-                    searchItem?.collapseActionView()
-                } else super.onBackPressed()
-            }
+        (searchItem?.actionView as? SearchView)?.apply {
+            if (query.isNotEmpty()) {
+                 setQuery("", false)
+                clearFocus()
+                searchItem?.collapseActionView()
+            } else super.onBackPressed()
+        }
     }
 
     // region QR

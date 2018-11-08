@@ -4,7 +4,9 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.tokend.authenticator.accounts.logic.model.Network
-import org.tokend.authenticator.base.extensions.toSingle
+import org.tokend.rx.extensions.createSignersUpdateTransactionSingle
+import org.tokend.rx.extensions.toSingle
+import org.tokend.rx.extensions.updateWalletCompletable
 import org.tokend.sdk.api.TokenDApi
 import org.tokend.sdk.keyserver.KeyStorage
 import org.tokend.sdk.keyserver.models.KdfAttributes
@@ -19,7 +21,7 @@ import java.net.HttpURLConnection
 class WalletUpdateManager {
     fun updateWalletWithNewKeyPair(walletInfo: WalletInfo,
                                    signedApi: TokenDApi,
-                                   walletManager: WalletManager,
+                                   keyStorage: KeyStorage,
                                    network: Network,
                                    signKeyPair: Account,
                                    newMasterKeyPair: Account,
@@ -51,7 +53,7 @@ class WalletUpdateManager {
                 }
                 // Update current wallet with it.
                 .flatMap { newWallet ->
-                    walletManager.updateWallet(walletId, newWallet)
+                    keyStorage.updateWalletCompletable(walletId, newWallet)
                             .andThen(Single.just(newWallet))
                 }
     }
@@ -95,17 +97,13 @@ class WalletUpdateManager {
                                                currentAccount: Account,
                                                currentSigners: Collection<org.tokend.sdk.api.accounts.model.Account.Signer>,
                                                newAccount: Account): Single<Transaction> {
-        return Single.defer {
-            val transaction = KeyStorage.createSignersUpdateTransaction(
-                    networkParams,
-                    currentWallet.accountId,
-                    currentAccount,
-                    currentSigners,
-                    newAccount
-            )
-
-            Single.just(transaction)
-        }.subscribeOn(Schedulers.newThread())
+        return KeyStorage.createSignersUpdateTransactionSingle(
+                networkParams,
+                currentWallet.accountId,
+                currentAccount,
+                currentSigners,
+                newAccount
+        ).subscribeOn(Schedulers.newThread())
     }
     // endregion
 }

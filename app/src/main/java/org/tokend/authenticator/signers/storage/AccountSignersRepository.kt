@@ -4,8 +4,6 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import org.tokend.authenticator.accounts.logic.model.Account
-import org.tokend.authenticator.base.extensions.toCompletable
-import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.db.AppDatabase
 import org.tokend.authenticator.base.logic.encryption.DataCipher
@@ -14,6 +12,8 @@ import org.tokend.authenticator.base.logic.repository.SimpleMultipleItemsReposit
 import org.tokend.authenticator.base.logic.transactions.TxManager
 import org.tokend.authenticator.base.util.LongUid
 import org.tokend.authenticator.signers.model.Signer
+import org.tokend.rx.extensions.toCompletable
+import org.tokend.rx.extensions.toSingle
 import org.tokend.wallet.Transaction
 import org.tokend.wallet.xdr.Operation
 import org.tokend.wallet.xdr.op_extensions.RemoveSignerOp

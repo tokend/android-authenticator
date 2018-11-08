@@ -7,7 +7,6 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
-import org.tokend.authenticator.base.extensions.toCompletable
 import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.api.AuthenticatorApi
 import org.tokend.authenticator.base.logic.api.authresult.AuthResultData
@@ -18,6 +17,8 @@ import org.tokend.authenticator.base.logic.transactions.factory.TxManagerFactory
 import org.tokend.authenticator.signers.model.Signer
 import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
+import org.tokend.rx.extensions.toCompletable
+import org.tokend.rx.extensions.toSingle
 import java.util.concurrent.CancellationException
 
 class AuthorizeAppUseCase(

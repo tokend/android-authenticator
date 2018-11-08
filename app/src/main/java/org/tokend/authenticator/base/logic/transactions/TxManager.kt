@@ -2,7 +2,7 @@ package org.tokend.authenticator.base.logic.transactions
 
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.tokend.authenticator.base.extensions.toSingle
+import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.TokenDApi
 import org.tokend.sdk.api.transactions.model.SubmitTransactionResponse
 import org.tokend.wallet.*
