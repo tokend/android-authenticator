@@ -24,7 +24,7 @@ class KdfAttributesGenerator {
 
     companion object {
         const val DEFAULT_ALG = "scrypt"
-        const val DEFAULT_N = 4096
+        const val DEFAULT_N = 16384
         const val DEFAULT_R = 8
         const val DEFAULT_P = 1
         const val DEFAULT_KEY_LENGTH_BYTES = 32
