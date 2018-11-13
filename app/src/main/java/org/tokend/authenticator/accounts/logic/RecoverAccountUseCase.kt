@@ -1,7 +1,9 @@
 package org.tokend.authenticator.accounts.logic
 
 import io.reactivex.Completable
+import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import okhttp3.HttpUrl
 import org.spongycastle.util.encoders.Base64
 import org.tokend.authenticator.accounts.logic.model.Account
@@ -47,6 +49,8 @@ class RecoverAccountUseCase(
     private lateinit var newWalletId: String
 
     fun perform(): Completable {
+        val scheduler = Schedulers.newThread()
+
         return getRecoveryKeyPair()
                 .doOnSuccess { recoveryKeyPair ->
                     this.recoveryKeyPair = recoveryKeyPair
@@ -56,6 +60,7 @@ class RecoverAccountUseCase(
                 .flatMap {
                     getSystemInfo()
                 }
+                .observeOn(scheduler)
                 .map { systemInfo ->
                     Network.fromSystemInfo(networkUrl, systemInfo)
                 }
@@ -65,6 +70,7 @@ class RecoverAccountUseCase(
                 .flatMap {
                     keyStorage.getWalletInfoSingle(email, recoverySeed, true)
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { recoveryWallet ->
                     this.recoveryWallet = recoveryWallet
                 }
@@ -77,12 +83,14 @@ class RecoverAccountUseCase(
                 .flatMap {
                     getRandomKeyPair()
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { newMasterKeyPair ->
                     this.newMasterKeyPair = newMasterKeyPair
                 }
                 .map {
                     KdfAttributesGenerator().getRandomSalt()
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { newKdfSalt ->
                     this.newKdfAttributes = recoveryWallet.loginParams.kdfAttributes
                             .copy(encodedSalt = Base64.toBase64String(newKdfSalt))
@@ -90,6 +98,7 @@ class RecoverAccountUseCase(
                 .flatMap {
                     updateWallet()
                 }
+                .observeOn(scheduler)
                 .doOnSuccess { updatedWallet ->
                     this.newWalletId = updatedWallet.id!!
                 }
