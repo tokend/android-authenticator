@@ -23,7 +23,7 @@ class Account {
             override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
                 return Single.defer {
                     Single.just(ScryptKeyDerivation(kdf.n, kdf.r, kdf.p)
-                            .derive(password, kdf.salt, 32)
+                            .derive(password, kdf.salt!!, 32)
                     )
                 }
             }
