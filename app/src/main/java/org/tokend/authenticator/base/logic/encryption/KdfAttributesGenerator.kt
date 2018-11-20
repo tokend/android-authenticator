@@ -1,6 +1,5 @@
 package org.tokend.authenticator.base.logic.encryption
 
-import org.spongycastle.util.encoders.Base64
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import java.security.SecureRandom
 
@@ -12,9 +11,7 @@ class KdfAttributesGenerator {
                 n = DEFAULT_N,
                 r = DEFAULT_R,
                 p = DEFAULT_P,
-                encodedSalt = Base64.toBase64String(
-                        getRandomSalt(lengthBytes)
-                )
+                salt = getRandomSalt(lengthBytes)
         )
     }
 
