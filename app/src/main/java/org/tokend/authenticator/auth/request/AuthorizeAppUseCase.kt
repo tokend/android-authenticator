@@ -9,7 +9,6 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.base.extensions.toSingle
 import org.tokend.authenticator.base.logic.api.AuthenticatorApi
-import org.tokend.authenticator.base.logic.api.authresult.AuthResultData
 import org.tokend.authenticator.base.logic.api.factory.ApiFactory
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
@@ -19,6 +18,7 @@ import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.rx.extensions.toCompletable
 import org.tokend.rx.extensions.toSingle
+import org.tokend.sdk.api.authenticator.model.AuthResult
 import java.util.concurrent.CancellationException
 
 class AuthorizeAppUseCase(
@@ -151,16 +151,16 @@ class AuthorizeAppUseCase(
 
     private fun postAuthResult(success: Boolean): Completable {
         return Completable.defer {
-            val result = AuthResultData(
-                    success = success,
+            val result = AuthResult(
+                    isSuccessful = success,
                     walletId =
                     if (success)
                         account.walletId
                     else
-                        null
+                        ""
             )
 
-            api.authResult.post(authRequest.publicKey, result)
+            api.authResults.postAuthResult(authRequest.publicKey, result)
                     .toCompletable()
         }
     }
