@@ -24,6 +24,7 @@ import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.AccountLogoFactory
 import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.base.activities.BaseActivity
+import org.tokend.authenticator.base.activities.account_list.adapter.AccountListItem
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountsListAdapter
 import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
@@ -172,7 +173,7 @@ class AccountsListActivity : BaseActivity() {
                         }
                     } ?: items
                 }
-        adapter.setData(items)
+        adapter.setData(items.map { AccountListItem(it) })
     }
 
     private var accountsDisposable: Disposable? = null
@@ -184,7 +185,7 @@ class AccountsListActivity : BaseActivity() {
                 accountsRepository.itemsObservable
                         .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe {
-                            adapter.setData(it)
+                            adapter.setData(it.map { AccountListItem(it) })
                         }
                         .addTo(compositeDisposable)
 

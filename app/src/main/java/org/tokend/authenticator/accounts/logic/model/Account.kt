@@ -14,16 +14,20 @@ class Account(
         val network: Network,
         @SerializedName("email")
         val email: String,
-        @SerializedName("originalAccountId")
+        @SerializedName("original_account_id")
         val originalAccountId: String,
-        @SerializedName("walletId")
+        @SerializedName("wallet_id")
         var walletId: String,
-        @SerializedName("encryptedSeed")
+        @SerializedName("public_key")
+        var publicKey: String,
+        @SerializedName("encrypted_seed")
         var encryptedSeed: KeychainData,
-        @SerializedName("kdfAttributes")
+        @SerializedName("kdf_attributes")
         var kdfAttributes: KdfAttributes,
         @SerializedName("uid")
-        val uid: Long = LongUid.get()
+        val uid: Long = LongUid.get(),
+        @SerializedName("is_broken")
+        var isBroken: Boolean = false
 ) {
     fun getSeed(cipher: DataCipher,
                 keyProvider: EncryptionKeyProvider): Single<CharArray> {

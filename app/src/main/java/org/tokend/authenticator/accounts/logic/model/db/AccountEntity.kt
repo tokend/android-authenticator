@@ -22,10 +22,14 @@ data class AccountEntity(
         val walletId: String,
         @ColumnInfo(name = "network_json")
         val networkJson: String,
+        @ColumnInfo(name = "public_key")
+        val publicKey: String,
         @ColumnInfo(name = "encrypted_seed_json")
         val encryptedSeedJson: String,
         @ColumnInfo(name = "kdf_json")
-        val kdfJson: String
+        val kdfJson: String,
+        @ColumnInfo(name = "is_broken")
+        val isBroken: Boolean
 ) {
     fun toAccount(): Account {
         val gson = GsonFactory().getBaseGson()
@@ -35,8 +39,10 @@ data class AccountEntity(
                 email = email,
                 originalAccountId = originalAccountId,
                 walletId = walletId,
+                publicKey = publicKey,
                 encryptedSeed = gson.fromJson(encryptedSeedJson, KeychainData::class.java),
-                kdfAttributes = gson.fromJson(kdfJson, KdfAttributes::class.java)
+                kdfAttributes = gson.fromJson(kdfJson, KdfAttributes::class.java),
+                isBroken = isBroken
         )
     }
 
@@ -48,9 +54,11 @@ data class AccountEntity(
                     email = account.email,
                     originalAccountId = account.originalAccountId,
                     walletId = account.walletId,
+                    publicKey = account.publicKey,
                     networkJson = gson.toJson(account.network),
                     encryptedSeedJson = gson.toJson(account.encryptedSeed),
-                    kdfJson = gson.toJson(account.kdfAttributes)
+                    kdfJson = gson.toJson(account.kdfAttributes),
+                    isBroken = account.isBroken
             )
         }
     }

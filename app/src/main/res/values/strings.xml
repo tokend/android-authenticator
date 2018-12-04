@@ -62,4 +62,6 @@
     <string name="invalid_pin">Invalid Pin</string>
     <string name="error_many_pin_entry_attempts">Too many PIN entry attempts</string>
     <string name="error_cipher_failed">Unable to decrypt data</string>
+    <string name="access_error_message">It seems you lose access to current account</string>
+    <string name="recover_suggestion">Try to recover it</string>
 </resources>

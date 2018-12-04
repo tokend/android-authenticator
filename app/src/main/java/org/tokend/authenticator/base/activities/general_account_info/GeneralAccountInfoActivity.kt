@@ -3,6 +3,7 @@ package org.tokend.authenticator.base.activities.general_account_info
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -42,35 +43,39 @@ class GeneralAccountInfoActivity : BaseActivity() {
     private val uid: Long
         get() = intent.getLongExtra(EXTRA_UID, -1)
 
+    private lateinit var account: Account
+
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_general_account_info)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         accountsRepository.itemsList.find { it.uid == uid }?.let {
+            account = it
             signersRepository = signersRepositoryProvider.getForAccount(it)
-            initGeneralCard(it)
-            initRecoverButton(it)
+            initGeneralCard()
+            initRecoverButton()
             initSignersList()
             subscribeSigners()
-            update(true)
+            updateErrorVisibility()
+            update(force = true)
         }
     }
 
     private fun update(force: Boolean = false) {
-        if (force) {
+        if (!force) {
             signersRepository.updateIfNotFresh()
         } else {
             signersRepository.update()
         }
     }
 
-    private fun initGeneralCard(account: Account) {
+    private fun initGeneralCard() {
         network_name.text = account.network.name
         network_host.text = HttpUrl.parse(account.network.rootUrl).host()
         email.text = account.email
     }
 
-    private fun initRecoverButton(account: Account) {
+    private fun initRecoverButton() {
         recover_button.setOnClickListener {
             Navigator.openRecoveryActivity(this, account.network.rootUrl, account.email)
         }
@@ -104,6 +109,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
                 signersRepository.itemsObservable
                         .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe {
+                            onSignersUpdated(it)
                             adapter.setData(it.filter { signer ->
                                 signer.name.isNotEmpty()
                             })
@@ -139,6 +145,27 @@ class GeneralAccountInfoActivity : BaseActivity() {
         AuthorizedAppDetailsDialog(signer, this, dateTimeDateFormat) {
             revokeSignerAccess(signer)
         }.show()
+    }
+
+    private fun onSignersUpdated(signers: List<Signer>) {
+        if (signersRepository.isNeverUpdated) {
+            return
+        }
+        val noAnySigners = !signers.any { it.publicKey == account.publicKey }
+        if (account.isBroken == noAnySigners) {
+            return
+        }
+        account.isBroken = noAnySigners
+        accountsRepository.update(account)
+        updateErrorVisibility()
+    }
+
+    private fun updateErrorVisibility() {
+        error_info_layout.visibility =
+                when(account.isBroken) {
+                    true -> View.VISIBLE
+                    false -> View.GONE
+                }
     }
 
     private fun revokeSignerAccess(signer: Signer) {

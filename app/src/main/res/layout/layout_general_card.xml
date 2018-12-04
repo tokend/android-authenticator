@@ -129,6 +129,57 @@
             android:layout_height="1dp"
             android:background="@drawable/horizontal_divider" />
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/error_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/standard_margin"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/error_logo_image_view"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/standard_margin"
+                android:layout_marginLeft="@dimen/standard_margin"
+                app:layout_constraintBottom_toBottomOf="@+id/suggestion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/error_description"
+                app:srcCompat="@drawable/ic_alert_circle_outline" />
+
+            <TextView
+                android:id="@+id/error_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standard_padding"
+                android:layout_marginRight="@dimen/standard_margin"
+                android:text="@string/access_error_message"
+                app:layout_constraintStart_toEndOf="@id/error_logo_image_view"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/suggestion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/quarter_standard_margin"
+                style="@style/SecondaryText"
+                android:text="@string/recover_suggestion"
+                app:layout_constraintTop_toBottomOf="@id/error_description"
+                app:layout_constraintStart_toStartOf="@id/error_description"
+                app:layout_constraintEnd_toEndOf="@id/error_description"/>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/horizontal_divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/suggestion" />
+        </android.support.constraint.ConstraintLayout>
+
         <Button
             android:id="@+id/recover_button"
             style="@style/DialogButton"

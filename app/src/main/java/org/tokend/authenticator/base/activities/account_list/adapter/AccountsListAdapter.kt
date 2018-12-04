@@ -6,19 +6,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.AccountLogoFactory
-import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.view.adapter.BaseRecyclerAdapter
 
 class AccountsListAdapter(
         private val logoFactory: AccountLogoFactory
-) : BaseRecyclerAdapter<Account, AccountViewHolder>() {
+) : BaseRecyclerAdapter<AccountListItem, AccountViewHolder>() {
 
     override fun createItemViewHolder(parent: ViewGroup): AccountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_account, parent, false)
         return AccountViewHolder(view, logoFactory)
     }
 
-    override fun getDiffCallback(newItems: List<Account>): DiffUtil.Callback? {
+    override fun getDiffCallback(newItems: List<AccountListItem>): DiffUtil.Callback? {
         return object : DiffUtil.Callback() {
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -37,7 +36,8 @@ class AccountsListAdapter(
                 val oldItem = items[oldItemPosition]
                 val newItem = newItems[newItemPosition]
                 return oldItem.email == newItem.email &&
-                        oldItem.network.rootUrl == newItem.network.rootUrl
+                        oldItem.network.rootUrl == newItem.network.rootUrl &&
+                        oldItem.isBroken == newItem.isBroken
             }
         }
     }

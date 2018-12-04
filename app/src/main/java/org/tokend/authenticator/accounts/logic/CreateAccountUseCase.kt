@@ -160,6 +160,7 @@ class CreateAccountUseCase(
                             email = email,
                             originalAccountId = masterKeyPair.accountId,
                             walletId = walletId,
+                            publicKey = masterKeyPair.accountId,
                             encryptedSeed = encryptedSeed,
                             kdfAttributes = kdfAttributes
                     )

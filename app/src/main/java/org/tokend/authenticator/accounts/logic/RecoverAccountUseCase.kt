@@ -1,7 +1,6 @@
 package org.tokend.authenticator.accounts.logic
 
 import io.reactivex.Completable
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.HttpUrl
@@ -146,6 +145,7 @@ class RecoverAccountUseCase(
                 }
                 .doOnSuccess { encryptedSeed ->
                     if (accountToUpdate != null) {
+                        accountToUpdate.publicKey = newMasterKeyPair.accountId
                         accountToUpdate.encryptedSeed = encryptedSeed
                         accountToUpdate.kdfAttributes = newKdfAttributes
                         accountToUpdate.walletId = newWalletId
@@ -158,6 +158,7 @@ class RecoverAccountUseCase(
                                 email = email,
                                 originalAccountId = recoveryWallet.accountId,
                                 walletId = newWalletId,
+                                publicKey = newMasterKeyPair.accountId,
                                 encryptedSeed = encryptedSeed,
                                 kdfAttributes = newKdfAttributes
                         )
