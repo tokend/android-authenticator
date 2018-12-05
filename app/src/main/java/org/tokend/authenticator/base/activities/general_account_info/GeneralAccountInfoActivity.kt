@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -94,7 +97,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
         }
 
         delete_button.setOnClickListener {
-            AlertDialog.Builder(this)
+            AlertDialog.Builder(this, R.style.AlertDialogStyle)
                     .setTitle(getString(R.string.delete_account_title))
                     .setMessage(getString(R.string.delete_account_message))
                     .setPositiveButton(getString(R.string.delete)) { _, _ ->
@@ -124,6 +127,21 @@ class GeneralAccountInfoActivity : BaseActivity() {
         signers_list.addItemDecoration(
                 DividerItemDecoration(ContextCompat.getDrawable(this, R.drawable.horizontal_divider))
         )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.general_account_info, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        SecretSeedDialog(
+                this,
+                account,
+                dataCipher,
+                encryptionKeyProvider
+        ).show()
+        return super.onOptionsItemSelected(item)
     }
 
     private var signersDisposable: Disposable? = null
