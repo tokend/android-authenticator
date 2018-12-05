@@ -90,6 +90,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
     }
 
     private fun initSignersList() {
+        signers_list.isNestedScrollingEnabled = false
         adapter.dateFormat = dateTimeDateFormat
         adapter.onItemClick { _, item ->
             showSignerDetailsDialog(item)
@@ -118,9 +119,6 @@ class GeneralAccountInfoActivity : BaseActivity() {
                         .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe {
                             onSignersUpdated(it)
-                            adapter.setData(it.filter { signer ->
-                                signer.name.isNotEmpty()
-                            })
                         }
                         .addTo(compositeDisposable)
 
@@ -159,6 +157,13 @@ class GeneralAccountInfoActivity : BaseActivity() {
     }
 
     private fun onSignersUpdated(signers: List<Signer>) {
+        signers.filter { signer ->
+            signer.name.isNotEmpty()
+        }.also {
+            adapter.setData(it)
+            updateListCardVisibility(it.isNotEmpty())
+        }
+
         if (signersRepository.isNeverUpdated) {
             return
         }
@@ -169,7 +174,6 @@ class GeneralAccountInfoActivity : BaseActivity() {
         account.isBroken = noAnySigners
         accountsRepository.update(account)
         updateErrorVisibility()
-        updateListCardVisibility(signers.isNotEmpty())
     }
 
     private fun updateErrorVisibility() {
