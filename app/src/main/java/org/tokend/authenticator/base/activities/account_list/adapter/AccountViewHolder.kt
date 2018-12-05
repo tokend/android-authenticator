@@ -3,7 +3,6 @@ package org.tokend.authenticator.base.activities.account_list.adapter
 import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import kotlinx.android.synthetic.main.item_account.view.*
-import org.jetbrains.anko.image
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.AccountLogoFactory
 import org.tokend.authenticator.base.view.adapter.BaseViewHolder
@@ -20,8 +19,7 @@ class AccountViewHolder(
 
     override fun bind(item: AccountListItem) {
         if(item.isBroken) {
-            itemView.account_logo_image_view.image =
-                    ResourcesCompat.getDrawable(itemView.resources, R.drawable.ic_alert_circle, null)
+            itemView.account_logo_image_view.setImageResource(R.drawable.ic_alert_circle)
         } else {
             itemView.account_logo_image_view.setImageBitmap(
                     logoFactory

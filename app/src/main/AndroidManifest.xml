@@ -76,7 +76,7 @@
             android:name=".base.activities.general_account_info.GeneralAccountInfoActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/manage_account"
-            android:theme="@style/AppTheme.CardsBackground" />
+            android:theme="@style/AppTheme.NoActionBar.CardsBackground" />
         <activity
             android:name="org.tokend.authenticator.security.view.activities.PinCodeActivity"
             android:configChanges="orientation|screenSize"

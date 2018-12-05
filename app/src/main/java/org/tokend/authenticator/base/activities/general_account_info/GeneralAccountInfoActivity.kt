@@ -32,7 +32,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
         const val EXTRA_UID = "extra_uid"
     }
 
-    private val loadingIndicator = LoadingIndicatorManager(
+    private val signersLoadingIndicator = LoadingIndicatorManager(
             showLoading = { progress.show() },
             hideLoading = { progress.hide() }
     )
@@ -47,18 +47,26 @@ class GeneralAccountInfoActivity : BaseActivity() {
 
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_general_account_info)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.title = getString(R.string.manage_account)
 
         accountsRepository.itemsList.find { it.uid == uid }?.let {
             account = it
             signersRepository = signersRepositoryProvider.getForAccount(it)
             initGeneralCard()
             initRecoverButton()
+            initSwipeRefresh()
             initSignersList()
             subscribeSigners()
             updateErrorVisibility()
             update(force = true)
         }
+    }
+
+    private fun initSwipeRefresh() {
+        swipe_refresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent))
+        swipe_refresh.setOnRefreshListener { update(force = true) }
     }
 
     private fun update(force: Boolean = false) {
@@ -120,8 +128,11 @@ class GeneralAccountInfoActivity : BaseActivity() {
         signersLoadingDisposable =
                 signersRepository.loading
                         .compose(ObservableTransformers.defaultSchedulers())
-                        .subscribe {
-                            loadingIndicator.setLoading(it, "signers")
+                        .subscribe { isLoading ->
+                            if(!isLoading) {
+                                swipe_refresh.isRefreshing = isLoading
+                            }
+                            signersLoadingIndicator.setLoading(isLoading, "signers")
                         }
                         .addTo(compositeDisposable)
 
@@ -158,6 +169,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
         account.isBroken = noAnySigners
         accountsRepository.update(account)
         updateErrorVisibility()
+        updateListCardVisibility(signers.isNotEmpty())
     }
 
     private fun updateErrorVisibility() {
@@ -166,6 +178,13 @@ class GeneralAccountInfoActivity : BaseActivity() {
                     true -> View.VISIBLE
                     false -> View.GONE
                 }
+    }
+
+    private fun updateListCardVisibility(visibility: Boolean) {
+        list_holder.visibility = when(visibility) {
+            true -> View.VISIBLE
+            false -> View.GONE
+        }
     }
 
     private fun revokeSignerAccess(signer: Signer) {
