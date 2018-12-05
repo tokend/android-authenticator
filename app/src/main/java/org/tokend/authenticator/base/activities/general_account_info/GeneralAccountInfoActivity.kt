@@ -2,6 +2,7 @@ package org.tokend.authenticator.base.activities.general_account_info
 
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import io.reactivex.disposables.Disposable
@@ -54,14 +55,18 @@ class GeneralAccountInfoActivity : BaseActivity() {
         accountsRepository.itemsList.find { it.uid == uid }?.let {
             account = it
             signersRepository = signersRepositoryProvider.getForAccount(it)
-            initGeneralCard()
-            initRecoverButton()
-            initSwipeRefresh()
-            initSignersList()
+            initViews()
             subscribeSigners()
             updateErrorVisibility()
             update(force = true)
         }
+    }
+
+    private fun initViews() {
+        initGeneralCard()
+        initButtons()
+        initSwipeRefresh()
+        initSignersList()
     }
 
     private fun initSwipeRefresh() {
@@ -83,9 +88,21 @@ class GeneralAccountInfoActivity : BaseActivity() {
         email.text = account.email
     }
 
-    private fun initRecoverButton() {
+    private fun initButtons() {
         recover_button.setOnClickListener {
             Navigator.openRecoveryActivity(this, account.network.rootUrl, account.email)
+        }
+
+        delete_button.setOnClickListener {
+            AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.delete_account_title))
+                    .setMessage(getString(R.string.delete_account_message))
+                    .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                        accountsRepository.delete(account)
+                        finish()
+                    }
+                    .setNegativeButton(getString(R.string.cancel), null)
+                    .show()
         }
     }
 

@@ -64,4 +64,7 @@
     <string name="error_cipher_failed">Unable to decrypt data</string>
     <string name="access_error_message">It seems you lose access to current account</string>
     <string name="recover_suggestion">Try to recover it</string>
+    <string name="delete">Delete</string>
+    <string name="delete_account_title">Delete current account?</string>
+    <string name="delete_account_message">You can always recover it using recovery seed</string>
 </resources>
