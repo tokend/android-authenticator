@@ -1,4 +1,4 @@
-package org.tokend.authenticator
+package org.tokend.authenticator.test
 
 import io.reactivex.Single
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider

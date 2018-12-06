@@ -1,4 +1,4 @@
-package org.tokend.authenticator
+package org.tokend.authenticator.test
 
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry

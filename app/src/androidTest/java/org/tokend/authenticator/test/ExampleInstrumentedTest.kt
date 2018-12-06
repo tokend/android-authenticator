@@ -1,4 +1,4 @@
-package org.tokend.authenticator
+package org.tokend.authenticator.test
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
