@@ -11,17 +11,17 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.util.ObservableTransformers
-import org.tokend.authenticator.base.util.ToastManager
+import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
 import org.tokend.authenticator.base.view.ProgressDialogFactory
 import org.tokend.crypto.ecdsa.erase
 import java.nio.CharBuffer
-import org.tokend.authenticator.security.logic.TooManyUserKeyAttemptsException
 
 class SecretSeedDialog(
         private val context: Context,
         private val account: Account,
         private val dataCipher: DataCipher,
-        private val encryptionKeyProvider: EncryptionKeyProvider
+        private val encryptionKeyProvider: EncryptionKeyProvider,
+        private val errorHandlerFactory: ErrorHandlerFactory
 ) {
 
     fun show() {
@@ -51,9 +51,7 @@ class SecretSeedDialog(
                 }
                 .doOnError { error ->
                     progress.dismiss()
-                    if(error is TooManyUserKeyAttemptsException) {
-                        ToastManager(context).short(R.string.error_many_pin_entry_attempts)
-                    }
+                    errorHandlerFactory.getDefault().handle(error)
                 }
                 .subscribe { seed ->
                     progress.dismiss()

@@ -139,7 +139,8 @@ class GeneralAccountInfoActivity : BaseActivity() {
                     this,
                     account,
                     dataCipher,
-                    encryptionKeyProvider
+                    encryptionKeyProvider,
+                    errorHandlerFactory
             ).show()
         }
         return super.onOptionsItemSelected(item)
