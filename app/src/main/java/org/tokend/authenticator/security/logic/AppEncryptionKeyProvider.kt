@@ -47,13 +47,15 @@ class AppEncryptionKeyProvider(
     }
 
     private fun decryptAndGetMasterKey(): Single<ByteArray> {
+        var isRetry = false
         return if (hasEncryptedMasterKey()) {
             var decryptionKey: ByteArray = byteArrayOf()
 
             getEncryptedMasterKey()
                     .flatMap { encryptedMasterKey ->
                         deriveMasterEncryptionKey(
-                                userKeyProvidersHolder.getDefaultUserKeyProvider()
+                                userKeyProvidersHolder.getDefaultUserKeyProvider(),
+                                isRetry
                         )
                                 .doOnSuccess {
                                     decryptionKey = it
@@ -64,16 +66,18 @@ class AppEncryptionKeyProvider(
                         cipher.decrypt(encryptedMasterKey, decryptionKey)
                     }
                     .retry { attempt, error ->
-                        error is InvalidCipherTextException
+                        isRetry = error is InvalidCipherTextException
                                 && attempt < MAX_FAILED_USER_KEY_ATTEMPTS
+                        isRetry
                     }
                     .onErrorResumeNext { error ->
-                        if (error is InvalidCipherTextException)
+                        if (error is InvalidCipherTextException) {
                             Single.error(
                                     TooManyUserKeyAttemptsException(MAX_FAILED_USER_KEY_ATTEMPTS)
                             )
-                        else
+                        } else {
                             Single.error(error)
+                        }
                     }
                     .doOnEvent { _, _ ->
                         decryptionKey.erase()
@@ -124,10 +128,10 @@ class AppEncryptionKeyProvider(
         }.toSingle()
     }
 
-    private fun deriveMasterEncryptionKey(userKeyProvider: UserKeyProvider)
+    private fun deriveMasterEncryptionKey(userKeyProvider: UserKeyProvider, isRetry: Boolean = false)
             : Single<ByteArray> {
         return userKeyProvider
-                .getUserKey()
+                .getUserKey(isRetry)
                 .switchIfEmpty(Single.error(CancellationException("Cancelled by user")))
                 .observeOn(Schedulers.newThread())
                 .map { keyChars ->

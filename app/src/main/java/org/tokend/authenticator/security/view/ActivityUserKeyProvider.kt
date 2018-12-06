@@ -15,13 +15,12 @@ class ActivityUserKeyProvider(
 ) : UserKeyProvider {
     private var resultSubject: MaybeSubject<CharArray>? = null
     private var requestCode = 0
-    private var isRetry = false
 
-    override fun getUserKey(): Maybe<CharArray> {
+    override fun getUserKey(isRetry: Boolean): Maybe<CharArray> {
         return resultSubject ?: (MaybeSubject.create<CharArray>()
                 .also {
                     resultSubject = it
-                    openInputActivity()
+                    openInputActivity(isRetry)
                 })
     }
 
@@ -32,7 +31,7 @@ class ActivityUserKeyProvider(
         return requestCode
     }
 
-    private fun openInputActivity() {
+    private fun openInputActivity(isRetry: Boolean) {
         if (parentActivity != null) {
             parentActivity.startActivityForResult(
                     Intent(parentActivity, activityClass).also {
@@ -69,14 +68,12 @@ class ActivityUserKeyProvider(
     private fun cancelInput() {
         val backupSubject = resultSubject
         resultSubject = null
-        isRetry = false
         backupSubject?.onComplete()
     }
 
     private fun postKey(key: CharArray) {
         val backupSubject = resultSubject
         resultSubject = null
-        isRetry = true
         backupSubject?.onSuccess(key)
     }
 }

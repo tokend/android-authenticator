@@ -134,12 +134,14 @@ class GeneralAccountInfoActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        SecretSeedDialog(
-                this,
-                account,
-                dataCipher,
-                encryptionKeyProvider
-        ).show()
+        if(item?.itemId == R.id.seed) {
+            SecretSeedDialog(
+                    this,
+                    account,
+                    dataCipher,
+                    encryptionKeyProvider
+            ).show()
+        }
         return super.onOptionsItemSelected(item)
     }
 
