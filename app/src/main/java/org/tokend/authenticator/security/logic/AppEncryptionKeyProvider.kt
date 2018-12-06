@@ -130,7 +130,12 @@ class AppEncryptionKeyProvider(
                 .getUserKey()
                 .switchIfEmpty(Single.error(CancellationException("Cancelled by user")))
                 .observeOn(Schedulers.newThread())
-                .map { it.toByteArray() }
+                .map { keyChars ->
+                    keyChars.toByteArray()
+                            .also {
+                                keyChars.erase()
+                            }
+                }
                 .map { userKey ->
                     val kdfAttributes = masterKeyKdfAttributesStorage.load()
 
@@ -139,6 +144,9 @@ class AppEncryptionKeyProvider(
                             kdfAttributes.r,
                             kdfAttributes.p
                     ).derive(userKey, kdfAttributes.salt!!, KEY_LENGTH_BYTES)
+                            .also {
+                                userKey.erase()
+                            }
                 }
     }
 
