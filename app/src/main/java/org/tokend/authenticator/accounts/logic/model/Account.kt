@@ -5,6 +5,7 @@ import io.reactivex.Single
 import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.util.LongUid
+import org.tokend.crypto.ecdsa.erase
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.KeychainData
 import org.tokend.wallet.utils.toCharArray
@@ -34,6 +35,9 @@ class Account(
         return keyProvider.getKey(kdfAttributes)
                 .flatMap { key ->
                     cipher.decrypt(encryptedSeed, key)
+                            .doOnEvent { _, _ ->
+                                key.erase()
+                            }
                 }
                 .map { seedBytes ->
                     seedBytes.toCharArray()

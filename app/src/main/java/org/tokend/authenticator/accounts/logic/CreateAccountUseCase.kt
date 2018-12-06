@@ -13,6 +13,7 @@ import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.wallet.WalletManager
+import org.tokend.crypto.ecdsa.erase
 import org.tokend.rx.extensions.saveWalletCompletable
 import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.general.model.SystemInfo
@@ -112,6 +113,9 @@ class CreateAccountUseCase(
                             recoverySeed = recoveryKeyPair.secretSeed!!
                     )
                 }
+                .doOnEvent { _, _ ->
+                    destroyKeys()
+                }
     }
 
     private fun getKdfAttributes(): Single<KdfAttributes> {
@@ -153,6 +157,9 @@ class CreateAccountUseCase(
         return encryptionKeyProvider.getKey(kdfAttributes)
                 .flatMap { encryptionKey ->
                     cipher.encrypt(masterKeyPair.secretSeed!!.toByteArray(), encryptionKey)
+                            .doOnSuccess {
+                                encryptionKey.erase()
+                            }
                 }
                 .map { encryptedSeed ->
                     Account(
@@ -165,5 +172,10 @@ class CreateAccountUseCase(
                             kdfAttributes = kdfAttributes
                     )
                 }
+    }
+
+    private fun destroyKeys() {
+        masterKeyPair.destroy()
+        recoveryKeyPair.destroy()
     }
 }

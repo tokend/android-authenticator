@@ -12,6 +12,7 @@ import org.tokend.authenticator.base.logic.repository.SimpleMultipleItemsReposit
 import org.tokend.authenticator.base.logic.transactions.TxManager
 import org.tokend.authenticator.base.util.LongUid
 import org.tokend.authenticator.signers.model.Signer
+import org.tokend.crypto.ecdsa.erase
 import org.tokend.rx.extensions.toCompletable
 import org.tokend.rx.extensions.toSingle
 import org.tokend.wallet.Transaction
@@ -69,16 +70,24 @@ class AccountSignersRepository(
         return account.getSeed(cipher, encryptionKeyProvider)
                 .map { accountSeed ->
                     org.tokend.wallet.Account.fromSecretSeed(accountSeed)
+                            .also {
+                                accountSeed.erase()
+                            }
                 }
                 .flatMap { signKeyPair ->
                     Single.zip(
                             createSignerAddTransaction(signer, signKeyPair),
                             createAccountIfNeeded(signKeyPair),
-                            BiFunction { transaction: Transaction, _: Boolean -> transaction }
+                            BiFunction { transaction: Transaction, _: Boolean ->
+                                transaction to signKeyPair
+                            }
                     )
                 }
-                .flatMap { transaction ->
+                .flatMap { (transaction, signKeyPair) ->
                     txManager.submit(transaction)
+                            .doOnEvent { _, _ ->
+                                signKeyPair.destroy()
+                            }
                 }
                 .ignoreElement()
                 .doOnComplete {
@@ -94,12 +103,21 @@ class AccountSignersRepository(
         return account.getSeed(cipher, encryptionKeyProvider)
                 .map { accountSeed ->
                     org.tokend.wallet.Account.fromSecretSeed(accountSeed)
+                            .also {
+                                accountSeed.erase()
+                            }
                 }
                 .flatMap { signKeyPair ->
                     createSignerDeleteTransaction(signer, signKeyPair)
+                            .map {
+                                it to signKeyPair
+                            }
                 }
-                .flatMap { transaction ->
+                .flatMap { (transaction, signKeyPair) ->
                     txManager.submit(transaction)
+                            .doOnEvent { _, _ ->
+                                signKeyPair.destroy()
+                            }
                 }
                 .ignoreElement()
                 .doOnComplete {

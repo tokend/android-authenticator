@@ -12,6 +12,8 @@ import org.tokend.authenticator.base.logic.encryption.DataCipher
 import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.base.view.ProgressDialogFactory
+import org.tokend.crypto.ecdsa.erase
+import java.nio.CharBuffer
 
 class SecretSeedDialog(
         private val context: Context,
@@ -52,8 +54,11 @@ class SecretSeedDialog(
                     progress.dismiss()
                     AlertDialog.Builder(context, R.style.AlertDialogStyle)
                             .setTitle(context.getString(R.string.secret_seed))
-                            .setMessage(String(seed))
+                            .setMessage(CharBuffer.wrap(seed))
                             .setPositiveButton(android.R.string.ok, null)
+                            .setOnDismissListener {
+                                seed.erase()
+                            }
                             .show().findViewById<TextView>(android.R.id.message)?.let { textView ->
                                 textView.isSelectable = true
                                 textView.typeface = Typeface.MONOSPACE

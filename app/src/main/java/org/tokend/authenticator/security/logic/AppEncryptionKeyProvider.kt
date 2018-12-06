@@ -11,6 +11,7 @@ import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.security.logic.persistence.EncryptedMasterKeyStorage
 import org.tokend.authenticator.security.logic.persistence.MasterKeyKdfAttributesStorage
 import org.tokend.crypto.cipher.InvalidCipherTextException
+import org.tokend.crypto.ecdsa.erase
 import org.tokend.kdf.ScryptKeyDerivation
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.KeychainData
@@ -30,8 +31,6 @@ class AppEncryptionKeyProvider(
     private val masterKeyKdfAttributesStorage = MasterKeyKdfAttributesStorage(preferences)
     private val encryptedMasterKeyStorage = EncryptedMasterKeyStorage(preferences)
 
-    private var masterKey: ByteArray? = null
-
     override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
         return getMasterKey()
                 .map { masterKey ->
@@ -44,23 +43,21 @@ class AppEncryptionKeyProvider(
     }
 
     private fun getMasterKey(): Single<ByteArray> {
-        if (masterKey != null) {
-            return Single.just(masterKey)
-        }
-
         return decryptAndGetMasterKey()
-                .doOnSuccess {
-                    masterKey = it
-                }
     }
 
     private fun decryptAndGetMasterKey(): Single<ByteArray> {
         return if (hasEncryptedMasterKey()) {
+            var decryptionKey: ByteArray = byteArrayOf()
+
             getEncryptedMasterKey()
                     .flatMap { encryptedMasterKey ->
                         deriveMasterEncryptionKey(
                                 userKeyProvidersHolder.getDefaultUserKeyProvider()
                         )
+                                .doOnSuccess {
+                                    decryptionKey = it
+                                }
                                 .map { encryptedMasterKey to it }
                     }
                     .flatMap { (encryptedMasterKey, decryptionKey) ->
@@ -78,6 +75,9 @@ class AppEncryptionKeyProvider(
                         else
                             Single.error(error)
                     }
+                    .doOnEvent { _, _ ->
+                        decryptionKey.erase()
+                    }
         } else {
             generateMasterKey()
                     .flatMap { newMasterKey ->
@@ -88,7 +88,10 @@ class AppEncryptionKeyProvider(
                     }
                     .flatMap { (newMasterKey, encryptionKey) ->
                         cipher.encrypt(newMasterKey, encryptionKey)
-                                .map { newMasterKey to it }
+                                .map {
+                                    encryptionKey.erase()
+                                    newMasterKey to it
+                                }
                     }
                     .flatMap { (newMasterKey, encryptedMasterKey) ->
                         saveEncryptedMasterKey(encryptedMasterKey)
@@ -148,11 +151,13 @@ class AppEncryptionKeyProvider(
                             .map { currentMasterKey to it }
                 }
                 .flatMap { (currentMasterKey, newEncryptionKey) ->
+                    currentMasterKey.erase()
                     cipher.encrypt(currentMasterKey, newEncryptionKey)
-                            .map { currentMasterKey to it }
+                            .doOnSuccess {
+                                newEncryptionKey.erase()
+                            }
                 }
-                .flatMap { (currentMasterKey, encryptedMasterKey) ->
-                    this.masterKey = currentMasterKey
+                .flatMap { encryptedMasterKey ->
                     saveEncryptedMasterKey(encryptedMasterKey)
                 }
                 .ignoreElement()

@@ -15,6 +15,7 @@ import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.wallet.WalletUpdateManager
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
+import org.tokend.crypto.ecdsa.erase
 import org.tokend.rx.extensions.getWalletInfoSingle
 import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.TokenDApi
@@ -104,6 +105,9 @@ class RecoverAccountUseCase(
                 .flatMapCompletable {
                     updateAccount()
                 }
+                .doOnTerminate {
+                    destroyKeys()
+                }
     }
 
     private fun getSystemInfo(): Single<SystemInfo> {
@@ -142,6 +146,9 @@ class RecoverAccountUseCase(
         return encryptionKeyProvider.getKey(newKdfAttributes)
                 .flatMap { encryptionKey ->
                     cipher.encrypt(newMasterKeyPair.secretSeed!!.toByteArray(), encryptionKey)
+                            .doOnSuccess {
+                                encryptionKey.erase()
+                            }
                 }
                 .doOnSuccess { encryptedSeed ->
                     if (accountToUpdate != null) {
@@ -166,5 +173,11 @@ class RecoverAccountUseCase(
                     }
                 }
                 .ignoreElement()
+    }
+
+    private fun destroyKeys() {
+        recoveryKeyPair.destroy()
+        recoveryWallet.secretSeed.erase()
+        newMasterKeyPair.destroy()
     }
 }
