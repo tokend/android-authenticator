@@ -70,6 +70,6 @@
     <string name="secret_seed">Secret seed</string>
     <string name="seed_alert_dialog">"You are about to show sensitive data of the selected account.\nAnyone who knows the secret seed can take possession of your account.\nDo you want to continue?"</string>
     <string name="yes">Yes</string>
-    <string name="decryption">Decryption</string>
+    <string name="decryption_progress">Decryption…</string>
 
 </resources>

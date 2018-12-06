@@ -38,7 +38,7 @@ class SecretSeedDialog(
     private fun showSecretSeed() {
         var disposable: Disposable? = null
         val progress = ProgressDialogFactory(context)
-                .get(context.getString(R.string.decryption)) {
+                .get(context.getString(R.string.decryption_progress)) {
                     disposable?.dispose()
                 }
 
@@ -55,7 +55,7 @@ class SecretSeedDialog(
                     AlertDialog.Builder(context, R.style.AlertDialogStyle)
                             .setTitle(context.getString(R.string.secret_seed))
                             .setMessage(CharBuffer.wrap(seed))
-                            .setPositiveButton(android.R.string.ok, null)
+                            .setPositiveButton(R.string.ok, null)
                             .setOnDismissListener {
                                 seed.erase()
                             }
