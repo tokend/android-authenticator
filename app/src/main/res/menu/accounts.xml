@@ -6,11 +6,17 @@
         android:icon="@drawable/ic_search"
         android:title="@string/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="collapseActionView|ifRoom" />
+        app:showAsAction="collapseActionView|always" />
 
     <item
         android:id="@+id/scan_qr"
         android:icon="@drawable/ic_qr_code_scan_white"
         android:title="@string/scan_qr_code_action"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
 </menu>

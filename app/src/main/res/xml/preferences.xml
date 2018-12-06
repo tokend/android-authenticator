@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.PreferenceCategory
+        android:key="security"
+        android:layout="@layout/preference_category_layout"
+        android:title="@string/settings_security_group">
+
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:icon="@drawable/ic_fingerprint"
+        android:key="fingerprint"
+        android:layout="@layout/preference_layout"
+        android:persistent="true"
+        android:title="@string/use_fingerprint" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+</android.support.v7.preference.PreferenceScreen>

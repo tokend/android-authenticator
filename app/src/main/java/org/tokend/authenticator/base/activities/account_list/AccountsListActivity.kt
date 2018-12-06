@@ -116,6 +116,9 @@ class AccountsListActivity : BaseActivity() {
         searchItem = menu?.findItem(R.id.search) ?: return
         val searchView = searchItem?.actionView as? SearchView ?: return
 
+        val qrItem = menu.findItem(R.id.scan_qr)
+        val settingsItem = menu.findItem(R.id.settings)
+
         (searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text) as? EditText)
                 ?.apply {
                     setHintTextColor(ContextCompat.getColor(context!!, R.color.white_almost))
@@ -146,16 +149,27 @@ class AccountsListActivity : BaseActivity() {
         }
 
         searchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean = true
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                qrItem.isVisible = false
+                settingsItem.isVisible = false
+                return true
+            }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 filter = null
+                qrItem.isVisible = true
+                settingsItem.isVisible = true
                 return true
             }
         })
 
-        menu.findItem(R.id.scan_qr)?.setOnMenuItemClickListener {
+        qrItem.setOnMenuItemClickListener {
             tryOpenQrScanner()
+            true
+        }
+
+        settingsItem.setOnMenuItemClickListener {
+            Navigator.openSettings(this)
             true
         }
     }

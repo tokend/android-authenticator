@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.InputFilter
 import android.view.View
 import kotlinx.android.synthetic.main.activity_pin_code.*
+import org.jetbrains.anko.defaultSharedPreferences
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.extensions.getChars
 import org.tokend.authenticator.base.extensions.setErrorAndFocus
@@ -60,9 +61,11 @@ open class PinCodeActivity : UserKeyActivity() {
 
     // region Fingerprint
     protected open fun requestFingerprintAuthIfAvailable() {
+        val preferences = applicationContext.defaultSharedPreferences
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && secureStorage.hasSecretKey(PIN_CODE_STORAGE_KEY)
-                && fingerprintUtil.isFingerprintAvailable) {
+                && fingerprintUtil.isFingerprintAvailable
+                && preferences.getBoolean("fingerprint", true)) {
             requestFingerprintAuth()
         }
     }

@@ -1,6 +1,7 @@
 package org.tokend.authenticator.base.util
 
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -13,6 +14,7 @@ import org.tokend.authenticator.base.activities.RecoveryActivity
 import org.tokend.authenticator.base.activities.RecoverySeedActivity
 import org.tokend.authenticator.base.activities.add_account.AddAccountActivity
 import org.tokend.authenticator.base.activities.general_account_info.GeneralAccountInfoActivity
+import org.tokend.authenticator.base.activities.settings.SettingsActivity
 
 
 /**
@@ -86,5 +88,9 @@ object Navigator {
         activity.startActivity(activity.intentFor<GeneralAccountInfoActivity>(
                 GeneralAccountInfoActivity.EXTRA_UID to uid
         ))
+    }
+
+    fun openSettings(activity: Activity) {
+        activity.startActivity(Intent(activity, SettingsActivity::class.java))
     }
 }

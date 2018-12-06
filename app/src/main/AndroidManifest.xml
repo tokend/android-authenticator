@@ -61,11 +61,10 @@
                     android:host="auth"
                     android:scheme="tokend" />
             </intent-filter>
-
             <intent-filter>
-                <action android:name="intent.action.TOKEND_AUTH"/>
+                <action android:name="intent.action.TOKEND_AUTH" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                     android:host="auth"
@@ -78,15 +77,18 @@
             android:label="@string/manage_account"
             android:theme="@style/AppTheme.NoActionBar.CardsBackground" />
         <activity
-            android:name="org.tokend.authenticator.security.view.activities.PinCodeActivity"
+            android:name=".security.view.activities.PinCodeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/pin_code_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="org.tokend.authenticator.security.view.activities.SetUpPinCodeActivity"
+            android:name=".security.view.activities.SetUpPinCodeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/set_up_pin_code_title"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".base.activities.settings.SettingsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/settings"/>
     </application>
 
 </manifest>

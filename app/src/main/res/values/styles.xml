@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
         <item name="android:windowAnimationStyle">@style/AppAnimationStyle</item>
     </style>
@@ -97,5 +98,10 @@
 
     <style name="SplashTheme" parent="AppTheme.NoActionBar.CardsBackground">
         <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:tint">@color/colorPrimary</item>
+        <item name="android:dividerHeight">0dp</item>
     </style>
 </resources>
