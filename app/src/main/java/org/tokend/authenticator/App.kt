@@ -3,6 +3,7 @@ package org.tokend.authenticator
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.multidex.MultiDexApplication
+import android.support.v7.app.AppCompatDelegate
 import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -29,6 +30,8 @@ class App : MultiDexApplication() {
                         SecureStorageModule(getKeystorePreferences())
                 )
                 .build()
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         initTls()
         initRxErrorHandler()
