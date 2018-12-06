@@ -18,6 +18,7 @@ class AccountsRepository {
             "EMAIL",
             "ORIGINAL_ACCOUNT_ID",
             "",
+            "",
             KeychainData.fromRaw(ByteArray(16), ByteArray(16)),
             KdfAttributesGenerator().withRandomSalt()
     )

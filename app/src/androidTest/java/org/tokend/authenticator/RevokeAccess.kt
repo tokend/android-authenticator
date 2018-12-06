@@ -34,6 +34,7 @@ class RevokeAccess {
             "EMAIL",
             "GCC4IGBATFLGG5JV4DUKA2HZSS6EO6LJBCBY4AJJPYJ6U7HKZGL7VE4T",
             "WALLET_ID",
+            "PUBLIC_KEY",
             DefaultDataCipher().encrypt(seed.toByteArray(), key).blockingGet(),
             KdfAttributesGenerator().withRandomSalt(),
             1L

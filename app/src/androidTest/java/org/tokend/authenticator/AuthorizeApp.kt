@@ -25,8 +25,9 @@ import java.net.URLEncoder
 
 @RunWith(AndroidJUnit4::class)
 class AuthorizeApp {
+    private val kdf = KdfAttributesGenerator().withRandomSalt()
     private val key = DumbEncryptionKeyProvider()
-            .getKey(KdfAttributesGenerator().withRandomSalt())
+            .getKey(kdf)
             .blockingGet()
     private val seed = "SCIUKFBGL364Q2A2BVO474BBOFS6VV2K5WFAQG6WQS7WHAATGLE6CVP3".toCharArray()
 
@@ -36,8 +37,9 @@ class AuthorizeApp {
             "EMAIL",
             "GCC4IGBATFLGG5JV4DUKA2HZSS6EO6LJBCBY4AJJPYJ6U7HKZGL7VE4T",
             "WALLET_ID",
+            "PUBLIC_KEY",
             DefaultDataCipher().encrypt(seed.toByteArray(), key).blockingGet(),
-            KdfAttributesGenerator().withRandomSalt(),
+            kdf,
             1L
     )
 
