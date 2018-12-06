@@ -113,19 +113,22 @@ class RecoverySeedActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun displaySkipConfirmation() {
+    private fun displayConfirmationIsRequiredDialog() {
         AlertDialog.Builder(this, R.style.AlertDialogStyle)
-                .setTitle(R.string.are_you_sure)
+                .setTitle(R.string.save_recovery_seed)
                 .setMessage(R.string.seed_not_copied_confirmation)
                 .setPositiveButton(R.string.i_understand, null)
                 .show()
     }
 
     override fun onBackPressed() {
-        if (seedsMatch || clipboardManager.text?.equals(seed) == true) {
+        val primaryClipText = clipboardManager.primaryClip?.getItemAt(0)?.text
+
+        if (seedsMatch
+                || primaryClipText?.equals(CharBuffer.wrap(seed)) == true) {
             finishWithSuccess()
         } else {
-            displaySkipConfirmation()
+            displayConfirmationIsRequiredDialog()
         }
     }
 
