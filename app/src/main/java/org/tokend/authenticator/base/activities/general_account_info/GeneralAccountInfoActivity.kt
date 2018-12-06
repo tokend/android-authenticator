@@ -22,7 +22,6 @@ import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.general_account_info.adapter.SignersAdapter
 import org.tokend.authenticator.base.util.Navigator
 import org.tokend.authenticator.base.util.ObservableTransformers
-import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
 import org.tokend.authenticator.base.view.ProgressDialogFactory
 import org.tokend.authenticator.base.view.util.DividerItemDecoration
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
@@ -134,7 +133,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item?.itemId == R.id.seed) {
+        if (item?.itemId == R.id.seed) {
             SecretSeedDialog(
                     this,
                     account,
@@ -164,7 +163,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
                 signersRepository.loading
                         .compose(ObservableTransformers.defaultSchedulers())
                         .subscribe { isLoading ->
-                            if(!isLoading) {
+                            if (!isLoading) {
                                 swipe_refresh.isRefreshing = isLoading
                             }
                             signersLoadingIndicator.setLoading(isLoading, "signers")
@@ -215,14 +214,14 @@ class GeneralAccountInfoActivity : BaseActivity() {
 
     private fun updateErrorVisibility() {
         error_info_layout.visibility =
-                when(account.isBroken) {
+                when (account.isBroken) {
                     true -> View.VISIBLE
                     false -> View.GONE
                 }
     }
 
     private fun updateListCardVisibility(visibility: Boolean) {
-        list_holder.visibility = when(visibility) {
+        list_holder.visibility = when (visibility) {
             true -> View.VISIBLE
             false -> View.GONE
         }
@@ -251,7 +250,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
                         },
                         onError = {
                             progress.dismiss()
-                            ErrorHandlerFactory(this).getDefault().handle(it)
+                            errorHandlerFactory.getDefault().handle(it)
                         }
                 )
                 .addTo(compositeDisposable)
