@@ -6,15 +6,13 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
-import org.jetbrains.anko.clearTop
 import org.jetbrains.anko.intentFor
 import org.tokend.authenticator.R
 import org.tokend.authenticator.auth.view.AuthorizeAppActivity
-import org.tokend.authenticator.base.activities.general_account_info.GeneralAccountInfoActivity
 import org.tokend.authenticator.base.activities.RecoveryActivity
 import org.tokend.authenticator.base.activities.RecoverySeedActivity
-import org.tokend.authenticator.base.activities.account_list.AccountsListActivity
 import org.tokend.authenticator.base.activities.add_account.AddAccountActivity
+import org.tokend.authenticator.base.activities.general_account_info.GeneralAccountInfoActivity
 
 
 /**
@@ -56,7 +54,7 @@ object Navigator {
         ))
     }
 
-    fun openRecoverySeedSaving(activity: Activity, requestCode: Int, seed: String) {
+    fun openRecoverySeedSaving(activity: Activity, requestCode: Int, seed: CharArray) {
         activity.startActivityForResult(activity.intentFor<RecoverySeedActivity>(
                 RecoverySeedActivity.SEED_EXTRA to seed
         ), requestCode)

@@ -22,6 +22,7 @@ import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.util.validators.EmailValidator
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
 import org.tokend.authenticator.base.view.util.SimpleTextWatcher
+import org.tokend.crypto.ecdsa.erase
 import org.tokend.sdk.api.wallets.model.EmailAlreadyTakenException
 
 class AddAccountActivity : BaseActivity() {
@@ -136,9 +137,13 @@ class AddAccountActivity : BaseActivity() {
                         onSuccess = {
                             canAddAccount = false
                             isLoading = false
+
+                            val recoverySeed = it.recoverySeed
                             Navigator.openRecoverySeedSaving(this,
                                     SAVE_SEED_REQUEST,
-                                    String(it.recoverySeed))
+                                    recoverySeed
+                            )
+                            recoverySeed.erase()
                         },
                         onError = {
                             it.printStackTrace()
