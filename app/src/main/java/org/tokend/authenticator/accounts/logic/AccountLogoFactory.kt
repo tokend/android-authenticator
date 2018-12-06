@@ -8,7 +8,6 @@ import android.support.v4.graphics.PaintCompat
 import android.support.v4.util.LruCache
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.model.Account
-import org.tokend.sdk.utils.HashCodes
 
 /**
  * Creates fancy circle logos for assets.
@@ -31,9 +30,7 @@ class AccountLogoFactory(private val context: Context) {
                               @ColorInt
                               fontColor: Int = ContextCompat.getColor(context, R.color.white)
     ): Bitmap {
-        val code = 70507 % (HashCodes.ofMany(account.email, account.network.name.firstOrNull()
-                ?: '0')
-                and 0xffff)
+        val code = "${account.email}${account.network.name}".hashCode() and 0xffff
 
         val background = colors[code % colors.size]
         return get(account.network.name, size, background, fontColor)
