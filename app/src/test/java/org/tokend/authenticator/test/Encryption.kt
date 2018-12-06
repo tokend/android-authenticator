@@ -1,4 +1,4 @@
-package org.tokend.authenticator
+package org.tokend.authenticator.test
 
 import org.junit.Assert
 import org.junit.Test
