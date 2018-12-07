@@ -9,9 +9,9 @@
         app:showAsAction="collapseActionView|always" />
 
     <item
-        android:id="@+id/scan_qr"
-        android:icon="@drawable/ic_qr_code_scan_white"
-        android:title="@string/scan_qr_code_action"
+        android:id="@+id/add_account"
+        android:icon="@drawable/ic_plus"
+        android:title="@string/add_account"
         app:showAsAction="never" />
 
     <item

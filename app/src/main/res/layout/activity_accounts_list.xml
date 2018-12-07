@@ -50,14 +50,14 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_account_fab"
+        android:id="@+id/scan_qr_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
         app:fabSize="normal"
         app:layout_anchor="@id/swipe_refresh"
         app:layout_anchorGravity="bottom|right|end"
-        app:srcCompat="@drawable/ic_plus" />
+        app:srcCompat="@drawable/ic_qr_code_scan_white" />
 
     <include layout="@layout/layout_appbar_elevation" />
 

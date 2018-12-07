@@ -67,9 +67,9 @@ class AccountsListActivity : BaseActivity() {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             if (dy > 2) {
-                add_account_fab.hide()
-            } else if (dy < -2 && add_account_fab.isEnabled) {
-                add_account_fab.show()
+                scan_qr_fab.hide()
+            } else if (dy < -2 && scan_qr_fab.isEnabled) {
+                scan_qr_fab.show()
             }
         }
     }
@@ -90,8 +90,8 @@ class AccountsListActivity : BaseActivity() {
     }
 
     private fun initFab() {
-        add_account_fab.setOnClickListener {
-            Navigator.openAddAccount(this)
+        scan_qr_fab.setOnClickListener {
+            tryOpenQrScanner()
         }
     }
 
@@ -116,7 +116,7 @@ class AccountsListActivity : BaseActivity() {
         searchItem = menu?.findItem(R.id.search) ?: return
         val searchView = searchItem?.actionView as? SearchView ?: return
 
-        val qrItem = menu.findItem(R.id.scan_qr)
+        val addAccountItem = menu.findItem(R.id.add_account)
         val settingsItem = menu.findItem(R.id.settings)
 
         (searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text) as? EditText)
@@ -150,21 +150,21 @@ class AccountsListActivity : BaseActivity() {
 
         searchItem?.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                qrItem.isVisible = false
+                addAccountItem.isVisible = false
                 settingsItem.isVisible = false
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 filter = null
-                qrItem.isVisible = true
+                addAccountItem.isVisible = true
                 settingsItem.isVisible = true
                 return true
             }
         })
 
-        qrItem.setOnMenuItemClickListener {
-            tryOpenQrScanner()
+        addAccountItem.setOnMenuItemClickListener {
+            Navigator.openAddAccount(this)
             true
         }
 
