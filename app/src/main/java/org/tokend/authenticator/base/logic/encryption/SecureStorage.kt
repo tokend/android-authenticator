@@ -5,6 +5,8 @@ import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.support.annotation.RequiresApi
+import android.util.Log
+import org.tokend.authenticator.security.logic.EnvSecurityStatus
 import org.tokend.sdk.factory.GsonFactory
 import org.tokend.sdk.keyserver.models.KeychainData
 import java.security.KeyStore
@@ -17,7 +19,8 @@ import javax.crypto.spec.IvParameterSpec
  * Represents secure storage based on SharedPreferences.
  */
 class SecureStorage(
-        private val preferences: SharedPreferences
+        private val preferences: SharedPreferences,
+        private val envSecurityStatus: EnvSecurityStatus
 ) {
     /**
      * Encrypts data using secure key from Android [KeyStore]
@@ -91,6 +94,11 @@ class SecureStorage(
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun createSecretKey(name: String): SecretKey? {
+        if (envSecurityStatus != EnvSecurityStatus.NORMAL) {
+            Log.e(LOG_TAG, "Cannot create secret keys when environment security is $envSecurityStatus")
+            return null
+        }
+
         return try {
             val keyGenerator = KeyGenerator.getInstance(SECRET_KEY_ALG, KEYSTORE_NAME)
             keyGenerator.init(KeyGenParameterSpec.Builder(
@@ -146,5 +154,6 @@ class SecureStorage(
         private const val SECRET_KEY_ALG = "AES"
         private const val KEYSTORE_NAME = "AndroidKeyStore"
         private const val CIPHER = "AES/CBC/PKCS7Padding"
+        private const val LOG_TAG = "SecureStorage"
     }
 }

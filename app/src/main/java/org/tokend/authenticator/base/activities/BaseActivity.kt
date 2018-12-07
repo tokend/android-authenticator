@@ -19,6 +19,7 @@ import org.tokend.authenticator.base.util.ToastManager
 import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
 import org.tokend.authenticator.security.logic.AppEncryptionKeyProvider
 import org.tokend.authenticator.security.logic.AppUserKeyProvidersHolder
+import org.tokend.authenticator.security.logic.EnvSecurityStatusProvider
 import org.tokend.authenticator.security.view.ActivityUserKeyProvider
 import org.tokend.authenticator.security.view.ActivityUserKeyProviderFactory
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
@@ -59,6 +60,8 @@ abstract class BaseActivity(
     lateinit var userKeyProvidersHolder: AppUserKeyProvidersHolder
     @Inject
     lateinit var secureStorage: SecureStorage
+    @Inject
+    lateinit var envSecurityStatusProvider: EnvSecurityStatusProvider
 
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
 

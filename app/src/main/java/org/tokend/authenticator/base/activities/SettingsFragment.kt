@@ -8,9 +8,13 @@ import android.view.View
 import org.tokend.authenticator.App
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.view.util.PreferenceDividerDecoration
+import org.tokend.authenticator.security.logic.EnvSecurityStatusProvider
+import javax.inject.Inject
 
 abstract class SettingsFragment : PreferenceFragmentCompat(),
         SharedPreferences.OnSharedPreferenceChangeListener {
+    @Inject
+    lateinit var envSecurityStatusProvider: EnvSecurityStatusProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -20,7 +20,8 @@ import javax.inject.Singleton
             ApiFactoryModule::class,
             TxManagerFactoryModule::class,
             AppUserKeyProvidersHolderModule::class,
-            SecureStorageModule::class
+            SecureStorageModule::class,
+            EnvSecurityStatusProviderModule::class
         ]
 )
 @Singleton
