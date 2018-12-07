@@ -26,10 +26,13 @@ import javax.crypto.KeyGenerator
 class AppEncryptionKeyProvider(
         preferences: SharedPreferences,
         private val cipher: DataCipher,
-        private val userKeyProvidersHolder: AppUserKeyProvidersHolder
+        private val userKeyProvidersHolder: AppUserKeyProvidersHolder,
+        private val securityStatus: EnvSecurityStatus
 ) : EncryptionKeyProvider {
     private val masterKeyKdfAttributesStorage = MasterKeyKdfAttributesStorage(preferences)
     private val encryptedMasterKeyStorage = EncryptedMasterKeyStorage(preferences)
+
+    private var masterKey: ByteArray? = null
 
     override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
         return getMasterKey()
@@ -43,7 +46,13 @@ class AppEncryptionKeyProvider(
     }
 
     private fun getMasterKey(): Single<ByteArray> {
-        return decryptAndGetMasterKey()
+        return masterKey?.let { Single.just(it.copyOf()) }
+                ?: decryptAndGetMasterKey()
+                        .doOnSuccess {
+                            if (securityStatus == EnvSecurityStatus.NORMAL) {
+                                masterKey = it
+                            }
+                        }
     }
 
     private fun decryptAndGetMasterKey(): Single<ByteArray> {
