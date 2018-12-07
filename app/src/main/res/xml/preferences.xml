@@ -15,6 +15,12 @@
         android:persistent="true"
         android:title="@string/use_fingerprint" />
 
+        <android.support.v7.preference.Preference
+            android:icon="@drawable/ic_lock"
+            android:key="change_password"
+            android:layout="@layout/preference_layout"
+            android:title="@string/change_password_title" />
+
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory

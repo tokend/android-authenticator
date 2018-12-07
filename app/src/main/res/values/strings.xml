@@ -76,4 +76,6 @@
     <string name="settings_security_group">Security</string>
     <string name="settings_information_group">Information</string>
     <string name="open_source_licenses_title">Open source licenses</string>
+    <string name="change_password_title">Change PIN</string>
+    <string name="change_password_progress">PIN change…</string>
 </resources>

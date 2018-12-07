@@ -163,9 +163,9 @@ class AppEncryptionKeyProvider(
                             .map { currentMasterKey to it }
                 }
                 .flatMap { (currentMasterKey, newEncryptionKey) ->
-                    currentMasterKey.erase()
                     cipher.encrypt(currentMasterKey, newEncryptionKey)
                             .doOnSuccess {
+                                currentMasterKey.erase()
                                 newEncryptionKey.erase()
                             }
                 }

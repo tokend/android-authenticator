@@ -1,10 +1,13 @@
 package org.tokend.authenticator.base.activities.settings
 
 import android.support.v7.preference.SwitchPreferenceCompat
+import io.reactivex.disposables.Disposable
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.activities.SettingsFragment
 import org.tokend.authenticator.base.logic.fingerprint.FingerprintUtil
+import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.base.view.OpenSourceLicensesDialog
+import org.tokend.authenticator.base.view.ProgressDialogFactory
 
 class GeneralSettingsFragment : SettingsFragment() {
 
@@ -13,13 +16,41 @@ class GeneralSettingsFragment : SettingsFragment() {
     override fun reloadPreferences() {
         super.reloadPreferences()
 
-        initFingerprintItem()
+        initSecurityCategory()
         initInfoCategory()
+    }
+
+    // region Security
+    private fun initSecurityCategory() {
+        initFingerprintItem()
+        initChangePasswordItem()
     }
 
     private fun initFingerprintItem() {
         fingerprintPreference = findPreference("fingerprint") as? SwitchPreferenceCompat
         fingerprintPreference?.isVisible = FingerprintUtil(requireContext()).isFingerprintAvailable
+    }
+
+    private fun initChangePasswordItem() {
+        var disposable: Disposable? = null
+        val progress = ProgressDialogFactory(requireContext())
+                .get(requireContext().getString(R.string.change_password_progress)) {
+                    disposable?.dispose()
+                }
+
+        findPreference("change_password")?.setOnPreferenceClickListener {
+            disposable = (activity as? SettingsActivity)?.let {
+                it.encryptionKeyProvider
+                        .resetUserKey()
+                        .compose(ObservableTransformers.defaultSchedulersCompletable())
+                        .doOnSubscribe { progress.show() }
+                        .doOnComplete { progress.dismiss() }
+                        .doOnError { progress.dismiss() }
+                        .subscribe()
+            }
+
+            true
+        }
     }
 
     // region Information
