@@ -6,11 +6,9 @@ import android.text.Editable
 import android.text.InputFilter
 import android.view.View
 import kotlinx.android.synthetic.main.activity_pin_code.*
-import org.jetbrains.anko.defaultSharedPreferences
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.extensions.getChars
 import org.tokend.authenticator.base.extensions.setErrorAndFocus
-import org.tokend.authenticator.base.logic.fingerprint.FingerprintUtil
 import org.tokend.authenticator.base.util.SoftInputUtil
 import org.tokend.authenticator.base.util.ToastManager
 import org.tokend.authenticator.base.view.util.AnimationUtil
@@ -22,12 +20,8 @@ import java.nio.CharBuffer
 open class PinCodeActivity : UserKeyActivity() {
     protected val PIN_CODE_STORAGE_KEY = "pin"
 
-    protected lateinit var fingerprintUtil: FingerprintUtil
-
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_pin_code)
-
-        fingerprintUtil = FingerprintUtil(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -61,11 +55,9 @@ open class PinCodeActivity : UserKeyActivity() {
 
     // region Fingerprint
     protected open fun requestFingerprintAuthIfAvailable() {
-        val preferences = applicationContext.defaultSharedPreferences
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && secureStorage.hasSecretKey(PIN_CODE_STORAGE_KEY)
-                && fingerprintUtil.isFingerprintAvailable
-                && preferences.getBoolean("fingerprint", true)) {
+                && fingerprintUtil.canFingerPrintBeUsed()) {
             requestFingerprintAuth()
         }
     }

@@ -1,8 +1,10 @@
 package org.tokend.authenticator.base.logic.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
+import org.tokend.authenticator.base.logic.fingerprint.FingerprintUtil
 import org.tokend.authenticator.base.util.ToastManager
 import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
 import javax.inject.Singleton
@@ -19,5 +21,11 @@ class UtilModule {
     @Singleton
     fun toastManager(context: Context): ToastManager {
         return ToastManager(context)
+    }
+
+    @Provides
+    @Singleton
+    fun fingerprintUtil(context: Context, sharedPreferences: SharedPreferences): FingerprintUtil {
+        return FingerprintUtil(context, sharedPreferences)
     }
 }

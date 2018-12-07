@@ -2,6 +2,7 @@ package org.tokend.authenticator.base.logic.fingerprint
 
 import android.app.KeyguardManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat
@@ -9,7 +10,8 @@ import android.support.v4.os.CancellationSignal
 import org.tokend.authenticator.R
 
 class FingerprintUtil(
-        private val context: Context
+        private val context: Context,
+        private val sharedPreferences: SharedPreferences
 ) {
     private val fingerprintManager: FingerprintManagerCompat =
             FingerprintManagerCompat.from(context)
@@ -44,6 +46,11 @@ class FingerprintUtil(
 
         fingerprintManager.authenticate(null, 0,
                 authCancellationSignal, callback, null)
+    }
+
+    fun canFingerPrintBeUsed() : Boolean {
+        return isFingerprintAvailable
+                && sharedPreferences.getBoolean("fingerprint", true)
     }
 
     fun requestAuth(onSuccess: () -> Unit,

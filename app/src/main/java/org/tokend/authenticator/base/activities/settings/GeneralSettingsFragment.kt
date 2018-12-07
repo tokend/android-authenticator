@@ -6,7 +6,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.activities.SettingsFragment
-import org.tokend.authenticator.base.logic.fingerprint.FingerprintUtil
 import org.tokend.authenticator.base.util.ObservableTransformers
 import org.tokend.authenticator.base.util.ToastManager
 import org.tokend.authenticator.base.view.OpenSourceLicensesDialog
@@ -52,8 +51,8 @@ class GeneralSettingsFragment : SettingsFragment() {
 
     private fun initFingerprintItem() {
         val preference = findPreference("fingerprint") as? SwitchPreferenceCompat
-        preference?.isVisible =
-                FingerprintUtil(requireContext()).isFingerprintAvailable
+        preference?.isVisible = (activity as SettingsActivity)
+                .fingerprintUtil.isFingerprintAvailable
         preference?.isEnabled = isDeviceSecure
     }
 
