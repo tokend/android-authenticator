@@ -76,7 +76,19 @@
     <string name="settings_security_group">Security</string>
     <string name="settings_information_group">Information</string>
     <string name="open_source_licenses_title">Open source licenses</string>
-    <string name="change_password_title">Change PIN</string>
-    <string name="change_password_progress">PIN change…</string>
-    <string name="pin_changed_message">Pin changed successfully</string>
+    <string name="security_code_changed_message">Pin changed successfully</string>
+    <string name="change_security_code_title">Change security code</string>
+    <string name="change_security_code_progress">Security code change…</string>
+    <string name="device_is_not_secure">Device is not secure</string>
+    <string name="security_limitations_summary">
+        Some features are unavailable, extra security mechanisms are enabled
+    </string>
+    <string name="security_limitations_explanation">
+        This device cannot provide enough security level for normal Authenticator work.
+        It\'s probably caused by enabled root access.
+        \n\nIn order to keep your accounts secured the following limitations has been applied:\n\n
+        \u00A0• You have to use strong password instead of PIN code\n
+        \u00A0• Fingerprint is disabled\n
+        \u00A0• Security code is being asked on any account-related action\n
+    </string>
 </resources>

@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.v7.preference.PreferenceCategory
         android:key="security"
         android:layout="@layout/preference_category_layout"
         android:title="@string/settings_security_group">
 
-    <android.support.v7.preference.SwitchPreferenceCompat
-        android:defaultValue="true"
-        android:icon="@drawable/ic_fingerprint"
-        android:key="fingerprint"
-        android:layout="@layout/preference_layout"
-        android:persistent="true"
-        android:title="@string/use_fingerprint" />
+        <android.support.v7.preference.Preference
+            android:icon="@drawable/ic_alert_circle_outline"
+            android:key="unsecured_device"
+            android:layout="@layout/preference_layout"
+            android:summary="@string/security_limitations_summary"
+            android:title="@string/device_is_not_secure" />
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:icon="@drawable/ic_fingerprint"
+            android:key="fingerprint"
+            android:layout="@layout/preference_layout"
+            android:persistent="true"
+            android:title="@string/use_fingerprint" />
 
         <android.support.v7.preference.Preference
             android:icon="@drawable/ic_lock"
             android:key="change_password"
             android:layout="@layout/preference_layout"
-            android:title="@string/change_password_title" />
+            android:title="@string/change_security_code_title" />
 
     </android.support.v7.preference.PreferenceCategory>
 
