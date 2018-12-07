@@ -78,4 +78,5 @@
     <string name="open_source_licenses_title">Open source licenses</string>
     <string name="change_password_title">Change PIN</string>
     <string name="change_password_progress">PIN change…</string>
+    <string name="pin_changed_message">Pin changed successfully</string>
 </resources>
