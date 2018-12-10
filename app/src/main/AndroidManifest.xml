@@ -10,7 +10,7 @@
 
     <application
         android:name=".App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -86,9 +86,20 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/set_up_pin_code_title"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".base.activities.settings.SettingsActivity"
+        <activity
+            android:name=".base.activities.settings.SettingsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/settings"/>
+            android:label="@string/settings" />
+        <activity
+            android:name=".security.view.activities.PasswordActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/password_title"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".security.view.activities.SetUpPasswordActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/set_up_password_title"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

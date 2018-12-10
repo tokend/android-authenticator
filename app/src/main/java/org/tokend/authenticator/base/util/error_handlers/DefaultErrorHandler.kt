@@ -3,7 +3,6 @@ package org.tokend.authenticator.base.util.error_handlers
 import android.content.Context
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.util.ToastManager
-import org.tokend.authenticator.security.logic.TooManyUserKeyAttemptsException
 import org.tokend.crypto.cipher.InvalidCipherTextException
 import java.io.IOException
 import java.io.InterruptedIOException

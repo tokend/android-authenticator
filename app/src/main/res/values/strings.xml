@@ -54,13 +54,15 @@
     <string name="pin_code_title">PIN code</string>
     <string name="set_up_pin_code_title">Set up PIN code</string>
     <string name="enter_pin_code">Enter PIN code</string>
+    <string name="enter_new_pin_code">Enter new PIN code</string>
     <string name="confirm_pin_code">Confirm PIN code</string>
-    <string name="error_pin_confirmation_mismatch">Incorrect PIN code</string>
+    <string name="error_pin_confirmation_mismatch">PIN doesn\'t match the confirmation</string>
     <string name="processing_progress">Processing…</string>
     <string name="error_fingerprint_locked">Too many failed attempts. Try again later</string>
     <string name="or_use_fingerprint">Or use your fingerprint</string>
-    <string name="invalid_pin">Invalid Pin</string>
     <string name="error_many_pin_entry_attempts">Too many PIN entry attempts.</string>
+    <string name="invalid_pin">Invalid PIN</string>
+    <string name="error_many_failed_entry_attempts">Too many failed entry attempts</string>
     <string name="error_cipher_failed">Unable to decrypt data</string>
     <string name="access_error_message">It seems you lose access to current account</string>
     <string name="recover_suggestion">Try to recover it</string>
@@ -76,7 +78,7 @@
     <string name="settings_security_group">Security</string>
     <string name="settings_information_group">Information</string>
     <string name="open_source_licenses_title">Open source licenses</string>
-    <string name="security_code_changed_message">Pin changed successfully</string>
+    <string name="security_code_changed_message">Security code has been changed</string>
     <string name="change_security_code_title">Change security code</string>
     <string name="change_security_code_progress">Security code change…</string>
     <string name="device_is_not_secure">Device is not secure</string>
@@ -92,4 +94,12 @@
         \u00A0• Security code is being asked on any account-related action\n
     </string>
     <string name="template_timer">Wait for %1$s sec…</string>
+    <string name="password_title">Password</string>
+    <string name="set_up_password_title">Set up password</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="error_password_confirmation_mismatch">Password doesn\'t match the confirmation</string>
+    <string name="error_invalid_password">Invalid password</string>
+    <string name="error_weak_password">Weak password</string>
 </resources>

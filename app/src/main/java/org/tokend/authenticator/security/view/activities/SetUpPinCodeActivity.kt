@@ -1,7 +1,6 @@
 package org.tokend.authenticator.security.view.activities
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.widget.TextView
@@ -10,7 +9,7 @@ import org.jetbrains.anko.find
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.vibrator
 import org.tokend.authenticator.R
-import org.tokend.wallet.utils.toByteArray
+import org.tokend.crypto.ecdsa.erase
 
 class SetUpPinCodeActivity : PinCodeActivity() {
     private var isFirstEnter = true
@@ -27,11 +26,13 @@ class SetUpPinCodeActivity : PinCodeActivity() {
             switchToConfirmationEnter()
         } else {
             if (enteredPin.contentEquals(pin)) {
-                savePinCodeIfAvailable(pin)
+                saveUserKeyIfAvailable(pin)
                 super.onPinCodeEntered(pin)
             } else {
                 showConfirmationError()
                 switchToFirstEnter()
+                pin.erase()
+                enteredPin.erase()
             }
         }
     }
@@ -39,7 +40,7 @@ class SetUpPinCodeActivity : PinCodeActivity() {
     private fun switchToFirstEnter() {
         isFirstEnter = true
         pin_code_edit_text.text.clear()
-        pin_code_label_text_view.text = getString(R.string.enter_pin_code)
+        pin_code_label_text_view.text = getString(R.string.enter_new_pin_code)
     }
 
     private fun switchToConfirmationEnter() {
@@ -71,9 +72,8 @@ class SetUpPinCodeActivity : PinCodeActivity() {
         hideFingerprintHint()
     }
 
-    private fun savePinCodeIfAvailable(pin: CharArray) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            secureStorage.save(pin.toByteArray(), PIN_CODE_STORAGE_KEY)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        enteredPin.erase()
     }
 }

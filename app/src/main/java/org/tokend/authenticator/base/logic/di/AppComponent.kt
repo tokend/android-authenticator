@@ -21,7 +21,8 @@ import javax.inject.Singleton
             TxManagerFactoryModule::class,
             AppUserKeyProvidersHolderModule::class,
             SecureStorageModule::class,
-            EnvSecurityStatusProviderModule::class
+            EnvSecurityStatusProviderModule::class,
+            ActivityUserKeyProviderFactoryModule::class
         ]
 )
 @Singleton

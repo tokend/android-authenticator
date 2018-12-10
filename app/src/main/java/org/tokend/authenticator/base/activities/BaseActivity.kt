@@ -68,6 +68,8 @@ abstract class BaseActivity(
     lateinit var fingerprintUtil: FingerprintUtil
     @Inject
     lateinit var punishmentTimer: PunishmentTimer
+    @Inject
+    lateinit var activityUserKeyProviderFactory: ActivityUserKeyProviderFactory
 
     protected val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -80,10 +82,8 @@ abstract class BaseActivity(
         (application as? App)?.appComponent?.inject(this)
 
         if (canShowUserKeyRequest) {
-            initialUserKeyProvider = ActivityUserKeyProviderFactory(this)
-                    .setUpPinCode()
-            defaultUserKeyProvider = ActivityUserKeyProviderFactory(this)
-                    .regularPinCode()
+            initialUserKeyProvider = activityUserKeyProviderFactory.getForSetUp(this)
+            defaultUserKeyProvider = activityUserKeyProviderFactory.getForRequest(this)
         }
 
         //replace to logic of allow creation

@@ -2,30 +2,73 @@ package org.tokend.authenticator.security.view
 
 import android.app.Activity
 import android.app.Fragment
+import org.tokend.authenticator.security.logic.EnvSecurityStatus
+import org.tokend.authenticator.security.logic.UserKeyType
+import org.tokend.authenticator.security.logic.persistence.UserKeyTypeStorage
+import org.tokend.authenticator.security.view.activities.PasswordActivity
 import org.tokend.authenticator.security.view.activities.PinCodeActivity
+import org.tokend.authenticator.security.view.activities.SetUpPasswordActivity
 import org.tokend.authenticator.security.view.activities.SetUpPinCodeActivity
 
-class ActivityUserKeyProviderFactory private constructor(
-        private val parentActivity: Activity?,
-        private val parentFragment: Fragment?
+class ActivityUserKeyProviderFactory(
+        envSecurityStatus: EnvSecurityStatus,
+        userKeyTypeStorage: UserKeyTypeStorage
 ) {
-    constructor(parentActivity: Activity) : this(parentActivity, null)
+    private val keyType =
+            userKeyTypeStorage.load()
+                    ?: getUserKeyTypeForSecurityStatus(envSecurityStatus)
+                            .also { userKeyTypeStorage.save(it) }
 
-    constructor(parentFragment: Fragment) : this(null, parentFragment)
+    private fun getUserKeyTypeForSecurityStatus(securityStatus: EnvSecurityStatus): UserKeyType {
+        return if (securityStatus == EnvSecurityStatus.NORMAL)
+            UserKeyType.PIN
+        else
+            UserKeyType.PASSWORD
+    }
 
-    fun regularPinCode(): ActivityUserKeyProvider {
+    private fun getForRequest(parentActivity: Activity?,
+                              parentFragment: Fragment?): ActivityUserKeyProvider {
+        val activity =
+                when (keyType) {
+                    UserKeyType.PASSWORD -> PasswordActivity::class.java
+                    UserKeyType.PIN -> PinCodeActivity::class.java
+                }
+
         return ActivityUserKeyProvider(
-                PinCodeActivity::class.java,
+                activity,
                 parentActivity,
                 parentFragment
         )
     }
 
-    fun setUpPinCode(): ActivityUserKeyProvider {
+    fun getForRequest(parentActivity: Activity?): ActivityUserKeyProvider {
+        return getForRequest(parentActivity, null)
+    }
+
+    fun getForRequest(parentFragment: Fragment?): ActivityUserKeyProvider {
+        return getForRequest(null, parentFragment)
+    }
+
+    private fun getForSetUp(parentActivity: Activity?,
+                            parentFragment: Fragment?): ActivityUserKeyProvider {
+        val activity =
+                when (keyType) {
+                    UserKeyType.PASSWORD -> SetUpPasswordActivity::class.java
+                    UserKeyType.PIN -> SetUpPinCodeActivity::class.java
+                }
+
         return ActivityUserKeyProvider(
-                SetUpPinCodeActivity::class.java,
+                activity,
                 parentActivity,
                 parentFragment
         )
+    }
+
+    fun getForSetUp(parentActivity: Activity?): ActivityUserKeyProvider {
+        return getForSetUp(parentActivity, null)
+    }
+
+    fun getForSetUp(parentFragment: Fragment?): ActivityUserKeyProvider {
+        return getForSetUp(null, parentFragment)
     }
 }

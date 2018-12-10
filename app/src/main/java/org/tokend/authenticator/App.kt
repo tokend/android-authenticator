@@ -10,6 +10,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.security.ProviderInstaller
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
+import org.jetbrains.anko.defaultSharedPreferences
 import org.tokend.authenticator.base.logic.di.*
 import java.io.IOException
 import java.net.SocketException
@@ -28,6 +29,9 @@ class App : MultiDexApplication() {
                 )
                 .secureStorageModule(
                         SecureStorageModule(getKeystorePreferences())
+                )
+                .activityUserKeyProviderFactoryModule(
+                        ActivityUserKeyProviderFactoryModule(defaultSharedPreferences)
                 )
                 .build()
 
