@@ -1,6 +1,6 @@
 package org.tokend.authenticator.base.activities.settings
 
-import android.app.AlertDialog
+import android.support.v7.app.AlertDialog
 import android.support.v7.preference.SwitchPreferenceCompat
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
