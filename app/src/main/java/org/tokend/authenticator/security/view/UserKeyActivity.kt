@@ -16,6 +16,9 @@ abstract class UserKeyActivity : BaseActivity(
     protected val isRetry
         get() = intent.getBooleanExtra(IS_RETRY_EXTRA, false)
 
+    protected val isPunished
+        get() = !punishmentTimer.isExpired()
+
     protected open fun finishWithKey(key: CharArray) {
         setResult(
                 Activity.RESULT_OK,
@@ -43,7 +46,8 @@ abstract class UserKeyActivity : BaseActivity(
     protected open fun requestFingerprintAuthIfAvailable() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && secureStorage.hasSecretKey(USER_KEY_STORAGE_KEY)
-                && fingerprintUtil.canFingerPrintBeUsed()) {
+                && fingerprintUtil.canFingerPrintBeUsed()
+                && !isPunished) {
             requestFingerprintAuth()
         }
     }
@@ -60,7 +64,7 @@ abstract class UserKeyActivity : BaseActivity(
         fingerprintUtil.cancelAuth()
     }
 
-    protected open fun onFingerprintAuthSuccess() { }
+    protected open fun onFingerprintAuthSuccess() {}
 
     protected open fun onFingerprintAuthMessage(message: String?) {
         message ?: return
@@ -83,6 +87,11 @@ abstract class UserKeyActivity : BaseActivity(
         }
     }
     // endregion
+
+    override fun onResume() {
+        super.onResume()
+        requestFingerprintAuthIfAvailable()
+    }
 
     override fun onPause() {
         super.onPause()

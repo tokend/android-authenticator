@@ -7,6 +7,7 @@ import android.text.InputFilter
 import android.view.View
 import kotlinx.android.synthetic.main.activity_pin_code.*
 import kotlinx.android.synthetic.main.include_fingerprint_field_hint.*
+import kotlinx.android.synthetic.main.include_punishment_timer_holder.*
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.extensions.getChars
 import org.tokend.authenticator.base.extensions.setErrorAndFocus
@@ -62,7 +63,7 @@ open class PinCodeActivity : UserKeyActivity() {
                 runOnUiThread {
                     timeLeft--
                     timer_text.text = timerTemplate.format(timeLeft.toString())
-                    if(timeLeft == 0) {
+                    if (timeLeft == 0) {
                         timer_holder.visibility = View.GONE
                         supportActionBar?.show()
                         focusOnEditText(true)
@@ -81,7 +82,7 @@ open class PinCodeActivity : UserKeyActivity() {
     private fun focusOnEditText(force: Boolean = false) {
         pin_code_edit_text.isFocusableInTouchMode = true
         val retry = isRetry || force
-        if(retry) {
+        if (retry) {
             pin_code_edit_text.setErrorAndFocus(getString(R.string.invalid_pin))
         } else {
             SoftInputUtil.showSoftInputOnView(pin_code_edit_text)

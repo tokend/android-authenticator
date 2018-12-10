@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,9 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_margin="@dimen/standard_margin"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/pin_code_label_text_view"
@@ -34,32 +33,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/timer_holder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fontFamily="sans-serif-medium"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:text="@string/error_many_pin_entry_attempts"/>
-
-        <TextView
-            android:id="@+id/timer_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fontFamily="sans-serif-medium"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            tools:text="@string/template_timer"/>
-
-    </LinearLayout>
+    <include layout="@layout/include_punishment_timer_holder" />
 
 </FrameLayout>
