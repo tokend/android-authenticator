@@ -43,8 +43,6 @@ open class DefaultErrorHandler(
                 context.getString(R.string.error_connection_try_again)
             is InvalidCipherTextException ->
                 context.getString(R.string.error_cipher_failed)
-            is TooManyUserKeyAttemptsException ->
-                context.getString(R.string.error_many_pin_entry_attempts)
             else -> {
                 context.getString(R.string.error_try_again)
             }

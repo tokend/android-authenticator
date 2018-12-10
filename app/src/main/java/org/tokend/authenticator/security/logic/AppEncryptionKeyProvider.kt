@@ -27,7 +27,8 @@ class AppEncryptionKeyProvider(
         preferences: SharedPreferences,
         private val cipher: DataCipher,
         private val userKeyProvidersHolder: AppUserKeyProvidersHolder,
-        private val securityStatus: EnvSecurityStatus
+        private val securityStatus: EnvSecurityStatus,
+        private val punishmentTimer: PunishmentTimer
 ) : EncryptionKeyProvider {
     private val masterKeyKdfAttributesStorage = MasterKeyKdfAttributesStorage(preferences)
     private val encryptedMasterKeyStorage = EncryptedMasterKeyStorage(preferences)
@@ -76,20 +77,16 @@ class AppEncryptionKeyProvider(
                     }
                     .retry { attempt, error ->
                         isRetry = error is InvalidCipherTextException
-                                && attempt < MAX_FAILED_USER_KEY_ATTEMPTS
-                        isRetry
-                    }
-                    .onErrorResumeNext { error ->
-                        if (error is InvalidCipherTextException) {
-                            Single.error(
-                                    TooManyUserKeyAttemptsException(MAX_FAILED_USER_KEY_ATTEMPTS)
-                            )
-                        } else {
-                            Single.error(error)
+                        if (isRetry) {
+                            punishmentTimer.punishFor(attempt)
                         }
+                        isRetry
                     }
                     .doOnEvent { _, _ ->
                         decryptionKey.erase()
+                    }
+                    .doOnSuccess {
+                        punishmentTimer.reset()
                     }
         } else {
             generateMasterKey()

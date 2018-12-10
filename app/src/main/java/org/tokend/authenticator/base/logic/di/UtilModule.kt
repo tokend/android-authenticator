@@ -7,6 +7,7 @@ import dagger.Provides
 import org.tokend.authenticator.base.logic.fingerprint.FingerprintUtil
 import org.tokend.authenticator.base.util.ToastManager
 import org.tokend.authenticator.base.util.error_handlers.ErrorHandlerFactory
+import org.tokend.authenticator.security.logic.PunishmentTimer
 import javax.inject.Singleton
 
 @Module
@@ -27,5 +28,11 @@ class UtilModule {
     @Singleton
     fun fingerprintUtil(context: Context, sharedPreferences: SharedPreferences): FingerprintUtil {
         return FingerprintUtil(context, sharedPreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun punishmentTimer(sharedPreferences: SharedPreferences): PunishmentTimer {
+        return PunishmentTimer(sharedPreferences)
     }
 }

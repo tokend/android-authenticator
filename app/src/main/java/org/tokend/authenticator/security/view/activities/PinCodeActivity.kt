@@ -16,16 +16,18 @@ import org.tokend.authenticator.base.view.util.SimpleTextWatcher
 import org.tokend.authenticator.security.view.UserKeyActivity
 import org.tokend.wallet.utils.toCharArray
 import java.nio.CharBuffer
+import java.util.*
+import kotlin.concurrent.scheduleAtFixedRate
 
 open class PinCodeActivity : UserKeyActivity() {
     protected val PIN_CODE_STORAGE_KEY = "pin"
 
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_pin_code)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         initFields()
+        initTimerLayout()
     }
 
     private fun initFields() {
@@ -42,15 +44,51 @@ open class PinCodeActivity : UserKeyActivity() {
                     }
                 }
         )
-
-        if(intent.getBooleanExtra(IS_RETRY_EXTRA, false)) {
-            pin_code_edit_text.setErrorAndFocus(getString(R.string.invalid_pin))
-        }
     }
 
     protected open fun onPinCodeEntered(pin: CharArray) {
         SoftInputUtil.hideSoftInput(this)
         finishWithKey(pin)
+    }
+
+    private fun initTimerLayout() {
+        if (!punishmentTimer.isExpired()) {
+            supportActionBar?.hide()
+            SoftInputUtil.hideSoftInput(this)
+            timer_holder.visibility = View.VISIBLE
+            val timerTemplate = getString(R.string.template_timer)
+
+            var timeLeft = punishmentTimer.timeLeft()
+            timer_text.text = timerTemplate.format(timeLeft.toString())
+
+            Timer().scheduleAtFixedRate(1000, 1000) {
+                runOnUiThread {
+                    timeLeft--
+                    timer_text.text = timerTemplate.format(timeLeft.toString())
+                    if(timeLeft == 0) {
+                        timer_holder.visibility = View.GONE
+                        supportActionBar?.show()
+                        focusOnEditText(true)
+                        requestFingerprintAuthIfAvailable()
+                        cancel()
+                    }
+                }
+            }
+
+        } else {
+            focusOnEditText()
+            requestFingerprintAuthIfAvailable()
+        }
+    }
+
+    private fun focusOnEditText(force: Boolean = false) {
+        pin_code_edit_text.isFocusableInTouchMode = true
+        val retry = intent.getBooleanExtra(IS_RETRY_EXTRA, false) || force
+        if(retry) {
+            pin_code_edit_text.setErrorAndFocus(getString(R.string.invalid_pin))
+        } else {
+            SoftInputUtil.showSoftInputOnView(pin_code_edit_text)
+        }
     }
 
     // region Fingerprint
@@ -101,11 +139,6 @@ open class PinCodeActivity : UserKeyActivity() {
         fingerprint_hint_layout.visibility = View.GONE
     }
     // endregion
-
-    override fun onResume() {
-        super.onResume()
-        requestFingerprintAuthIfAvailable()
-    }
 
     override fun onPause() {
         super.onPause()

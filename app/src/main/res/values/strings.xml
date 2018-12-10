@@ -60,7 +60,7 @@
     <string name="error_fingerprint_locked">Too many failed attempts. Try again later</string>
     <string name="or_use_fingerprint">Or use your fingerprint</string>
     <string name="invalid_pin">Invalid Pin</string>
-    <string name="error_many_pin_entry_attempts">Too many PIN entry attempts</string>
+    <string name="error_many_pin_entry_attempts">Too many PIN entry attempts.</string>
     <string name="error_cipher_failed">Unable to decrypt data</string>
     <string name="access_error_message">It seems you lose access to current account</string>
     <string name="recover_suggestion">Try to recover it</string>
@@ -91,4 +91,5 @@
         \u00A0• Fingerprint is disabled\n
         \u00A0• Security code is being asked on any account-related action\n
     </string>
+    <string name="template_timer">Wait for %1$s sec…</string>
 </resources>
