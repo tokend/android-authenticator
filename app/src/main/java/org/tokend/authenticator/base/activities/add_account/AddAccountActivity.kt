@@ -210,7 +210,7 @@ class AddAccountActivity : BaseActivity() {
     }
 
     private fun onSuccessfulCreated() {
-        toastManager.long(getString(R.string.acount_created))
+        toastManager.long(getString(R.string.account_created))
         finish()
     }
 }

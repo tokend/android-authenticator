@@ -18,14 +18,14 @@
     <string name="recovery_seed_explanation">Save this seed in a secure place.
         In case you change device or re-install app you will be able to recover access to your account
         by using this seed</string>
-    <string name="seed_copied">Seed is copied to the clipboard</string>
-    <string name="error_seed_mismatch">Seed doesn\'t match confirmation</string>
+    <string name="seed_copied">Seed has been copied to the clipboard</string>
+    <string name="error_seed_mismatch">Seed doesn\'t match the confirmation</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="seed_not_copied_confirmation">This seed is the only way to recover your account. You will not be able to get it later</string>
     <string name="i_understand">I understand</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="acount_created">Account created</string>
+    <string name="account_created">Account has been created</string>
     <string name="validate_recovery_seed">Validate recovery seed</string>
     <string name="validate_recovery_seed_explanation">Please validate this seed in the field below to ensure that you copied it properly</string>
     <string name="continue_action">Continue</string>
@@ -64,11 +64,15 @@
     <string name="invalid_pin">Invalid PIN</string>
     <string name="error_many_failed_entry_attempts">Too many failed entry attempts</string>
     <string name="error_cipher_failed">Unable to decrypt data</string>
-    <string name="access_error_message">It seems you lose access to current account</string>
+    <string name="access_error_message">It seems you\'ve lost an access to the current account</string>
     <string name="recover_suggestion">Try to recover it</string>
     <string name="delete">Delete</string>
     <string name="delete_account_title">Delete current account?</string>
-    <string name="delete_account_message">You can always recover it using recovery seed</string>
+    <string name="delete_account_message">
+        You are about to delete current account from the device.
+        However it will remain in the network and
+        you will be able to recover it later using the recovery seed
+    </string>
     <string name="secret_seed">Secret seed</string>
     <string name="seed_alert_dialog">"You are about to show sensitive data of the selected account.\nAnyone who knows the secret seed can take possession of your account.\nDo you want to continue?"</string>
     <string name="yes">Yes</string>
@@ -89,7 +93,7 @@
         This device cannot provide enough security level for normal Authenticator work.
         It\'s probably caused by enabled root access.
         \n\nIn order to keep your accounts secured the following limitations has been applied:\n\n
-        \u00A0• You have to use strong password instead of PIN code\n
+        \u00A0• You have to use strong password as a security code\n
         \u00A0• Fingerprint is disabled\n
         \u00A0• Security code is being asked on any account-related action\n
     </string>
