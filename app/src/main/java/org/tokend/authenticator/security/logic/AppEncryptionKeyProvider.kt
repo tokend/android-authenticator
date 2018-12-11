@@ -183,6 +183,5 @@ class AppEncryptionKeyProvider(
 
     companion object {
         private const val KEY_LENGTH_BYTES = 32
-        private const val MAX_FAILED_USER_KEY_ATTEMPTS = 3
     }
 }
