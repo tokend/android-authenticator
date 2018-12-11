@@ -1,6 +1,5 @@
 package org.tokend.authenticator.auth.request
 
-import android.net.Uri
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -18,6 +17,7 @@ import org.tokend.authenticator.signers.storage.AccountSignersRepository
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
 import org.tokend.rx.extensions.toCompletable
 import org.tokend.rx.extensions.toSingle
+import org.tokend.sdk.api.authenticator.model.AuthRequest
 import org.tokend.sdk.api.authenticator.model.AuthResult
 import java.util.concurrent.CancellationException
 
@@ -90,7 +90,7 @@ class AuthorizeAppUseCase(
 
     private fun getAuthRequest(): Single<AuthRequest> {
         return {
-            AuthRequest.fromUri(Uri.parse(authUri))
+            AuthRequest.parse(authUri)
         }.toSingle()
     }
 

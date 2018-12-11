@@ -11,7 +11,6 @@ import org.junit.runner.RunWith
 import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.auth.request.AuthAccountSelector
-import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.auth.request.AuthRequestConfirmationProvider
 import org.tokend.authenticator.auth.request.AuthorizeAppUseCase
 import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
@@ -20,6 +19,7 @@ import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
 import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
 import org.tokend.authenticator.base.logic.transactions.factory.DefaultTxManagerFactory
 import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
+import org.tokend.sdk.api.authenticator.model.AuthRequest
 import org.tokend.wallet.utils.toByteArray
 import java.net.URLEncoder
 

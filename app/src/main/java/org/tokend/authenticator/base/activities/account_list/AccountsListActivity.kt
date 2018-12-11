@@ -22,12 +22,12 @@ import okhttp3.HttpUrl
 import org.json.JSONObject
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.logic.AccountLogoFactory
-import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountListItem
 import org.tokend.authenticator.base.activities.account_list.adapter.AccountsListAdapter
 import org.tokend.authenticator.base.util.*
 import org.tokend.authenticator.base.view.util.LoadingIndicatorManager
+import org.tokend.sdk.api.authenticator.model.AuthRequest
 import java.util.concurrent.TimeUnit
 
 class AccountsListActivity : BaseActivity() {
@@ -257,7 +257,7 @@ class AccountsListActivity : BaseActivity() {
         QrScannerUtil.getStringFromResult(requestCode, resultCode, data).also {
             try {
                 val uri = Uri.parse(it)
-                AuthRequest.fromUri(uri)
+                AuthRequest.parse(uri.toString())
                 Navigator.openAuthorizeAppActivity(this, uri)
                 return@also
             } catch (e: Exception) {

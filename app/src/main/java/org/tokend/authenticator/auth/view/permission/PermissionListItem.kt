@@ -2,8 +2,8 @@ package org.tokend.authenticator.auth.view.permission
 
 import android.content.Context
 import org.tokend.authenticator.R
-import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.signers.model.Signer
+import org.tokend.sdk.api.authenticator.model.AuthRequest
 import org.tokend.wallet.xdr.SignerType
 import java.text.DateFormat
 import java.util.*

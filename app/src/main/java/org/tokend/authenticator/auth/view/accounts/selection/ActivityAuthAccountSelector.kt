@@ -10,7 +10,7 @@ import org.tokend.authenticator.accounts.logic.model.Account
 import org.tokend.authenticator.accounts.logic.model.Network
 import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
 import org.tokend.authenticator.auth.request.AuthAccountSelector
-import org.tokend.authenticator.auth.request.AuthRequest
+import org.tokend.sdk.api.authenticator.model.AuthRequest
 
 class ActivityAuthAccountSelector
 private constructor(

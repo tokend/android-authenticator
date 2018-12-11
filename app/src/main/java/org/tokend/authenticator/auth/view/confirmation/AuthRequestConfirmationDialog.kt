@@ -6,10 +6,10 @@ import io.reactivex.Single
 import io.reactivex.subjects.SingleSubject
 import org.jetbrains.anko.runOnUiThread
 import org.tokend.authenticator.R
-import org.tokend.authenticator.auth.request.AuthRequest
 import org.tokend.authenticator.auth.request.AuthRequestConfirmationProvider
 import org.tokend.authenticator.auth.view.permission.PermissionListItem
 import org.tokend.authenticator.auth.view.permission.PermissionsArrayAdapter
+import org.tokend.sdk.api.authenticator.model.AuthRequest
 import java.text.DateFormat
 
 class AuthRequestConfirmationDialog(
