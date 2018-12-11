@@ -4,11 +4,11 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import org.junit.Assert
 import org.junit.Test
-import org.tokend.authenticator.accounts.logic.model.Account
-import org.tokend.authenticator.accounts.logic.model.Network
-import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
-import org.tokend.authenticator.base.logic.db.AppDatabase
-import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
+import org.tokend.authenticator.accounts.data.model.Account
+import org.tokend.authenticator.accounts.data.model.Network
+import org.tokend.authenticator.accounts.data.storage.AccountsRepository
+import org.tokend.authenticator.logic.db.AppDatabase
+import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
 import org.tokend.sdk.keyserver.models.KeychainData
 
 class AccountsRepository {

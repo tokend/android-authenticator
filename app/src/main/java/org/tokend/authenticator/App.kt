@@ -11,7 +11,7 @@ import com.google.android.gms.security.ProviderInstaller
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import org.jetbrains.anko.defaultSharedPreferences
-import org.tokend.authenticator.base.logic.di.*
+import org.tokend.authenticator.di.*
 import java.io.IOException
 import java.net.SocketException
 

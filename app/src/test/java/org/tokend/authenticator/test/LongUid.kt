@@ -2,7 +2,7 @@ package org.tokend.authenticator.test
 
 import org.junit.Assert
 import org.junit.Test
-import org.tokend.authenticator.base.util.LongUid
+import org.tokend.authenticator.util.LongUid
 
 class LongUid {
     @Test

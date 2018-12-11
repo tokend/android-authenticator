@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.tokend.authenticator.base.view.ErrorEmptyView
+<org.tokend.authenticator.view.ErrorEmptyView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/error_empty_view"
     android:layout_width="match_parent"

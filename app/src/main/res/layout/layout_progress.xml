@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.tokend.authenticator.base.view.util.ContentLoadingProgressBar
+<org.tokend.authenticator.view.ContentLoadingProgressBar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/progress"
     style="?android:attr/progressBarStyleHorizontal"

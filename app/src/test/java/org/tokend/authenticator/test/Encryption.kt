@@ -2,8 +2,8 @@ package org.tokend.authenticator.test
 
 import org.junit.Assert
 import org.junit.Test
-import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
-import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
+import org.tokend.authenticator.security.encryption.cipher.DefaultDataCipher
+import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
 import java.security.SecureRandom
 
 class Encryption {

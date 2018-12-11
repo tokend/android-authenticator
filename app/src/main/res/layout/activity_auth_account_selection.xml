@@ -8,7 +8,7 @@
     android:paddingLeft="24dp"
     android:paddingRight="8dp"
     android:paddingTop="16dp"
-    tools:context=".auth.view.accounts.selection.AuthAccountSelectionActivity">
+    tools:context=".auth.request.accountselection.view.AuthAccountSelectionActivity">
 
     <include layout="@layout/layout_progress" />
 

@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".base.activities.account_list.AccountsListActivity"
+            android:name=".accounts.view.AccountsListActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".base.activities.add_account.AddAccountActivity"
+            android:name=".accounts.add.view.AddAccountActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/add_account" />
         <activity
@@ -34,21 +34,21 @@
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
         <activity
-            android:name=".base.activities.RecoverySeedActivity"
+            android:name=".accounts.add.view.RecoverySeedActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/save_recovery_seed"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".base.activities.RecoveryActivity"
+            android:name=".accounts.add.recovery.view.RecoveryActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/recovery" />
         <activity
-            android:name=".auth.view.accounts.selection.AuthAccountSelectionActivity"
+            android:name=".auth.request.accountselection.view.AuthAccountSelectionActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.Dialog" />
         <activity
-            android:name=".auth.view.AuthorizeAppActivity"
+            android:name=".auth.request.view.AuthorizeAppActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.Dialog">
             <intent-filter>
@@ -72,31 +72,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".base.activities.general_account_info.GeneralAccountInfoActivity"
+            android:name="org.tokend.authenticator.accounts.info.view.GeneralAccountInfoActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/manage_account"
             android:theme="@style/AppTheme.NoActionBar.CardsBackground" />
         <activity
-            android:name=".security.view.activities.PinCodeActivity"
+            android:name=".security.userkey.pin.PinCodeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/pin_code_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".security.view.activities.SetUpPinCodeActivity"
+            android:name=".security.userkey.pin.SetUpPinCodeActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/set_up_pin_code_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".base.activities.settings.SettingsActivity"
+            android:name="org.tokend.authenticator.settings.view.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings" />
         <activity
-            android:name=".security.view.activities.PasswordActivity"
+            android:name=".security.userkey.password.view.PasswordActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/password_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".security.view.activities.SetUpPasswordActivity"
+            android:name=".security.userkey.password.view.SetUpPasswordActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/set_up_password_title"
             android:windowSoftInputMode="adjustResize" />

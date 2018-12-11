@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".base.activities.general_account_info.GeneralAccountInfoActivity">
+    tools:context=".accounts.info.view.GeneralAccountInfoActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -70,7 +70,7 @@
                         android:text="@string/access"
                         app:fontFamily="sans-serif-medium" />
 
-                    <org.tokend.authenticator.base.view.util.ContentLoadingProgressBar
+                    <org.tokend.authenticator.view.ContentLoadingProgressBar
                         android:id="@+id/progress"
                         style="?android:attr/progressBarStyleSmall"
                         android:layout_width="wrap_content"

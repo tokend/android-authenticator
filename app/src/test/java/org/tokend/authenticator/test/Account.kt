@@ -3,11 +3,11 @@ package org.tokend.authenticator.test
 import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Test
-import org.tokend.authenticator.accounts.logic.model.Account
-import org.tokend.authenticator.accounts.logic.model.Network
-import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
-import org.tokend.authenticator.base.logic.encryption.EncryptionKeyProvider
-import org.tokend.authenticator.base.logic.encryption.KdfAttributesGenerator
+import org.tokend.authenticator.accounts.data.model.Account
+import org.tokend.authenticator.accounts.data.model.Network
+import org.tokend.authenticator.security.encryption.cipher.DefaultDataCipher
+import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
+import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
 import org.tokend.kdf.ScryptKeyDerivation
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toByteArray

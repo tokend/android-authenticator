@@ -6,13 +6,13 @@ import android.support.test.runner.AndroidJUnit4
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.tokend.authenticator.accounts.logic.RecoverAccountUseCase
-import org.tokend.authenticator.accounts.logic.storage.AccountsRepository
-import org.tokend.authenticator.base.logic.api.factory.DefaultApiFactory
-import org.tokend.authenticator.base.logic.db.AppDatabase
-import org.tokend.authenticator.base.logic.encryption.DefaultDataCipher
-import org.tokend.authenticator.base.util.ObservableTransformers
-import org.tokend.authenticator.signers.storage.AccountSignersRepositoryProvider
+import org.tokend.authenticator.accounts.add.recovery.logic.RecoverAccountUseCase
+import org.tokend.authenticator.accounts.data.storage.AccountsRepository
+import org.tokend.authenticator.logic.api.factory.DefaultApiFactory
+import org.tokend.authenticator.logic.db.AppDatabase
+import org.tokend.authenticator.security.encryption.cipher.DefaultDataCipher
+import org.tokend.authenticator.util.ObservableTransformers
+import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepositoryProvider
 
 @RunWith(AndroidJUnit4::class)
 class AccountRecovery {
