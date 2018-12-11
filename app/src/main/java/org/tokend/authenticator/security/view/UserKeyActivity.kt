@@ -4,17 +4,29 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.support.annotation.RequiresApi
+import android.view.View
+import com.rengwuxian.materialedittext.MaterialEditText
+import kotlinx.android.synthetic.main.include_punishment_timer_holder.*
+import org.tokend.authenticator.R
 import org.tokend.authenticator.base.activities.BaseActivity
+import org.tokend.authenticator.base.extensions.setErrorAndFocus
 import org.tokend.authenticator.base.util.SoftInputUtil
 import org.tokend.crypto.ecdsa.erase
 import org.tokend.wallet.utils.toByteArray
 import org.tokend.wallet.utils.toCharArray
+import java.util.*
+import kotlin.concurrent.scheduleAtFixedRate
 
 abstract class UserKeyActivity : BaseActivity(
         canShowUserKeyRequest = false
 ) {
+    abstract val errorMessage: String
+    abstract val entryEditText: MaterialEditText
+
     protected val isRetry
         get() = intent.getBooleanExtra(IS_RETRY_EXTRA, false)
+
+    protected var timerTask: TimerTask? = null
 
     protected val isPunished
         get() = !punishmentTimer.isExpired()
@@ -40,6 +52,48 @@ abstract class UserKeyActivity : BaseActivity(
     override fun onBackPressed() {
         super.onBackPressed()
         finishWithCancellation()
+    }
+
+    protected open fun initTimerLayout() {
+        entryEditText.isFocusableInTouchMode = false
+        if (!punishmentTimer.isExpired()) {
+            supportActionBar?.hide()
+            SoftInputUtil.hideSoftInput(this)
+            timer_holder.visibility = View.VISIBLE
+            val timerTemplate = getString(R.string.template_timer)
+
+            var timeLeft = punishmentTimer.timeLeft()
+            timer_text.text = timerTemplate.format(timeLeft.toString())
+
+            timerTask = Timer().scheduleAtFixedRate(1000, 1000) {
+                runOnUiThread {
+                    timeLeft--
+                    timer_text.text = timerTemplate.format(timeLeft.toString())
+                    if (timeLeft == 0) {
+                        focusOnEditText()
+                        requestFingerprintAuthIfAvailable()
+                        cancel()
+                    }
+                }
+            }
+
+        } else {
+            focusOnEditText()
+            requestFingerprintAuthIfAvailable()
+        }
+    }
+
+    protected open fun focusOnEditText() {
+        timer_holder.visibility = View.GONE
+        supportActionBar?.show()
+
+        entryEditText.isFocusableInTouchMode = true
+        if (isRetry) {
+            entryEditText.setErrorAndFocus(errorMessage)
+        } else {
+            entryEditText.requestFocus()
+            SoftInputUtil.showSoftInputOnView(entryEditText)
+        }
     }
 
     // region Fingerprint
@@ -90,12 +144,14 @@ abstract class UserKeyActivity : BaseActivity(
 
     override fun onResume() {
         super.onResume()
-        requestFingerprintAuthIfAvailable()
+        initTimerLayout()
     }
 
     override fun onPause() {
         super.onPause()
         cancelFingerprintAuth()
+        timerTask?.cancel()
+        timerTask = null
     }
 
     companion object {

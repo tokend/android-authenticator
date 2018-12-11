@@ -60,7 +60,7 @@
     <string name="processing_progress">Processing…</string>
     <string name="error_fingerprint_locked">Too many failed attempts. Try again later</string>
     <string name="or_use_fingerprint">Or use your fingerprint</string>
-    <string name="error_many_pin_entry_attempts">Too many PIN entry attempts.</string>
+    <string name="error_many_wrong_entry_attempts">Too many wrong entry attempts.</string>
     <string name="invalid_pin">Invalid PIN</string>
     <string name="error_many_failed_entry_attempts">Too many failed entry attempts</string>
     <string name="error_cipher_failed">Unable to decrypt data</string>

@@ -4,18 +4,24 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import com.rengwuxian.materialedittext.MaterialEditText
 import kotlinx.android.synthetic.main.activity_password.*
 import kotlinx.android.synthetic.main.include_fingerprint_field_hint.*
 import org.tokend.authenticator.R
 import org.tokend.authenticator.base.extensions.getChars
 import org.tokend.authenticator.base.extensions.onEditorAction
-import org.tokend.authenticator.base.extensions.setErrorAndFocus
 import org.tokend.authenticator.base.view.util.AnimationUtil
 import org.tokend.authenticator.base.view.util.SimpleTextWatcher
 import org.tokend.authenticator.security.view.UserKeyActivity
 import java.nio.CharBuffer
 
 open class PasswordActivity : UserKeyActivity() {
+
+    override val errorMessage: String
+        get() = getString(R.string.error_invalid_password)
+    override val entryEditText: MaterialEditText
+        get() = password_edit_text
+
     protected var canContinue: Boolean = false
         set(value) {
             field = value
@@ -44,10 +50,6 @@ open class PasswordActivity : UserKeyActivity() {
             if (canContinue) {
                 onPasswordEntered()
             }
-        }
-
-        if (isRetry) {
-            password_edit_text.setErrorAndFocus(getString(R.string.error_invalid_password))
         }
     }
 
