@@ -11,6 +11,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 class PunishmentTimerView(private val context: UserKeyActivity,
                           private val punishmentTimer: PunishmentTimer) {
 
+    private val timer = Timer()
     private var timerTask: TimerTask? = null
 
     fun showTimer(onTimerStart: () -> Unit,
@@ -23,7 +24,7 @@ class PunishmentTimerView(private val context: UserKeyActivity,
             var timeLeft = punishmentTimer.timeLeft()
             context.timer_text.text = timerTemplate.format(timeLeft.toString())
 
-            timerTask = Timer().scheduleAtFixedRate(DELAY, DELAY) {
+            timerTask = timer.scheduleAtFixedRate(DELAY, DELAY) {
                 context.runOnUiThread {
                     timeLeft--
                     context.timer_text.text = timerTemplate.format(timeLeft.toString())
@@ -40,6 +41,7 @@ class PunishmentTimerView(private val context: UserKeyActivity,
 
     fun cancelTimer() {
         timerTask?.cancel()
+        timer.purge()
     }
 
     companion object {

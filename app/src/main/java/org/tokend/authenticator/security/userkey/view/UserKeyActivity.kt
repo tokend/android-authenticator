@@ -14,6 +14,7 @@ import org.tokend.authenticator.view.util.input.SoftInputUtil
 import org.tokend.crypto.ecdsa.erase
 import org.tokend.wallet.utils.toByteArray
 import org.tokend.wallet.utils.toCharArray
+import java.lang.ref.WeakReference
 
 abstract class UserKeyActivity : BaseActivity(
         canShowUserKeyRequest = false
@@ -24,8 +25,7 @@ abstract class UserKeyActivity : BaseActivity(
     protected val isRetry
         get() = intent.getBooleanExtra(IS_RETRY_EXTRA, false)
 
-    protected val timerView: PunishmentTimerView
-        get() = punishmentTimer.viewFor(this)
+    protected lateinit var timerView: PunishmentTimerView
 
     protected open fun finishWithKey(key: CharArray) {
         setResult(
@@ -51,6 +51,7 @@ abstract class UserKeyActivity : BaseActivity(
     }
 
     protected open fun initTimerLayout() {
+        timerView = PunishmentTimerView(this, punishmentTimer)
         timerView.showTimer(
                 onTimerStart = {
                     entryEditText.isFocusableInTouchMode = false
@@ -85,10 +86,11 @@ abstract class UserKeyActivity : BaseActivity(
     }
 
     protected open fun requestFingerprintAuth() {
+        val weakThis = WeakReference(this)
         fingerprintUtil.requestAuth(
-                onSuccess = this::onFingerprintAuthSuccess,
-                onError = this::onFingerprintAuthMessage,
-                onHelp = this::onFingerprintAuthMessage
+                onSuccess = { weakThis.get()?.onFingerprintAuthSuccess() },
+                onError = { weakThis.get()?.onFingerprintAuthMessage(it) },
+                onHelp = { weakThis.get()?.onFingerprintAuthMessage(it) }
         )
     }
 
