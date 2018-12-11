@@ -25,7 +25,7 @@ abstract class UserKeyActivity : BaseActivity(
         get() = intent.getBooleanExtra(IS_RETRY_EXTRA, false)
 
     protected val timerView: PunishmentTimerView
-        get() = PunishmentTimerView(this, punishmentTimer)
+        get() = punishmentTimer.viewFor(this)
 
     protected open fun finishWithKey(key: CharArray) {
         setResult(

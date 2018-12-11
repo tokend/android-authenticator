@@ -2,6 +2,8 @@ package org.tokend.authenticator.security.userkey.punishment
 
 import android.content.SharedPreferences
 import android.os.SystemClock
+import org.tokend.authenticator.security.userkey.punishment.view.PunishmentTimerView
+import org.tokend.authenticator.security.userkey.view.UserKeyActivity
 
 class PunishmentTimer(private val sharedPreferences: SharedPreferences) {
 
@@ -46,6 +48,8 @@ class PunishmentTimer(private val sharedPreferences: SharedPreferences) {
             putInt(KEY_PUNISH_FACTOR, lastFactor)
         }.apply()
     }
+
+    fun viewFor(activity: UserKeyActivity) = PunishmentTimerView(activity, this)
 
     companion object {
         private const val PUNISH_TIME: Long = 5000
