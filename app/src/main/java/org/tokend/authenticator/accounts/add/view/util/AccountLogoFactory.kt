@@ -46,25 +46,26 @@ class AccountLogoFactory(private val context: Context) {
             (31 * result + char.toInt()) % colors.size
         }
         val background = colors[code]
-        return getForValue(account.network.name, size, background, fontColor)
+
+        val key = "${string}_$size"
+        return cache.get(key)
+                ?: generateForValue(account.network.name, size, background, fontColor)
+                        .also { cache.put(key, it) }
     }
 
     /**
      * Returns [Bitmap] logo for given asset code by first letter.
      * If first letter cannot be displayed it will be replaced with emoj.
      */
-    fun getForValue(networkName: String,
-                    size: Int,
-                    @ColorInt
-                    backgroundColor: Int,
-                    @ColorInt
-                    fontColor: Int
+    private fun generateForValue(networkName: String,
+                                 size: Int,
+                                 @ColorInt
+                                 backgroundColor: Int,
+                                 @ColorInt
+                                 fontColor: Int
     ): Bitmap {
         val letter = networkName.firstOrNull()?.toString()
-        val key = "${networkName}_$size"
-        val cached = cache.get(key)
-        return cached
-                ?: generate(letter, size, backgroundColor, fontColor).also { cache.put(key, it) }
+        return generate(letter, size, backgroundColor, fontColor)
     }
 
     private fun generate(content: String?,
