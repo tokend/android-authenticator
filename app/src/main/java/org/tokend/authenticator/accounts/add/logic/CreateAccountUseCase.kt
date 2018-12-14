@@ -175,7 +175,11 @@ class CreateAccountUseCase(
     }
 
     private fun destroyKeys() {
-        masterKeyPair.destroy()
-        recoveryKeyPair.destroy()
+        try {
+            masterKeyPair.destroy()
+            recoveryKeyPair.destroy()
+        } catch (e: UninitializedPropertyAccessException) {
+            // Doesn't matter
+        }
     }
 }

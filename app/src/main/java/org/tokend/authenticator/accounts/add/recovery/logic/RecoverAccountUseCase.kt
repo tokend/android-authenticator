@@ -176,8 +176,12 @@ class RecoverAccountUseCase(
     }
 
     private fun destroyKeys() {
-        recoveryKeyPair.destroy()
-        recoveryWallet.secretSeed.erase()
-        newMasterKeyPair.destroy()
+        try {
+            recoveryKeyPair.destroy()
+            recoveryWallet.secretSeed.erase()
+            newMasterKeyPair.destroy()
+        } catch (e: UninitializedPropertyAccessException) {
+            // Doesn't matter
+        }
     }
 }
