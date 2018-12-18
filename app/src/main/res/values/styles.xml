@@ -104,4 +104,9 @@
         <item name="android:tint">@color/colorPrimary</item>
         <item name="android:dividerHeight">0dp</item>
     </style>
+
+    <style name="LimitedMatchParentWidth">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
 </resources>
