@@ -265,6 +265,11 @@ class AccountsListActivity : BaseActivity() {
     }
     // endregion
 
+    override fun onDestroy() {
+        super.onDestroy()
+        list_account.clearOnScrollListeners()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         QrScannerUtil.getStringFromResult(requestCode, resultCode, data).also {
