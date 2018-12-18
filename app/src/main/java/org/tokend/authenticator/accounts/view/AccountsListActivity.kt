@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.support.transition.Fade
 import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
+import android.util.DisplayMetrics
 import android.view.MenuItem
 import android.widget.EditText
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
@@ -22,10 +23,13 @@ import okhttp3.HttpUrl
 import org.json.JSONObject
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.add.view.util.AccountLogoFactory
-import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.accounts.view.adapter.AccountListItem
 import org.tokend.authenticator.accounts.view.adapter.AccountsListAdapter
-import org.tokend.authenticator.util.*
+import org.tokend.authenticator.base.activities.BaseActivity
+import org.tokend.authenticator.util.Navigator
+import org.tokend.authenticator.util.ObservableTransformers
+import org.tokend.authenticator.util.Permission
+import org.tokend.authenticator.util.QrScannerUtil
 import org.tokend.authenticator.view.util.LoadingIndicatorManager
 import org.tokend.authenticator.view.util.ToastManager
 import org.tokend.sdk.api.authenticator.model.AuthRequest
@@ -76,6 +80,14 @@ class AccountsListActivity : BaseActivity() {
     }
 
     private fun initAccountsList() {
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        val screenWidth = displayMetrics.widthPixels.toDouble()
+        val columns = (screenWidth / resources.getDimensionPixelSize(R.dimen.max_content_width))
+                .let { Math.ceil(it) }
+                .toInt()
+
         error_empty_view.setPadding(0, 0, 0,
                 resources.getDimensionPixelSize(R.dimen.quadra_margin))
         error_empty_view.observeAdapter(adapter, R.string.no_accounts_message)
@@ -85,7 +97,7 @@ class AccountsListActivity : BaseActivity() {
             Navigator.openGeneralAccountInfo(this, item.uid)
         }
 
-        list_account.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        list_account.layoutManager = GridLayoutManager(this, columns)
         list_account.adapter = adapter
         list_account.addOnScrollListener(hideFabScrollListener)
     }
@@ -232,7 +244,7 @@ class AccountsListActivity : BaseActivity() {
     override fun onBackPressed() {
         (searchItem?.actionView as? SearchView)?.apply {
             if (query.isNotEmpty()) {
-                 setQuery("", false)
+                setQuery("", false)
                 clearFocus()
                 searchItem?.collapseActionView()
             } else super.onBackPressed()
