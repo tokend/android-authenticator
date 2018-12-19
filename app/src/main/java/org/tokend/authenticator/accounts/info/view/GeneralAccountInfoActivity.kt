@@ -203,7 +203,8 @@ class GeneralAccountInfoActivity : BaseActivity() {
         if (signersRepository.isNeverUpdated) {
             return
         }
-        val noAnySigners = !signers.any { it.publicKey == account.publicKey }
+        val noAnySigners = signers.isNotEmpty()
+                && !signers.any { it.publicKey == account.publicKey }
         if (account.isBroken == noAnySigners) {
             return
         }
