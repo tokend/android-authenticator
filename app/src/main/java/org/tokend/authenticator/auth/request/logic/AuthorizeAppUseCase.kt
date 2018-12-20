@@ -1,26 +1,26 @@
 package org.tokend.authenticator.auth.request.logic
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.tokend.authenticator.accounts.data.model.Account
 import org.tokend.authenticator.accounts.data.model.Network
+import org.tokend.authenticator.util.extensions.toSingle
+import org.tokend.authenticator.logic.api.AuthenticatorApi
+import org.tokend.authenticator.logic.api.factory.ApiFactory
+import org.tokend.authenticator.security.encryption.cipher.DataCipher
+import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
+import org.tokend.authenticator.logic.transactions.factory.TxManagerFactory
 import org.tokend.authenticator.accounts.info.data.model.Signer
 import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepository
 import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepositoryProvider
 import org.tokend.authenticator.auth.request.accountselection.logic.AuthAccountSelector
 import org.tokend.authenticator.auth.request.confirmation.logic.AuthRequestConfirmationProvider
-import org.tokend.authenticator.logic.api.AuthenticatorApi
-import org.tokend.authenticator.logic.api.factory.ApiFactory
-import org.tokend.authenticator.logic.transactions.factory.TxManagerFactory
-import org.tokend.authenticator.security.encryption.cipher.DataCipher
-import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
-import org.tokend.authenticator.util.extensions.toSingle
-import org.tokend.crypto.ecdsa.erase
+import org.tokend.rx.extensions.toCompletable
 import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.authenticator.model.AuthRequest
 import org.tokend.sdk.api.authenticator.model.AuthResult
-import org.tokend.sdk.keyserver.models.KdfAttributes
 import java.util.concurrent.CancellationException
 
 class AuthorizeAppUseCase(
@@ -38,14 +38,8 @@ class AuthorizeAppUseCase(
     private lateinit var network: Network
     private lateinit var account: Account
     private lateinit var signersRepository: AccountSignersRepository
-    private lateinit var accountEncryptionKey: ByteArray
-    private lateinit var authSecret: ByteArray
 
-    class Result(
-            val authSecret: ByteArray
-    )
-
-    fun perform(): Single<Result> {
+    fun perform(): Completable {
         val scheduler = Schedulers.newThread()
 
         return getAuthRequest()
@@ -84,29 +78,15 @@ class AuthorizeAppUseCase(
                 .map {
                     getNewSigner()
                 }
-                .flatMap { newSigner ->
+                .flatMapCompletable { newSigner ->
                     addNewSigner(newSigner)
                 }
-                .flatMap {
-                    deriveAuthSecret()
-                }
-                .doOnSuccess { authSecret ->
-                    this.authSecret = authSecret
-                }
-                .flatMap {
-                    postAuthResult(true)
-                }
+                .andThen(postAuthResult(true))
                 .onErrorResumeNext {
                     if (it is CancellationException) {
                         postAuthResultAsync(false)
                     }
-                    Single.error(it)
-                }
-                .map {
-                    Result(authSecret)
-                }
-                .doOnEvent { _, _ ->
-                    eraseKeys()
+                    Completable.error(it)
                 }
     }
 
@@ -162,36 +142,17 @@ class AuthorizeAppUseCase(
         )
     }
 
-    private fun addNewSigner(signer: Signer): Single<Boolean> {
-        // Back up account encryption key to avoid requesting it twice.
-        val localEncryptionKeyProvider = object : EncryptionKeyProvider {
-            override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
-                return encryptionKeyProvider.getKey(kdfAttributes)
-                        .doOnSuccess {
-                            accountEncryptionKey = it.copyOf()
-                        }
-            }
-        }
-
+    private fun addNewSigner(signer: Signer): Completable {
         return signersRepository.add(
                 signer = signer,
                 cipher = cipher,
-                encryptionKeyProvider = localEncryptionKeyProvider,
+                encryptionKeyProvider = encryptionKeyProvider,
                 txManager = txManagerFactory.getTxManager(api)
         )
-                .toSingleDefault(true)
     }
 
-    private fun deriveAuthSecret(): Single<ByteArray> {
-        return AuthSecretGenerator().generate(
-                authRequest.publicKey,
-                accountEncryptionKey,
-                account.kdfAttributes
-        )
-    }
-
-    private fun postAuthResult(success: Boolean): Single<Boolean> {
-        return Single.defer {
+    private fun postAuthResult(success: Boolean): Completable {
+        return Completable.defer {
             val result = AuthResult(
                     isSuccessful = success,
                     walletId =
@@ -202,22 +163,13 @@ class AuthorizeAppUseCase(
             )
 
             api.authResults.postAuthResult(authRequest.publicKey, result)
-                    .toSingle()
-                    .map { true }
+                    .toCompletable()
         }
     }
 
     private fun postAuthResultAsync(success: Boolean) {
         doAsync {
-            postAuthResult(success).blockingGet()
-        }
-    }
-
-    private fun eraseKeys() {
-        try {
-            accountEncryptionKey.erase()
-        } catch (e: UninitializedPropertyAccessException) {
-            // Doesn't matter
+            postAuthResult(success).blockingAwait()
         }
     }
 }
