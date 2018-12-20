@@ -147,7 +147,8 @@ class AuthorizeAppUseCase(
                 signer = signer,
                 cipher = cipher,
                 encryptionKeyProvider = encryptionKeyProvider,
-                txManager = txManagerFactory.getTxManager(api)
+                txManager = txManagerFactory.getTxManager(api),
+                isUnique = true
         )
     }
 

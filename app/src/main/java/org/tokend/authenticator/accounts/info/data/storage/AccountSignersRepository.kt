@@ -66,7 +66,10 @@ class AccountSignersRepository(
     fun add(signer: Signer,
             cipher: DataCipher,
             encryptionKeyProvider: EncryptionKeyProvider,
-            txManager: TxManager): Completable {
+            txManager: TxManager,
+            isUnique: Boolean = false): Completable {
+
+        var signersToRemove = emptyList<Signer>()
         return account.getSeed(cipher, encryptionKeyProvider)
                 .map { accountSeed ->
                     org.tokend.wallet.Account.fromSecretSeed(accountSeed)
@@ -75,13 +78,25 @@ class AccountSignersRepository(
                             }
                 }
                 .flatMap { signKeyPair ->
-                    Single.zip(
-                            createSignerAddTransaction(signer, signKeyPair),
-                            createAccountIfNeeded(signKeyPair),
-                            BiFunction { transaction: Transaction, _: Boolean ->
-                                transaction to signKeyPair
+                    if (isUnique) {
+                        updateIfNotFreshDeferred()
+                    } else {
+                        Completable.complete()
+                    }.doOnComplete {
+                        signersToRemove = itemsCache.items.filter {
+                            it.name == signer.name
+                        }
+                    }
+                            .toSingleDefault(true)
+                            .flatMap {
+                                Single.zip(
+                                        createSignerAddTransaction(signer, signersToRemove, signKeyPair),
+                                        createAccountIfNeeded(signKeyPair),
+                                        BiFunction { transaction: Transaction, _: Boolean ->
+                                            transaction to signKeyPair
+                                        }
+                                )
                             }
-                    )
                 }
                 .flatMap { (transaction, signKeyPair) ->
                     txManager.submit(transaction)
@@ -91,6 +106,9 @@ class AccountSignersRepository(
                 }
                 .ignoreElement()
                 .doOnComplete {
+                    signersToRemove.forEach {
+                        itemsCache.delete(it)
+                    }
                     itemsCache.add(signer)
                     broadcast()
                 }
@@ -127,20 +145,33 @@ class AccountSignersRepository(
     }
 
     private fun createSignerAddTransaction(signer: Signer,
+                                           sameSigners: List<Signer>,
                                            signKeyPair: org.tokend.wallet.Account): Single<Transaction> {
+
+        val operations = mutableListOf<Operation.OperationBody>()
+        sameSigners.forEach {
+            operations.add(Operation.OperationBody.SetOptions(
+                    RemoveSignerOp(
+                            accountID = it.publicKey,
+                            identity = DEFAULT_SIGNER_IDENTITY
+                    )
+            ))
+        }
+        operations.add(Operation.OperationBody.SetOptions(
+                UpdateSignerOp(
+                        accountID = signer.publicKey,
+                        type = signer.scope,
+                        name = signer.name,
+                        identity = DEFAULT_SIGNER_IDENTITY,
+                        weight = DEFAULT_SIGNER_WEIGHT
+                )
+        ))
+
         return TxManager.createSignedTransaction(
                 account.network.toNetParams(),
                 account.originalAccountId,
                 signKeyPair,
-                Operation.OperationBody.SetOptions(
-                        UpdateSignerOp(
-                                accountID = signer.publicKey,
-                                type = signer.scope,
-                                name = signer.name,
-                                identity = DEFAULT_SIGNER_IDENTITY,
-                                weight = DEFAULT_SIGNER_WEIGHT
-                        )
-                )
+                *operations.toTypedArray()
         )
     }
 
