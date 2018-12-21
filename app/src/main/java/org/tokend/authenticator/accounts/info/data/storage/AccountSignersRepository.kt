@@ -80,23 +80,23 @@ class AccountSignersRepository(
                 .flatMap { signKeyPair ->
                     if (isUnique) {
                         updateIfNotFreshDeferred()
+                                .doOnComplete {
+                                    signersToRemove = itemsCache.items.filter {
+                                        it.name == signer.name
+                                    }
+                                }
                     } else {
                         Completable.complete()
-                    }.doOnComplete {
-                        signersToRemove = itemsCache.items.filter {
-                            it.name == signer.name
-                        }
-                    }
-                            .toSingleDefault(true)
-                            .flatMap {
-                                Single.zip(
-                                        createSignerAddTransaction(signer, signersToRemove, signKeyPair),
-                                        createAccountIfNeeded(signKeyPair),
-                                        BiFunction { transaction: Transaction, _: Boolean ->
-                                            transaction to signKeyPair
-                                        }
-                                )
+                    }.toSingleDefault(signKeyPair)
+                }
+                .flatMap { signKeyPair ->
+                    Single.zip(
+                            createSignerAddTransaction(signer, signersToRemove, signKeyPair),
+                            createAccountIfNeeded(signKeyPair),
+                            BiFunction { transaction: Transaction, _: Boolean ->
+                                transaction to signKeyPair
                             }
+                    )
                 }
                 .flatMap { (transaction, signKeyPair) ->
                     txManager.submit(transaction)
@@ -106,9 +106,7 @@ class AccountSignersRepository(
                 }
                 .ignoreElement()
                 .doOnComplete {
-                    signersToRemove.forEach {
-                        itemsCache.delete(it)
-                    }
+                    itemsCache.delete(*signersToRemove.toTypedArray())
                     itemsCache.add(signer)
                     broadcast()
                 }

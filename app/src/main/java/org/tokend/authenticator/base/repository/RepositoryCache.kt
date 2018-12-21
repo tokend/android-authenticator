@@ -44,10 +44,10 @@ abstract class RepositoryCache<T> {
         }
     }
 
-    fun delete(item: T): Boolean {
-        return mItems.remove(item).also { deleted ->
+    fun delete(vararg item: T): Boolean {
+        return mItems.removeAll(item).also { deleted ->
             if (deleted) {
-                deleteFromDbSafe(listOf(item))
+                deleteFromDbSafe(item.toList())
             }
         }
     }
