@@ -26,6 +26,7 @@ import org.tokend.wallet.xdr.SignerType
 class AccountSignersRepository {
     private val key = ByteArray(32)
     private val seed = "SCIUKFBGL364Q2A2BVO474BBOFS6VV2K5WFAQG6WQS7WHAATGLE6CVP3".toCharArray()
+    private val signerName = "MyAwesomeSigner"
 
     private val account = Account(
             Network("NET_NAME", "TokenD Testnet Network",
@@ -93,9 +94,43 @@ class AccountSignersRepository {
         Assert.assertNotNull(repository.itemsList.find { it.publicKey == publicKey })
     }
 
-    private fun performSignerAdd(publicKey: String, repository: AccountSignersRepository) {
+    @Test
+    fun addUniqueSigner() {
+        val appContext = InstrumentationRegistry.getTargetContext()
+
+        val database = Room.databaseBuilder(appContext, AppDatabase::class.java,
+                "app-db-test")
+                .build()
+        database.signersDao.deleteAll()
+
+        val getRepository = {
+            AccountSignersRepository(account, database, DefaultApiFactory())
+                    .also {
+                        it.updateDeferred().blockingAwait()
+                    }
+        }
+        val repository = getRepository()
+        val publicKey = org.tokend.wallet.Account.random().accountId
+
+        performSignerAdd(publicKey, repository)
+        performSignerAdd(publicKey, repository)
+
+        Assert.assertTrue(repository.itemsList.filter { it.name == signerName }.size >= 2)
+
+        performSignerAdd(publicKey, repository, isUnique = true)
+
+        Assert.assertEquals(1, repository.itemsList.filter { it.name == signerName }.size)
+
+        repository.update().blockingAwait()
+
+        Assert.assertEquals(1, repository.itemsList.filter { it.name == signerName }.size)
+    }
+
+    private fun performSignerAdd(publicKey: String,
+                                 repository: AccountSignersRepository,
+                                 isUnique: Boolean = false) {
         val newSigner = Signer(
-                name = "MyAwesomeSigner",
+                name = signerName,
                 scope = SignerType.READER.value,
                 publicKey = publicKey,
                 accountId = account.uid,
@@ -106,7 +141,7 @@ class AccountSignersRepository {
             override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
                 return Single.just(key)
             }
-        }, TxManager(DefaultApiFactory().getApi(account.network.rootUrl))).blockingAwait()
+         }, TxManager(DefaultApiFactory().getApi(account.network.rootUrl)), isUnique).blockingAwait()
     }
 
     @Test
