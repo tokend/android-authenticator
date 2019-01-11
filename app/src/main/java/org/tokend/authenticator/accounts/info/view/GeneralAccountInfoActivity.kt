@@ -57,7 +57,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
             initViews()
             subscribeSigners()
             updateErrorVisibility()
-            update(force = true)
+            update()
         }
     }
 
