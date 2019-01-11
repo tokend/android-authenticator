@@ -16,17 +16,17 @@ import kotlinx.android.synthetic.main.layout_general_card.*
 import okhttp3.HttpUrl
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.data.model.Account
+import org.tokend.authenticator.accounts.info.data.model.Signer
+import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepository
+import org.tokend.authenticator.accounts.info.view.adapter.SignersAdapter
 import org.tokend.authenticator.auth.manage.logic.RevokeAccessUseCase
 import org.tokend.authenticator.auth.manage.view.AuthorizedAppDetailsDialog
 import org.tokend.authenticator.base.activities.BaseActivity
-import org.tokend.authenticator.accounts.info.view.adapter.SignersAdapter
 import org.tokend.authenticator.util.Navigator
 import org.tokend.authenticator.util.ObservableTransformers
 import org.tokend.authenticator.view.ProgressDialogFactory
 import org.tokend.authenticator.view.decoration.DividerItemDecoration
 import org.tokend.authenticator.view.util.LoadingIndicatorManager
-import org.tokend.authenticator.accounts.info.data.model.Signer
-import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepository
 
 class GeneralAccountInfoActivity : BaseActivity() {
 
@@ -49,9 +49,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
 
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_general_account_info)
-        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.title = getString(R.string.manage_account)
 
         accountsRepository.itemsList.find { it.uid == uid }?.let {
             account = it

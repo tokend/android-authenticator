@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/standard_margin">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        style="@style/LimitedMatchParentWidth"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <ScrollView style="@style/LimitedMatchParentWidthConstraint">
 
-        <include layout="@layout/layout_network_field" />
-
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/email_edit_text"
-            style="@style/EditText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:paddingBottom="@dimen/standard_margin" />
+            android:layout_margin="@dimen/standard_margin"
+            android:orientation="vertical">
 
-        <include
-            layout="@layout/layout_progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <include layout="@layout/layout_network_field" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/recovery_button"
-                style="@style/PrimaryActionTextView"
-                android:layout_width="wrap_content"
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/email_edit_text"
+                style="@style/EditText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="@string/recover" />
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="@dimen/standard_margin" />
 
-            <Button
-                android:id="@+id/add_account_button"
-                style="@style/PrimaryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:enabled="false"
-                android:paddingEnd="@dimen/double_margin"
-                android:paddingLeft="@dimen/double_margin"
-                android:paddingRight="@dimen/double_margin"
-                android:paddingStart="@dimen/double_margin"
-                android:text="@string/create"
-                android:theme="@style/PrimaryButton.Overlay" />
-        </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
+            <include
+                layout="@layout/layout_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/recovery_button"
+                    style="@style/PrimaryActionTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/recover" />
+
+                <Button
+                    android:id="@+id/add_account_button"
+                    style="@style/PrimaryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:enabled="false"
+                    android:paddingStart="@dimen/double_margin"
+                    android:paddingLeft="@dimen/double_margin"
+                    android:paddingEnd="@dimen/double_margin"
+                    android:paddingRight="@dimen/double_margin"
+                    android:text="@string/create"
+                    android:theme="@style/PrimaryButton.Overlay" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
