@@ -37,6 +37,8 @@ open class PasswordActivity : UserKeyActivity() {
         initButtons()
 
         updateContinueAvailability()
+
+        super.onCreateAllowed(savedInstanceState)
     }
 
     private fun initFields() {

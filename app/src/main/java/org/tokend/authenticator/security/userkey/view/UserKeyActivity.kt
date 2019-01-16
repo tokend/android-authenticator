@@ -3,13 +3,16 @@ package org.tokend.authenticator.security.userkey.view
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.view.View
 import com.rengwuxian.materialedittext.MaterialEditText
+import kotlinx.android.synthetic.main.include_fingerprint_field_hint.*
 import kotlinx.android.synthetic.main.include_punishment_timer_holder.*
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.security.userkey.punishment.view.PunishmentTimerView
 import org.tokend.authenticator.util.extensions.setErrorAndFocus
+import org.tokend.authenticator.view.FingerprintIndicatorManager
 import org.tokend.authenticator.view.util.input.SoftInputUtil
 import org.tokend.crypto.ecdsa.erase
 import org.tokend.wallet.utils.toByteArray
@@ -26,6 +29,7 @@ abstract class UserKeyActivity : BaseActivity(
         get() = intent.getBooleanExtra(IS_RETRY_EXTRA, false)
 
     protected lateinit var timerView: PunishmentTimerView
+    protected lateinit var fingerprintIndicatorManager: FingerprintIndicatorManager
 
     protected open fun finishWithKey(key: CharArray) {
         setResult(
@@ -43,6 +47,10 @@ abstract class UserKeyActivity : BaseActivity(
     protected open fun finishWithCancellation() {
         setResult(Activity.RESULT_CANCELED)
         finish()
+    }
+
+    override fun onCreateAllowed(savedInstanceState: Bundle?) {
+        fingerprintIndicatorManager = FingerprintIndicatorManager(this, fingerprint_indicator)
     }
 
     override fun onBackPressed() {
@@ -89,8 +97,13 @@ abstract class UserKeyActivity : BaseActivity(
         val weakThis = WeakReference(this)
         fingerprintUtil.requestAuth(
                 onSuccess = { weakThis.get()?.onFingerprintAuthSuccess() },
-                onError = { weakThis.get()?.onFingerprintAuthMessage(it) },
-                onHelp = { weakThis.get()?.onFingerprintAuthMessage(it) }
+                onError = {
+                    weakThis.get()?.onFingerprintAuthMessage(it)
+                    fingerprintIndicatorManager.error()
+                },
+                onHelp = {
+                    weakThis.get()?.onFingerprintAuthMessage(it)
+                    fingerprintIndicatorManager.error()}
         )
     }
 

@@ -28,6 +28,8 @@ open class PinCodeActivity : UserKeyActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         initFields()
+
+        super.onCreateAllowed(savedInstanceState)
     }
 
     private fun initFields() {

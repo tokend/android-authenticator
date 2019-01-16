@@ -105,4 +105,5 @@
     <string name="error_password_confirmation_mismatch">Password doesn\'t match the confirmation</string>
     <string name="error_invalid_password">Invalid password</string>
     <string name="error_weak_password">Weak password</string>
+    <string name="touch_sensor">Touch the sensor</string>
 </resources>
