@@ -2,6 +2,7 @@ package org.tokend.authenticator.accounts.view
 
 import android.Manifest
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.support.transition.Fade
@@ -54,6 +55,8 @@ class AccountsListActivity : BaseActivity() {
 
     private val cameraPermission = Permission(Manifest.permission.CAMERA, 404)
 
+    private lateinit var layoutManager: GridLayoutManager
+
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_accounts_list)
         toolbar.title = getString(R.string.accounts)
@@ -80,13 +83,9 @@ class AccountsListActivity : BaseActivity() {
     }
 
     private fun initAccountsList() {
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val columns = calculateColumnCount()
 
-        val screenWidth = displayMetrics.widthPixels.toDouble()
-        val columns = (screenWidth / resources.getDimensionPixelSize(R.dimen.max_content_width))
-                .let { Math.ceil(it) }
-                .toInt()
+        layoutManager = GridLayoutManager(this, columns)
 
         error_empty_view.setPadding(0, 0, 0,
                 resources.getDimensionPixelSize(R.dimen.quadra_margin))
@@ -97,9 +96,19 @@ class AccountsListActivity : BaseActivity() {
             Navigator.openGeneralAccountInfo(this, item.uid)
         }
 
-        list_account.layoutManager = GridLayoutManager(this, columns)
+        list_account.layoutManager = layoutManager
         list_account.adapter = adapter
         list_account.addOnScrollListener(hideFabScrollListener)
+    }
+
+    private fun calculateColumnCount(): Int {
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        val screenWidth = displayMetrics.widthPixels.toDouble()
+        return (screenWidth / resources.getDimensionPixelSize(R.dimen.max_content_width))
+                .let { Math.ceil(it) }
+                .toInt()
     }
 
     private fun initFab() {
@@ -295,5 +304,10 @@ class AccountsListActivity : BaseActivity() {
                 ToastManager(this).short(R.string.error_unknown_qr)
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        layoutManager.spanCount = calculateColumnCount()
     }
 }
