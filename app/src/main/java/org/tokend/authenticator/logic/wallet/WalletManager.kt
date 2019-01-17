@@ -3,7 +3,7 @@ package org.tokend.authenticator.logic.wallet
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.tokend.authenticator.util.extensions.toSingle
-import org.tokend.sdk.keyserver.KeyStorage
+import org.tokend.sdk.keyserver.KeyServer
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.WalletData
 import org.tokend.wallet.Account
@@ -21,7 +21,7 @@ class WalletManager {
                          recoveryAccount: Account,
                          kdfAttributes: KdfAttributes): Single<WalletData> {
             return {
-                val (wallet, _, _) = KeyStorage.createWallet(
+                val (wallet, _, _) = KeyServer.createWallet(
                         email = email,
                         password = masterAccount.secretSeed!!,
                         kdfVersion = STUB_KDF_VERSION,

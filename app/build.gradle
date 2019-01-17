@@ -77,9 +77,9 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.13'
     compileOnly 'javax.annotation:jsr250-api:1.0'
 
-    implementation "org.tokend:sdk:1.2.14"
-    implementation "org.tokend:rx-sdk:1.0"
-    implementation "org.tokend:wallet:1.0.11"
+    implementation "org.tokend:sdk:1.2.17"
+    implementation "org.tokend:rx-sdk:1.0.1"
+    implementation "org.tokend:wallet:1.0.12"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

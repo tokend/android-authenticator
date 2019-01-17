@@ -8,19 +8,19 @@ import org.spongycastle.util.encoders.Base64
 import org.tokend.authenticator.accounts.data.model.Account
 import org.tokend.authenticator.accounts.data.model.Network
 import org.tokend.authenticator.accounts.data.storage.AccountsRepository
-import org.tokend.authenticator.util.extensions.toSingle
+import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepositoryProvider
 import org.tokend.authenticator.logic.api.factory.ApiFactory
+import org.tokend.authenticator.logic.wallet.WalletUpdateManager
 import org.tokend.authenticator.security.encryption.cipher.DataCipher
 import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
 import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
-import org.tokend.authenticator.logic.wallet.WalletUpdateManager
-import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepositoryProvider
+import org.tokend.authenticator.util.extensions.toSingle
 import org.tokend.crypto.ecdsa.erase
 import org.tokend.rx.extensions.getWalletInfoSingle
 import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.TokenDApi
 import org.tokend.sdk.api.general.model.SystemInfo
-import org.tokend.sdk.keyserver.KeyStorage
+import org.tokend.sdk.keyserver.KeyServer
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.WalletData
 import org.tokend.sdk.keyserver.models.WalletInfo
@@ -43,7 +43,7 @@ class RecoverAccountUseCase(
     private lateinit var recoveryKeyPair: org.tokend.wallet.Account
     private lateinit var recoveryWallet: WalletInfo
     private lateinit var newMasterKeyPair: org.tokend.wallet.Account
-    private lateinit var keyStorage: KeyStorage
+    private lateinit var keyStorage: KeyServer
     private lateinit var walletUpdateManager: WalletUpdateManager
     private lateinit var newKdfAttributes: KdfAttributes
     private lateinit var newWalletId: String
@@ -55,7 +55,7 @@ class RecoverAccountUseCase(
                 .doOnSuccess { recoveryKeyPair ->
                     this.recoveryKeyPair = recoveryKeyPair
                     this.signedApi = apiFactory.getSignedApi(networkUrl, recoveryKeyPair)
-                    this.keyStorage = apiFactory.getSignedKeyStorage(networkUrl, recoveryKeyPair)
+                    this.keyStorage = apiFactory.getSignedKeyServer(networkUrl, recoveryKeyPair)
                 }
                 .flatMap {
                     getSystemInfo()

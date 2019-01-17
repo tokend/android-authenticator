@@ -1,8 +1,8 @@
 package org.tokend.authenticator.logic.api.factory
 
-import org.tokend.authenticator.util.extensions.addSlashIfNeed
 import org.tokend.authenticator.logic.api.AuthenticatorApi
-import org.tokend.sdk.keyserver.KeyStorage
+import org.tokend.authenticator.util.extensions.addSlashIfNeed
+import org.tokend.sdk.keyserver.KeyServer
 import org.tokend.sdk.signing.AccountRequestSigner
 import org.tokend.wallet.Account
 
@@ -16,12 +16,12 @@ class DefaultApiFactory : ApiFactory {
         return AuthenticatorApi(rootUrl.addSlashIfNeed(), AccountRequestSigner(signKeyPair))
     }
 
-    override fun getKeyStorage(rootUrl: String): KeyStorage {
-        return KeyStorage(getApi(rootUrl).wallets)
+    override fun getKeyServer(rootUrl: String): KeyServer {
+        return KeyServer(getApi(rootUrl).wallets)
     }
 
-    override fun getSignedKeyStorage(rootUrl: String,
-                                     signKeyPair: Account): KeyStorage {
-        return KeyStorage(getSignedApi(rootUrl, signKeyPair).wallets)
+    override fun getSignedKeyServer(rootUrl: String,
+                                    signKeyPair: Account): KeyServer {
+        return KeyServer(getSignedApi(rootUrl, signKeyPair).wallets)
     }
 }

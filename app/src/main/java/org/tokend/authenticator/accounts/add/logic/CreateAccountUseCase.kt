@@ -41,7 +41,7 @@ class CreateAccountUseCase(
     private val networkUrl = HttpUrl.parse(networkUrl).toString()
 
     private val api = apiFactory.getApi(networkUrl)
-    private val keyStorageApi = apiFactory.getKeyStorage(networkUrl)
+    private val keyStorageApi = apiFactory.getKeyServer(networkUrl)
 
     private lateinit var kdfAttributes: KdfAttributes
     private lateinit var network: Network

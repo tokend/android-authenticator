@@ -1,7 +1,7 @@
 package org.tokend.authenticator.logic.api.factory
 
 import org.tokend.authenticator.logic.api.AuthenticatorApi
-import org.tokend.sdk.keyserver.KeyStorage
+import org.tokend.sdk.keyserver.KeyServer
 import org.tokend.wallet.Account
 
 interface ApiFactory {
@@ -9,7 +9,7 @@ interface ApiFactory {
 
     fun getSignedApi(rootUrl: String, signKeyPair: Account): AuthenticatorApi
 
-    fun getKeyStorage(rootUrl: String): KeyStorage
+    fun getKeyServer(rootUrl: String): KeyServer
 
-    fun getSignedKeyStorage(rootUrl: String, signKeyPair: Account): KeyStorage
+    fun getSignedKeyServer(rootUrl: String, signKeyPair: Account): KeyServer
 }

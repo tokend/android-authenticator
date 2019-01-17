@@ -8,7 +8,7 @@ import org.tokend.rx.extensions.createSignersUpdateTransactionSingle
 import org.tokend.rx.extensions.toSingle
 import org.tokend.rx.extensions.updateWalletCompletable
 import org.tokend.sdk.api.TokenDApi
-import org.tokend.sdk.keyserver.KeyStorage
+import org.tokend.sdk.keyserver.KeyServer
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.sdk.keyserver.models.WalletData
 import org.tokend.sdk.keyserver.models.WalletInfo
@@ -21,7 +21,7 @@ import java.net.HttpURLConnection
 class WalletUpdateManager {
     fun updateWalletWithNewKeyPair(walletInfo: WalletInfo,
                                    signedApi: TokenDApi,
-                                   keyStorage: KeyStorage,
+                                   keyStorage: KeyServer,
                                    network: Network,
                                    signKeyPair: Account,
                                    newMasterKeyPair: Account,
@@ -97,7 +97,7 @@ class WalletUpdateManager {
                                                currentAccount: Account,
                                                currentSigners: Collection<org.tokend.sdk.api.accounts.model.Account.Signer>,
                                                newAccount: Account): Single<Transaction> {
-        return KeyStorage.createSignersUpdateTransactionSingle(
+        return KeyServer.createSignersUpdateTransactionSingle(
                 networkParams,
                 currentWallet.accountId,
                 currentAccount,
