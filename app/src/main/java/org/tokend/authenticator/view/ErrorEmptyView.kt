@@ -1,7 +1,11 @@
 package org.tokend.authenticator.view
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
+import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.Gravity
@@ -13,18 +17,18 @@ import android.widget.TextView
 import org.tokend.authenticator.R
 import org.tokend.authenticator.util.errorhandler.ErrorHandler
 
-class ErrorEmptyView : LinearLayout {
-    constructor(context: Context, attributeSet: AttributeSet?) :
-            super(context, attributeSet)
-
-    constructor(context: Context, attributeSet: AttributeSet?, style: Int) :
-            super(context, attributeSet, style)
-
-    constructor(context: Context) : super(context)
+class ErrorEmptyView @JvmOverloads constructor(
+        context: Context,
+        attributeSet: AttributeSet? = null,
+        defStyleAttr: Int = 0
+) : LinearLayout(context, attributeSet, defStyleAttr) {
 
     private val messageTextView: TextView
     private val actionButton: Button
-    private val buttonHolder: LinearLayout
+    private val iconImageView: AppCompatImageView
+
+    private var emptyDrawable: Drawable? = null
+    private var errorDrawable: Drawable? = null
 
     private var emptyViewDenial: () -> Boolean = { false }
 
@@ -37,8 +41,58 @@ class ErrorEmptyView : LinearLayout {
                 this, true)
 
         messageTextView = findViewById(R.id.message_text_view)
-        buttonHolder = findViewById(R.id.button_holder)
         actionButton = findViewById(R.id.action_button)
+        iconImageView = findViewById(R.id.icon_image_view)
+
+        attributeSet?.let {
+            val typedArray = context.obtainStyledAttributes(it, R.styleable.ErrorEmptyView, defStyleAttr, 0)
+
+            val emptyRes = typedArray.getResourceId(R.styleable.ErrorEmptyView_empty_drawable, 0)
+            val errorRes = typedArray.getResourceId(R.styleable.ErrorEmptyView_error_drawable, 0)
+
+            if (emptyRes != 0) {
+                emptyDrawable = ResourcesCompat.getDrawable(resources, emptyRes, null)
+            }
+
+            if (errorRes != 0) {
+                errorDrawable = ResourcesCompat.getDrawable(resources, errorRes, null)
+            }
+
+            typedArray.recycle()
+        }
+    }
+
+    fun setEmptyDrawable(@DrawableRes id: Int) {
+        setEmptyDrawable(ResourcesCompat.getDrawable(resources, id, null))
+    }
+
+    fun setEmptyDrawable(drawable: Drawable?) {
+        emptyDrawable = drawable
+    }
+
+    fun getEmptyDrawable(): Drawable? {
+        return emptyDrawable
+    }
+
+    fun setErrorDrawable(@DrawableRes id: Int) {
+        setErrorDrawable(ResourcesCompat.getDrawable(resources, id, null))
+    }
+
+    fun setErrorDrawable(drawable: Drawable?) {
+        errorDrawable = drawable
+    }
+
+    fun getErrorDrawable(): Drawable? {
+        return errorDrawable
+    }
+
+    private fun setIcon(drawable: Drawable?) {
+        if (emptyDrawable != null) {
+            iconImageView.visibility = View.VISIBLE
+            iconImageView.setImageDrawable(drawable)
+        } else {
+            iconImageView.visibility = View.GONE
+        }
     }
 
     fun hide() {
@@ -54,7 +108,8 @@ class ErrorEmptyView : LinearLayout {
 
         messageTextView.text = message
         actionButton.visibility = View.GONE
-        buttonHolder.visibility = View.GONE
+
+        setIcon(emptyDrawable)
     }
 
     fun showError(throwable: Throwable, errorHandler: ErrorHandler,
@@ -71,13 +126,13 @@ class ErrorEmptyView : LinearLayout {
         messageTextView.text = error
 
         if (actionButtonClick != null) {
-            buttonHolder.visibility = View.VISIBLE
             actionButton.visibility = View.VISIBLE
             actionButton.setOnClickListener { actionButtonClick.invoke() }
         } else {
             actionButton.visibility = View.GONE
-            buttonHolder.visibility = View.GONE
         }
+
+        setIcon(errorDrawable)
     }
 
     fun observeAdapter(adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>,

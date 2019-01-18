@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ErrorEmptyView">
+        <attr name="empty_drawable" format="reference"/>
+        <attr name="error_drawable" format="reference"/>
+    </declare-styleable>
+
+</resources>
