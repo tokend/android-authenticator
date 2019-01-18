@@ -87,7 +87,7 @@ class ErrorEmptyView @JvmOverloads constructor(
     }
 
     private fun setIcon(drawable: Drawable?) {
-        if (emptyDrawable != null) {
+        if (drawable != null) {
             iconImageView.visibility = View.VISIBLE
             iconImageView.setImageDrawable(drawable)
         } else {
