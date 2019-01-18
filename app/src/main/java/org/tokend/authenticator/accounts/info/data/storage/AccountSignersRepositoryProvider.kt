@@ -14,7 +14,11 @@ class AccountSignersRepositoryProvider(
     fun getForAccount(account: Account): AccountSignersRepository {
         val accountId = account.uid
         return repoByAccountId[accountId]
-                ?: AccountSignersRepository(account, database, apiFactory)
+                ?: AccountSignersRepository(
+                        account,
+                        apiFactory,
+                        AccountSignersCache(accountId, database)
+                )
                         .also { repoByAccountId.put(accountId, it) }
     }
 

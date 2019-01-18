@@ -4,14 +4,14 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import org.tokend.authenticator.accounts.data.model.Account
+import org.tokend.authenticator.accounts.info.data.model.Signer
+import org.tokend.authenticator.base.repository.RepositoryCache
+import org.tokend.authenticator.base.repository.SimpleMultipleItemsRepository
 import org.tokend.authenticator.logic.api.factory.ApiFactory
-import org.tokend.authenticator.logic.db.AppDatabase
+import org.tokend.authenticator.logic.transactions.TxManager
 import org.tokend.authenticator.security.encryption.cipher.DataCipher
 import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
-import org.tokend.authenticator.base.repository.SimpleMultipleItemsRepository
-import org.tokend.authenticator.logic.transactions.TxManager
 import org.tokend.authenticator.util.LongUid
-import org.tokend.authenticator.accounts.info.data.model.Signer
 import org.tokend.crypto.ecdsa.erase
 import org.tokend.rx.extensions.toCompletable
 import org.tokend.rx.extensions.toSingle
@@ -24,12 +24,10 @@ import java.net.HttpURLConnection
 
 class AccountSignersRepository(
         val account: Account,
-        database: AppDatabase,
-        private val apiFactory: ApiFactory
+        private val apiFactory: ApiFactory,
+        override val itemsCache: RepositoryCache<Signer>
 ) : SimpleMultipleItemsRepository<Signer>() {
     private val api = apiFactory.getApi(account.network.rootUrl)
-
-    override val itemsCache = AccountSignersCache(account.uid, database)
 
     override fun getItems(): Single<List<Signer>> {
         return api

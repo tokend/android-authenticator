@@ -6,6 +6,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.tokend.authenticator.accounts.data.model.Account
 import org.tokend.authenticator.accounts.data.model.Network
+import org.tokend.authenticator.accounts.data.storage.AccountsCache
 import org.tokend.authenticator.accounts.data.storage.AccountsRepository
 import org.tokend.authenticator.logic.db.AppDatabase
 import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
@@ -33,7 +34,7 @@ class AccountsRepository {
         database.accountsDao.deleteAll()
 
         val getRepository = {
-            AccountsRepository(database)
+            AccountsRepository(AccountsCache(database))
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
@@ -58,7 +59,7 @@ class AccountsRepository {
         database.accountsDao.deleteAll()
 
         val getRepository = {
-            AccountsRepository(database)
+            AccountsRepository(AccountsCache(database))
                     .also {
                         it.updateDeferred().blockingAwait()
                     }

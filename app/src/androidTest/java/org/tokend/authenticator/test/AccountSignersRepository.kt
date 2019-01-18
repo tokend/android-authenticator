@@ -9,15 +9,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.tokend.authenticator.accounts.data.model.Account
 import org.tokend.authenticator.accounts.data.model.Network
+import org.tokend.authenticator.accounts.info.data.model.Signer
+import org.tokend.authenticator.accounts.info.data.storage.AccountSignersCache
+import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepository
+import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepositoryProvider
 import org.tokend.authenticator.logic.api.factory.DefaultApiFactory
 import org.tokend.authenticator.logic.db.AppDatabase
+import org.tokend.authenticator.logic.transactions.TxManager
 import org.tokend.authenticator.security.encryption.cipher.DefaultDataCipher
 import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
 import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
-import org.tokend.authenticator.logic.transactions.TxManager
-import org.tokend.authenticator.accounts.info.data.model.Signer
-import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepository
-import org.tokend.authenticator.accounts.info.data.storage.AccountSignersRepositoryProvider
 import org.tokend.sdk.keyserver.models.KdfAttributes
 import org.tokend.wallet.utils.toByteArray
 import org.tokend.wallet.xdr.SignerType
@@ -49,7 +50,11 @@ class AccountSignersRepository {
         database.signersDao.deleteAll()
 
         val getRepository = {
-            AccountSignersRepository(account, database, DefaultApiFactory())
+            AccountSignersRepository(
+                    account,
+                    DefaultApiFactory(),
+                    AccountSignersCache(account.uid, database)
+            )
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
@@ -76,7 +81,11 @@ class AccountSignersRepository {
         database.signersDao.deleteAll()
 
         val getRepository = {
-            AccountSignersRepository(account, database, DefaultApiFactory())
+            AccountSignersRepository(
+                    account,
+                    DefaultApiFactory(),
+                    AccountSignersCache(account.uid, database)
+            )
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
@@ -104,7 +113,11 @@ class AccountSignersRepository {
         database.signersDao.deleteAll()
 
         val getRepository = {
-            AccountSignersRepository(account, database, DefaultApiFactory())
+            AccountSignersRepository(
+                    account,
+                    DefaultApiFactory(),
+                    AccountSignersCache(account.uid, database)
+            )
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
@@ -141,7 +154,7 @@ class AccountSignersRepository {
             override fun getKey(kdfAttributes: KdfAttributes): Single<ByteArray> {
                 return Single.just(key)
             }
-         }, TxManager(DefaultApiFactory().getApi(account.network.rootUrl)), isUnique).blockingAwait()
+        }, TxManager(DefaultApiFactory().getApi(account.network.rootUrl)), isUnique).blockingAwait()
     }
 
     @Test
@@ -154,7 +167,11 @@ class AccountSignersRepository {
         database.signersDao.deleteAll()
 
         val getRepository = {
-            AccountSignersRepository(account, database, DefaultApiFactory())
+            AccountSignersRepository(
+                    account,
+                    DefaultApiFactory(),
+                    AccountSignersCache(account.uid, database)
+            )
                     .also {
                         it.updateDeferred().blockingAwait()
                     }
