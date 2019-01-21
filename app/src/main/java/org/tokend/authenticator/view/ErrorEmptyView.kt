@@ -1,22 +1,31 @@
 package org.tokend.authenticator.view
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
+import android.support.annotation.Dimension
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v4.content.res.ResourcesCompat
+import android.support.v4.widget.ImageViewCompat
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import org.tokend.authenticator.R
 import org.tokend.authenticator.util.errorhandler.ErrorHandler
+import kotlin.math.roundToInt
 
+/**
+ * Used to display empty or error state.
+ */
 class ErrorEmptyView @JvmOverloads constructor(
         context: Context,
         attributeSet: AttributeSet? = null,
@@ -29,6 +38,9 @@ class ErrorEmptyView @JvmOverloads constructor(
 
     private var emptyDrawable: Drawable? = null
     private var errorDrawable: Drawable? = null
+    private var drawableSize = ViewGroup.LayoutParams.WRAP_CONTENT
+    @ColorInt
+    private var drawableTint: Int? = null
 
     private var emptyViewDenial: () -> Boolean = { false }
 
@@ -49,6 +61,8 @@ class ErrorEmptyView @JvmOverloads constructor(
 
             val emptyRes = typedArray.getResourceId(R.styleable.ErrorEmptyView_empty_drawable, 0)
             val errorRes = typedArray.getResourceId(R.styleable.ErrorEmptyView_error_drawable, 0)
+            val drawableSize = typedArray.getDimension(R.styleable.ErrorEmptyView_drawable_size, 0f)
+            val drawableTint = typedArray.getColor(R.styleable.ErrorEmptyView_drawable_tint_color, Int.MIN_VALUE)
 
             if (emptyRes != 0) {
                 emptyDrawable = ResourcesCompat.getDrawable(resources, emptyRes, null)
@@ -58,10 +72,21 @@ class ErrorEmptyView @JvmOverloads constructor(
                 errorDrawable = ResourcesCompat.getDrawable(resources, errorRes, null)
             }
 
+            if (drawableSize != 0f) {
+                this.drawableSize = drawableSize.roundToInt()
+            }
+
+            if (drawableTint != Int.MIN_VALUE) {
+                this.drawableTint = drawableTint
+            }
+
             typedArray.recycle()
         }
     }
 
+    /***
+     * Sets drawable that would be shown with empty message.
+     */
     fun setEmptyDrawable(@DrawableRes id: Int) {
         setEmptyDrawable(ResourcesCompat.getDrawable(resources, id, null))
     }
@@ -74,6 +99,9 @@ class ErrorEmptyView @JvmOverloads constructor(
         return emptyDrawable
     }
 
+    /***
+     * Sets drawable that would be shown with error message.
+     */
     fun setErrorDrawable(@DrawableRes id: Int) {
         setErrorDrawable(ResourcesCompat.getDrawable(resources, id, null))
     }
@@ -86,23 +114,68 @@ class ErrorEmptyView @JvmOverloads constructor(
         return errorDrawable
     }
 
+    /**
+     * Sets drawable pixel size.
+     */
+    fun setDrawableSize(@Dimension(unit = Dimension.PX) size: Int?) {
+        drawableSize = size ?: ViewGroup.LayoutParams.WRAP_CONTENT
+    }
+
+    fun getDrawableSize(): Int {
+        return drawableSize
+    }
+
+    /**
+     * Sets drawable tint color.
+     */
+    fun setDrawableTintColor(@ColorInt color: Int?) {
+        drawableTint = color
+    }
+
+    @ColorInt
+    fun getDrawableTintColor(): Int? {
+        return drawableTint
+    }
+
     private fun setIcon(drawable: Drawable?) {
         if (drawable != null) {
             iconImageView.visibility = View.VISIBLE
+            iconImageView.layoutParams = iconImageView.layoutParams.apply {
+                width = drawableSize
+                height = drawableSize
+            }
+
             iconImageView.setImageDrawable(drawable)
+
+            drawableTint.also { tint ->
+                if (tint != null) {
+                    ImageViewCompat.setImageTintList(iconImageView, ColorStateList.valueOf(tint))
+                } else {
+                    ImageViewCompat.setImageTintList(iconImageView, null)
+                }
+            }
         } else {
             iconImageView.visibility = View.GONE
         }
     }
 
+    /**
+     * Hides the view.
+     */
     fun hide() {
         visibility = View.GONE
     }
 
+    /**
+     * Shows empty state with given message.
+     */
     fun showEmpty(@StringRes messageId: Int) {
         showEmpty(context.getString(messageId))
     }
 
+    /**
+     * Shows empty state with given message.
+     */
     fun showEmpty(message: String) {
         visibility = View.VISIBLE
 
@@ -112,12 +185,27 @@ class ErrorEmptyView @JvmOverloads constructor(
         setIcon(emptyDrawable)
     }
 
+    /**
+     * Shows error state
+     *
+     * @param throwable occurred error
+     * @param errorHandler error handler to get error message from
+     * @param actionButtonClick click listener for Retry button.
+     * If not set the button will be invisible
+     */
     fun showError(throwable: Throwable, errorHandler: ErrorHandler,
                   actionButtonClick: (() -> Unit)? = null) {
         showError(errorHandler.getErrorMessage(throwable),
                 actionButtonClick)
     }
 
+    /**
+     * Shows error state
+     *
+     * @param error message to display
+     * @param actionButtonClick click listener for Retry button.
+     * If not set the button will be invisible
+     */
     fun showError(error: String?, actionButtonClick: (() -> Unit)? = null) {
         error ?: return
 
@@ -135,6 +223,12 @@ class ErrorEmptyView @JvmOverloads constructor(
         setIcon(errorDrawable)
     }
 
+    /**
+     * Subscribes to [RecyclerView.Adapter] data changes in order to display empty state
+     *
+     * @param adapter adapter to observe
+     * @param messageId empty state message id
+     */
     fun observeAdapter(adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>,
                        @StringRes messageId: Int) {
         adapter.registerAdapterDataObserver(getEmptyObserver(adapter) {
@@ -142,11 +236,25 @@ class ErrorEmptyView @JvmOverloads constructor(
         })
     }
 
+    /**
+     * Subscribes to [RecyclerView.Adapter] data changes in order to display empty state
+     *
+     * @param adapter adapter to observe
+     * @param messageProvider provider of the empty state message
+     */
     fun observeAdapter(adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>,
                        messageProvider: () -> String) {
         adapter.registerAdapterDataObserver(getEmptyObserver(adapter, messageProvider))
     }
 
+    /**
+     * Sets denial provider for empty view with adapter observation
+     *
+     * @param denial if returns true then empty state will not be displayed
+     * even if observed adapter has no data
+     *
+     * @see observeAdapter
+     */
     fun setEmptyViewDenial(denial: () -> Boolean) {
         this.emptyViewDenial = denial
     }

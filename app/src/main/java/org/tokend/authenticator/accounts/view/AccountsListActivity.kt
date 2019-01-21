@@ -87,6 +87,7 @@ class AccountsListActivity : BaseActivity() {
 
         layoutManager = GridLayoutManager(this, columns)
 
+        error_empty_view.setEmptyDrawable(R.drawable.ic_account_key)
         error_empty_view.setPadding(0, 0, 0,
                 resources.getDimensionPixelSize(R.dimen.quadra_margin))
         error_empty_view.observeAdapter(adapter, R.string.no_accounts_message)

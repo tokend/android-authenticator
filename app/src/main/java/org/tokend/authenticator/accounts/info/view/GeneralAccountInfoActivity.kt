@@ -112,6 +112,7 @@ class GeneralAccountInfoActivity : BaseActivity() {
             showSignerDetailsDialog(item)
         }
 
+        error_empty_view.setEmptyDrawable(R.drawable.ic_link)
         error_empty_view.setPadding(0,
                 resources.getDimensionPixelSize(R.dimen.half_standard_margin), 0,
                 resources.getDimensionPixelSize(R.dimen.half_standard_margin))

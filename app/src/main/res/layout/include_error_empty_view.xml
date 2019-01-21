@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.tokend.authenticator.view.ErrorEmptyView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<org.tokend.authenticator.view.ErrorEmptyView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/error_empty_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    app:drawable_size="48dp"
+    app:drawable_tint_color="@color/colorSecondaryText"
+    app:error_drawable="@drawable/ic_error_outline" />
