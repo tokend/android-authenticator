@@ -28,6 +28,19 @@
 -dontwarn java.lang.**
 -dontwarn javax.lang.**
 -dontwarn javax.annotation.**
+-keepclassmembers class * {
+    @com.github.jasminb.jsonapi.annotations.Id <fields>;
+}
+-keep class com.fasterxml.jackson.databind.ObjectMapper {
+    public <methods>;
+    protected <methods>;
+}
+-keep class com.fasterxml.jackson.databind.ObjectWriter {
+    public ** writeValueAsString(**);
+}
+-keepnames class com.fasterxml.jackson.** { *; }
+-dontwarn com.fasterxml.jackson.databind.**
+-keep class * implements com.github.jasminb.jsonapi.ResourceIdHandler
 
 # JSON
 -keep class sun.misc.Unsafe { *; }
