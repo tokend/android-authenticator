@@ -2,6 +2,7 @@ package org.tokend.authenticator.settings.view
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
@@ -33,6 +34,8 @@ abstract class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, null))
 
         listView.addItemDecoration(
                 PreferenceDividerDecoration(context,
