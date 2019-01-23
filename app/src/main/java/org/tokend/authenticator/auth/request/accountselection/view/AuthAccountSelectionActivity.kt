@@ -86,7 +86,8 @@ class AuthAccountSelectionActivity : BaseActivity(
                 .compose(ObservableTransformers.defaultSchedulers())
                 .subscribeBy { accounts ->
                     val filteredAccounts = accounts.filter {
-                        it.network == network
+                        it.network == network &&
+                                !it.isBroken
                     }
                     displayAccounts(filteredAccounts)
                 }
