@@ -8,14 +8,15 @@ import org.tokend.authenticator.R
 import org.tokend.authenticator.view.util.AnimationUtil
 import org.tokend.authenticator.view.util.ToastManager
 
-class FingerprintIndicatorManager(private val context: Context,
-                                  private val fingerprintIndicator: AppCompatImageView) {
+class FingerprintIndicatorManager(context: Context,
+                                  private val fingerprintIndicator: AppCompatImageView,
+                                  private val toastManager: ToastManager?) {
 
     private val animation = AnimationUtils.loadAnimation(context, R.anim.shake)
 
     init {
         fingerprintIndicator.setOnClickListener {
-            ToastManager(context).short(R.string.touch_sensor)
+            toastManager?.short(R.string.touch_sensor)
         }
     }
 

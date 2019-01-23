@@ -32,7 +32,6 @@ import org.tokend.authenticator.util.ObservableTransformers
 import org.tokend.authenticator.util.Permission
 import org.tokend.authenticator.util.QrScannerUtil
 import org.tokend.authenticator.view.util.LoadingIndicatorManager
-import org.tokend.authenticator.view.util.ToastManager
 import org.tokend.sdk.api.authenticator.model.AuthRequest
 import java.util.concurrent.TimeUnit
 
@@ -302,7 +301,7 @@ class AccountsListActivity : BaseActivity() {
             }
 
             if (it != null) {
-                ToastManager(this).short(R.string.error_unknown_qr)
+                toastManager.short(R.string.error_unknown_qr)
             }
         }
     }

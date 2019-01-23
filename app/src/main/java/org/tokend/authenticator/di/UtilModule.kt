@@ -4,18 +4,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
-import org.tokend.authenticator.util.FingerprintUtil
-import org.tokend.authenticator.view.util.ToastManager
-import org.tokend.authenticator.util.errorhandler.ErrorHandlerFactory
 import org.tokend.authenticator.security.userkey.punishment.PunishmentTimer
+import org.tokend.authenticator.util.FingerprintUtil
+import org.tokend.authenticator.util.errorhandler.ErrorHandlerFactory
+import org.tokend.authenticator.view.util.ToastManager
 import javax.inject.Singleton
 
 @Module
 class UtilModule {
     @Provides
     @Singleton
-    fun errorHandlerFactory(context: Context): ErrorHandlerFactory {
-        return ErrorHandlerFactory(context)
+    fun errorHandlerFactory(context: Context, toastManager: ToastManager): ErrorHandlerFactory {
+        return ErrorHandlerFactory(context, toastManager)
     }
 
     @Provides

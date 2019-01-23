@@ -16,13 +16,14 @@ import org.json.JSONObject
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.add.recovery.logic.RecoverAccountUseCase
 import org.tokend.authenticator.base.activities.BaseActivity
+import org.tokend.authenticator.util.ObservableTransformers
+import org.tokend.authenticator.util.Permission
+import org.tokend.authenticator.util.QrScannerUtil
 import org.tokend.authenticator.util.extensions.addSlashIfNeed
 import org.tokend.authenticator.util.extensions.getChars
 import org.tokend.authenticator.util.extensions.getStringExtra
 import org.tokend.authenticator.util.extensions.setErrorAndFocus
-import org.tokend.authenticator.util.*
 import org.tokend.authenticator.view.util.LoadingIndicatorManager
-import org.tokend.authenticator.view.util.ToastManager
 import org.tokend.authenticator.view.util.input.SimpleTextWatcher
 import org.tokend.authenticator.view.util.input.SoftInputUtil
 import org.tokend.sdk.api.wallets.model.EmailNotVerifiedException
@@ -218,7 +219,7 @@ class RecoveryActivity : BaseActivity() {
             }
 
             if (it != null) {
-                ToastManager(this).short(R.string.error_unknown_qr)
+                toastManager.short(R.string.error_unknown_qr)
             }
         }
     }

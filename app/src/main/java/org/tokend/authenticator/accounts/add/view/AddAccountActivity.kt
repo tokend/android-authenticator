@@ -15,13 +15,15 @@ import org.json.JSONObject
 import org.tokend.authenticator.R
 import org.tokend.authenticator.accounts.add.logic.CreateAccountUseCase
 import org.tokend.authenticator.base.activities.BaseActivity
+import org.tokend.authenticator.util.Navigator
+import org.tokend.authenticator.util.ObservableTransformers
+import org.tokend.authenticator.util.Permission
+import org.tokend.authenticator.util.QrScannerUtil
 import org.tokend.authenticator.util.extensions.addSlashIfNeed
 import org.tokend.authenticator.util.extensions.hasError
 import org.tokend.authenticator.util.extensions.setErrorAndFocus
-import org.tokend.authenticator.util.*
 import org.tokend.authenticator.util.validator.EmailValidator
 import org.tokend.authenticator.view.util.LoadingIndicatorManager
-import org.tokend.authenticator.view.util.ToastManager
 import org.tokend.authenticator.view.util.input.SimpleTextWatcher
 import org.tokend.authenticator.view.util.input.SoftInputUtil
 import org.tokend.crypto.ecdsa.erase
@@ -193,7 +195,7 @@ class AddAccountActivity : BaseActivity() {
                     }
 
                     if (it != null) {
-                        ToastManager(this).short(R.string.error_unknown_qr)
+                        toastManager.short(R.string.error_unknown_qr)
                     }
                 }
             }

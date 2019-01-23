@@ -4,22 +4,21 @@ import android.app.Activity
 import android.content.ClipData
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.InputType
 import kotlinx.android.synthetic.main.activity_recovery_seed.*
 import org.jetbrains.anko.clipboardManager
 import org.jetbrains.anko.dip
 import org.tokend.authenticator.R
+import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.util.extensions.getChars
 import org.tokend.authenticator.util.extensions.onEditorAction
-import org.tokend.authenticator.view.util.ToastManager
 import org.tokend.authenticator.view.util.input.SimpleTextWatcher
 import org.tokend.crypto.ecdsa.erase
 import java.nio.CharBuffer
 
 
-class RecoverySeedActivity : AppCompatActivity() {
+class RecoverySeedActivity : BaseActivity() {
     companion object {
         const val SEED_EXTRA = "seed"
     }
@@ -35,9 +34,7 @@ class RecoverySeedActivity : AppCompatActivity() {
 
     private var seedsMatch = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onCreateAllowed(savedInstanceState: Bundle?) {
         if (seed == null) {
             finish()
             return
@@ -87,7 +84,7 @@ class RecoverySeedActivity : AppCompatActivity() {
                     getString(R.string.recovery_seed),
                     CharBuffer.wrap(seed)
             )
-            ToastManager(this).short(R.string.seed_copied)
+            toastManager.short(R.string.seed_copied)
         }
     }
     // endregion

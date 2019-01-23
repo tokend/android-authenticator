@@ -50,7 +50,8 @@ abstract class UserKeyActivity : BaseActivity(
     }
 
     override fun onCreateAllowed(savedInstanceState: Bundle?) {
-        fingerprintIndicatorManager = FingerprintIndicatorManager(this, fingerprint_indicator)
+        fingerprintIndicatorManager =
+                FingerprintIndicatorManager(this, fingerprint_indicator, toastManager)
     }
 
     override fun onBackPressed() {

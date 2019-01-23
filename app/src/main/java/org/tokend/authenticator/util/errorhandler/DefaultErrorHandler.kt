@@ -10,7 +10,8 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.CancellationException
 
 open class DefaultErrorHandler(
-        private val context: Context
+        private val context: Context,
+        private val toastManager: ToastManager
 ) : ErrorHandler {
     /**
      * Handles given [Throwable]
@@ -22,7 +23,7 @@ open class DefaultErrorHandler(
                 return true
             else -> {
                 return getErrorMessage(error)?.let {
-                    ToastManager(context).short(it)
+                    toastManager.short(it)
                     true
                 } ?: false
             }

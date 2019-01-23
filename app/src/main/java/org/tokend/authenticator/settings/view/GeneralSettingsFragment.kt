@@ -5,12 +5,16 @@ import android.support.v7.preference.SwitchPreferenceCompat
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import org.tokend.authenticator.R
-import org.tokend.authenticator.util.ObservableTransformers
-import org.tokend.authenticator.view.util.ToastManager
-import org.tokend.authenticator.view.ProgressDialogFactory
 import org.tokend.authenticator.security.environment.model.EnvSecurityStatus
+import org.tokend.authenticator.util.ObservableTransformers
+import org.tokend.authenticator.view.ProgressDialogFactory
+import org.tokend.authenticator.view.util.ToastManager
+import javax.inject.Inject
 
 class GeneralSettingsFragment : SettingsFragment() {
+    @Inject
+    lateinit var toastManager: ToastManager
+
     private val isDeviceSecure
         get() = envSecurityStatusProvider.getEnvSecurityStatus() == EnvSecurityStatus.NORMAL
 
@@ -70,7 +74,7 @@ class GeneralSettingsFragment : SettingsFragment() {
                         .subscribeBy(
                                 onComplete = {
                                     progress.dismiss()
-                                    ToastManager(requireContext())
+                                    toastManager
                                             .short(getString(R.string.security_code_changed_message))
                                 },
                                 onError = { progress.dismiss() }

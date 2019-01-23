@@ -6,11 +6,10 @@ import android.os.Bundle
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import org.tokend.authenticator.R
-import org.tokend.authenticator.auth.request.logic.AuthorizeAppUseCase
 import org.tokend.authenticator.auth.request.accountselection.view.ActivityAuthAccountSelector
+import org.tokend.authenticator.auth.request.logic.AuthorizeAppUseCase
 import org.tokend.authenticator.base.activities.BaseActivity
 import org.tokend.authenticator.util.ObservableTransformers
-import org.tokend.authenticator.view.util.ToastManager
 
 class AuthorizeAppActivity : BaseActivity() {
     private lateinit var accountSelector: ActivityAuthAccountSelector
@@ -38,7 +37,7 @@ class AuthorizeAppActivity : BaseActivity() {
                 .subscribeBy(
                         onComplete = {
                             if (!isFinishing) {
-                                ToastManager(this).short(R.string.app_authorized)
+                                toastManager.short(R.string.app_authorized)
                                 setResult(Activity.RESULT_OK)
                                 finish()
                             }
