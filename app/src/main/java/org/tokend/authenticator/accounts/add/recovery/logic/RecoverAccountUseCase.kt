@@ -16,7 +16,6 @@ import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
 import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
 import org.tokend.authenticator.util.extensions.toSingle
 import org.tokend.crypto.ecdsa.erase
-import org.tokend.rx.extensions.getWalletInfoSingle
 import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.TokenDApi
 import org.tokend.sdk.api.general.model.SystemInfo
@@ -68,7 +67,9 @@ class RecoverAccountUseCase(
                     this.network = network
                 }
                 .flatMap {
-                    keyStorage.getWalletInfoSingle(email, recoverySeed, true)
+                    keyStorage
+                            .getWalletInfo(email, recoverySeed, true)
+                            .toSingle()
                 }
                 .observeOn(scheduler)
                 .doOnSuccess { recoveryWallet ->

@@ -5,8 +5,8 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.tokend.authenticator.accounts.data.model.Network
 import org.tokend.rx.extensions.createSignersUpdateTransactionSingle
+import org.tokend.rx.extensions.toCompletable
 import org.tokend.rx.extensions.toSingle
-import org.tokend.rx.extensions.updateWalletCompletable
 import org.tokend.sdk.api.TokenDApi
 import org.tokend.sdk.keyserver.KeyServer
 import org.tokend.sdk.keyserver.models.KdfAttributes
@@ -53,7 +53,9 @@ class WalletUpdateManager {
                 }
                 // Update current wallet with it.
                 .flatMap { newWallet ->
-                    keyStorage.updateWalletCompletable(walletId, newWallet)
+                    keyStorage
+                            .updateWallet(walletId, newWallet)
+                            .toCompletable()
                             .andThen(Single.just(newWallet))
                 }
     }

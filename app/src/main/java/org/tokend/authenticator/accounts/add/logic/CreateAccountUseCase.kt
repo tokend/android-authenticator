@@ -7,14 +7,14 @@ import okhttp3.HttpUrl
 import org.tokend.authenticator.accounts.data.model.Account
 import org.tokend.authenticator.accounts.data.model.Network
 import org.tokend.authenticator.accounts.data.storage.AccountsRepository
-import org.tokend.authenticator.util.extensions.toSingle
 import org.tokend.authenticator.logic.api.factory.ApiFactory
+import org.tokend.authenticator.logic.wallet.WalletManager
 import org.tokend.authenticator.security.encryption.cipher.DataCipher
 import org.tokend.authenticator.security.encryption.logic.EncryptionKeyProvider
 import org.tokend.authenticator.security.encryption.logic.KdfAttributesGenerator
-import org.tokend.authenticator.logic.wallet.WalletManager
+import org.tokend.authenticator.util.extensions.toSingle
 import org.tokend.crypto.ecdsa.erase
-import org.tokend.rx.extensions.saveWalletCompletable
+import org.tokend.rx.extensions.toCompletable
 import org.tokend.rx.extensions.toSingle
 import org.tokend.sdk.api.general.model.SystemInfo
 import org.tokend.sdk.keyserver.models.KdfAttributes
@@ -119,9 +119,8 @@ class CreateAccountUseCase(
     }
 
     private fun getKdfAttributes(): Single<KdfAttributes> {
-        return {
-            keyStorageApi.getLoginParams()
-        }
+        return keyStorageApi
+                .getLoginParams()
                 .toSingle()
                 .map {
                     it.kdfAttributes.also { kdf ->
@@ -150,7 +149,10 @@ class CreateAccountUseCase(
     }
 
     private fun postWallet(wallet: WalletData): Single<Boolean> {
-        return keyStorageApi.saveWalletCompletable(wallet).toSingleDefault(true)
+        return keyStorageApi
+                .saveWallet(wallet)
+                .toCompletable()
+                .toSingleDefault(true)
     }
 
     private fun createAccount(): Single<Account> {
